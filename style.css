@@ -13,6 +13,10 @@ body {
   line-height: 1.5; /* Añadir o modificar esta línea */
 }
 
+body, p, li {
+  line-height: 1.5;
+}
+
 main {
   color: #1e293b; /* texto oscuro para buena lectura */
   padding-top: 180px; /* ajusta según la altura real de tu header */
