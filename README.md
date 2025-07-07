@@ -59,13 +59,13 @@ Currently, I am pursuing a **Master’s in Data Analytics** at the **University 
 
 ## 🔗 Follow Me
 
-| Platform | Link |
-|----------|------|
-| ![Instagram](https://www.instagram.com/mfzamudio) |
-| ![X (Twitter)](https://x.com/mfzamudio) |
-| ![LinkedIn](https://linkedin.com/in/mzamudio) |
-| ![Indeed](https://profile.indeed.com/p/wg2i33u) |
-| ![GitHub](https://github.com/mfzamudio) |
+| Platform   | Link                                                                 |
+|------------|----------------------------------------------------------------------|
+| Instagram  | [https://www.instagram.com/mfzamudio](https://www.instagram.com/mfzamudio) |
+| X (Twitter)| [https://x.com/mfzamudio](https://x.com/mfzamudio)                  |
+| LinkedIn   | [https://linkedin.com/in/mzamudio](https://linkedin.com/in/mzamudio) |
+| Indeed     | [https://profile.indeed.com/p/wg2i33u](https://profile.indeed.com/p/wg2i33u) |
+| GitHub     | [https://github.com/mfzamudio](https://github.com/mfzamudio) 
 
 ---
 
