@@ -122,3 +122,12 @@ footer .social-icons img {
 footer .social-icons a:hover img {
   transform: scale(1.2);
 }
+.thumbnail-image {
+  width: 100%;
+  max-width: 500px; /* Ajusta según lo que se vea mejor */
+  height: auto;
+  display: block;
+  margin: 0 auto; /* Centrado */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
