@@ -5,47 +5,164 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mario Zamudio – Data Analytics Portfolio</title>
   <style>
+    :root {
+      --blue-main: #a8c5f0;
+      --blue-dark: #5b8ecb;
+      --blue-light: #e7f0fa;
+      --text-dark: #1e2b3a;
+      --text-light: #4f6b84;
+      --white: #ffffff;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background: #f4f4f4;
-      color: #333;
+      margin: 0;
+      padding: 0;
+      background: var(--blue-light);
+      color: var(--text-dark);
     }
+
     header {
-      background-color: #004080;
-      color: white;
+      background-color: var(--blue-main);
+      color: var(--text-dark);
       padding: 2rem;
       text-align: center;
+      border-bottom: 4px solid var(--blue-dark);
     }
+
+    header a {
+      color: var(--text-dark);
+      font-weight: bold;
+    }
+
     section {
       padding: 2rem;
       max-width: 900px;
       margin: auto;
     }
+
     h2 {
-      color: #004080;
+      color: var(--blue-dark);
       margin-top: 2rem;
+      border-bottom: 2px solid var(--blue-main);
+      padding-bottom: 0.5rem;
     }
+
     .project {
-      background: white;
+      background: var(--white);
       padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(100, 150, 200, 0.15);
       margin-bottom: 1.5rem;
     }
+
+    .project a {
+      color: var(--blue-dark);
+      font-weight: bold;
+    }
+
     a {
-      color: #004080;
+      color: var(--blue-dark);
       text-decoration: none;
     }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
     footer {
       text-align: center;
       padding: 1rem;
-      background-color: #eee;
+      background-color: var(--blue-main);
       font-size: 0.9rem;
+      color: var(--text-dark);
+      border-top: 2px solid var(--blue-dark);
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Mario Zamudio
+  <h1>Mario Zamudio</h1>
+  <p>Data Analytics Portfolio</p>
+  <p>📍 Niagara Falls, ON, Canada | <a href="mailto:mzamudio@gmail.com">mzamudio@gmail.com</a> | 
+     <a href="https://linkedin.com/in/mzamudio" target="_blank">LinkedIn</a> | 
+     <a href="https://github.com/mfzamudio" target="_blank">GitHub</a></p>
+</header>
+
+<section>
+  <h2>👨‍💼 About Me</h2>
+  <p>I’m an Electronic Engineer with over 23 years of experience in the telecommunications industry, specialized in designing and implementing scalable, high-performance solutions. I currently study a Master’s in Data Analytics at the University of Niagara Falls. My goal is to merge technical leadership and analytical expertise to drive innovative, data-driven decisions.</p>
+
+  <h2>🧪 Experience</h2>
+  <p><strong>Solution Architect – Hewlett Packard Enterprise (HPE)</strong><br>
+  <em>May 2010 – Oct 2024 | Colombia</em><br>
+  Led full-cycle solution design and delivery for telecommunications clients in Latin America and Canada. Specialized in provisioning systems, charging control, analytics solutions, and automated testing. Implemented data-driven solutions to reduce marketing campaign setup time from 10 days to 2 minutes and testing/deployment from 10 days to 1 day.</p>
+
+  <p><strong>Technical Consultant – Indra</strong><br>
+  <em>2008 – 2010 | Colombia</em><br>
+  Implemented enterprise integration architecture (SOA) with Siebel and TIBCO. Streamlined service provisioning from 15 to 2 days for home clients.</p>
+
+  <p><strong>System Analyst – Tigo</strong><br>
+  <em>2005 – 2008 | Colombia</em><br>
+  Designed mediation platforms and satellite applications for operational efficiency across telecom systems.</p>
+
+  <p><strong>Developer – Hewlett Packard & Proyectos Compartidos</strong><br>
+  <em>2002 – 2005 | Colombia</em><br>
+  Developed third-party payment reconciliation systems and ATM forecasting solutions using neural networks.</p>
+
+  <h2>📊 Featured Projects</h2>
+
+  <div class="project">
+    <h3>🚦 Predicting Traffic Collisions in Toronto</h3>
+    <p>Regression model using weather and location data to predict accident rates. Built with Python and Random Forest.</p>
+    <p><a href="https://github.com/mfzamudio/traffic-collision-prediction" target="_blank">🔗 View Notebook</a></p>
+  </div>
+
+  <div class="project">
+    <h3>🌍 Global Trade Insights (Tableau)</h3>
+    <p>Interactive dashboard analyzing global trade patterns and regional trends using Tableau.</p>
+    <p><a href="https://public.tableau.com/app/profile/tu_usuario/viz/global-trade-insights" target="_blank">🔗 View Dashboard</a></p>
+  </div>
+
+  <div class="project">
+    <h3>❤️ Cardiac Risk Dashboard (Power BI)</h3>
+    <p>Visualization of patient risk levels using Power BI and clinical/demographic data.</p>
+    <p><a href="https://app.powerbi.com/view?r=tu_enlace" target="_blank">🔗 View Power BI Report</a></p>
+  </div>
+
+  <div class="project">
+    <h3>🚌 Public Transport Route Optimization</h3>
+    <p>Python + OR-Tools model to optimize urban bus routes based on cost and time constraints.</p>
+    <p><a href="https://github.com/mfzamudio/route-optimization" target="_blank">🔗 View Notebook</a></p>
+  </div>
+
+  <h2>🛠 Skills</h2>
+  <ul>
+    <li><strong>Languages:</strong> Python, SQL, Java, C++, Shell</li>
+    <li><strong>Tools:</strong> Tableau, Power BI, Jupyter, Git, Jenkins, Ansible</li>
+    <li><strong>Databases:</strong> Oracle, MySQL, Postgres, Vertica</li>
+    <li><strong>Methods:</strong> Regression, Clustering, Forecasting, Optimization</li>
+  </ul>
+
+  <h2>🎓 Education & Certifications</h2>
+  <ul>
+    <li><a href="https://unfcanada.ca/" target="_blank">Master in Data Analytics – University of Niagara Falls (2024–2026)</a></li>
+    <li><a href="https://www.unal.edu.co/" target="_blank">Electronic Engineering – Universidad Nacional de Colombia (1996–2002)</a></li>
+    <li><a href="https://www.usta.edu.co/" target="_blank">Project Management Specialist – Universidad Santo Tomás (2009–2010)</a></li>
+    <li><a href="https://www.udistrital.edu.co/" target="_blank">Mobile Telecommunications Specialist – Universidad Distrital Francisco José de Caldas (2003–2004)</a></li>
+    <li><a href="https://www.scrumstudy.com/" target="_blank">SCRUM Fundamentals Certified – SCRUMstudy (2020)</a></li>
+    <li><a href="https://scaledagile.com/certification/certified-safe-product-owner-product-manager/" target="_blank">Certified SAFe® 6 Product Owner/Product Manager – Scaled Agile (2023)</a></li>
+  </ul>
+</section>
+
+<footer>
+  &copy; 2025 Mario Zamudio | Built with GitHub Pages
+</footer>
+
+</body>
+</html>
