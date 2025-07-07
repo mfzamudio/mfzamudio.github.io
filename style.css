@@ -182,6 +182,15 @@ footer .social-icons a:hover img {
   border-radius: 8px;
 }
 
+.feature-image {
+  display: block;
+  margin: 1rem auto;
+  max-width: 90%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 main section p,
 main section li {
   line-height: 1.5;
