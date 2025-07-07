@@ -5,9 +5,12 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f5faff;
-  padding-top: 180px;
+  color: #0d1b2a;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5; /* Añadir o modificar esta línea */
 }
 
 main {
