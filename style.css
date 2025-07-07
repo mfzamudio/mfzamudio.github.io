@@ -1,0 +1,125 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+  line-height: 1.6;
+}
+
+header {
+  background: #e0efff;
+  padding: 1.5rem;
+  border-bottom: 2px solid #bcd7f5;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1000px;
+  margin: auto;
+}
+
+nav h1 {
+  font-size: 1.8rem;
+  color: #1d4ed8;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #1d4ed8;
+  font-weight: bold;
+}
+
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.about {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.about img {
+  width: 150px;
+  border-radius: 50%;
+  border: 3px solid #dbeafe;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.card {
+  background: white;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 0.8rem;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  color: #1d4ed8;
+  margin-bottom: 0.5rem;
+}
+
+.card a {
+  margin-top: auto;
+  padding: 0.5rem;
+  text-align: center;
+  background-color: #dbeafe;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #1e40af;
+  text-decoration: none;
+}
+
+.card a:hover {
+  background-color: #bfdbfe;
+}
+
+section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: #1d4ed8;
+}
+
+section#contact {
+  margin-top: 2rem;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #e0efff;
+  border-top: 1px solid #bcd7f5;
+  margin-top: 2rem;
+}
