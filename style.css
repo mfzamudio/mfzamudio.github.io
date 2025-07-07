@@ -6,9 +6,12 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f5faff; /* azul pastel muy claro */
-  color: white;
-  padding-top: 180px; /* espacio para el header fijo */
+  background-color: #f5faff;
+  padding-top: 180px;
+}
+
+main {
+  color: #1e293b; /* texto oscuro para buena lectura */
 }
 
 header {
@@ -72,7 +75,7 @@ main section {
 
 main section h2 {
   text-align: center;
-  color: #0b1120; /* mismo azul oscuro del header */
+  color: #0b1120; /* azul oscuro */
   font-size: 1.6rem;
   margin-bottom: 1rem;
 }
