@@ -82,6 +82,7 @@ main section {
   max-width: 1000px;
   margin: auto;
   padding: 2rem;
+  padding-top: 220px; /* ajusta según la altura real de tu header */
 }
 
 main section h2 {
