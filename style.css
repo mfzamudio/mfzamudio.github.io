@@ -181,3 +181,8 @@ footer .social-icons a:hover img {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
+
+main section p,
+main section li {
+  line-height: 1.5;
+}
