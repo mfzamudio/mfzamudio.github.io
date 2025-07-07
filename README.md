@@ -1,59 +1,72 @@
-# 🎯 Mario Zamudio – Data Analytics Portfolio
+# 📊 Mario Zamudio – Data Analytics Portfolio
 
-Welcome to my professional portfolio!
+Welcome to my professional portfolio site hosted via **GitHub Pages**.
 
-I’m Mario Zamudio, a Solution Architect with over 23 years of experience in the telecommunications industry. I’m currently pursuing a Master’s degree in **Data Analytics** at the University of Niagara Falls, Canada, where I’ve been recognized for academic excellence. This space highlights my transition into data-driven solutions, combining deep technical knowledge with analytical tools.
+This portfolio showcases my background as a **Solution Architect** with over 23 years of experience in the **telecommunications industry**, now evolving into the **Data Analytics** field. It highlights my technical expertise, analytics projects, and certifications.
+
+🔗 Live site: [mfzamudio.github.io](https://mfzamudio.github.io)
 
 ---
 
 ## 🧠 About Me
 
-- 📍 Based in Niagara Falls, Ontario – 🇨🇦
-- 🎓 Master’s in Data Analytics (2024–2026)
-- ⚙️ Strong background in solution design, automation, and data architecture
-- 🤝 Experience with multinational telecom operators across Latin America and Canada
+I am an electronic engineer with more than two decades of experience designing, deploying, and supporting complex systems for telecom operators. Over the last 10+ years, I’ve focused on provisioning, charging control, automation, and analytics—leading technical teams with precision and creativity.
+
+Currently, I am pursuing a **Master’s in Data Analytics** at the **University of Niagara Falls**, combining my systems expertise with statistical modeling and data visualization.
 
 ---
 
-## 📊 Projects Included
+## 🚀 Featured Projects
 
 | Project | Description | Tools |
 |--------|-------------|--------|
-| [Traffic Collision Prediction](https://github.com/mfzamudio/traffic-collision-prediction) | Regression model using weather/location data in Toronto | Python, Random Forest |
-| [Global Trade Dashboard](https://public.tableau.com/app/profile/tu_usuario/viz/global-trade-insights) | Visualizes patterns and anomalies in international trade | Tableau |
-| [Cardiac Risk Analysis](https://app.powerbi.com/view?r=tu_enlace) | Clinical and demographic insight for health prediction | Power BI |
-| [Transport Route Optimization](https://github.com/mfzamudio/route-optimization) | Linear programming for urban transport efficiency | Python, OR-Tools |
+| [Traffic Collision Prediction](https://github.com/mfzamudio/traffic-collision-prediction) | Regression model to estimate accident probability based on weather and location | Python, Random Forest |
+| [Global Trade Insights](https://public.tableau.com/app/profile/tu_usuario/viz/global-trade-insights) | Interactive Tableau dashboard for visualizing international trade patterns | Tableau |
+| [Cardiac Risk Analysis](https://app.powerbi.com/view?r=tu_enlace) | Power BI dashboard on heart disease risk by demographic data | Power BI |
+| [Bus Route Optimization](https://github.com/mfzamudio/route-optimization) | Mathematical model to optimize public transportation networks | Python, OR-Tools |
 
 ---
 
-## 🔧 Skills
+## 🛠 Technical Skills
 
-**Languages:** Python, SQL, Java, Shell  
-**Tools:** Tableau, Power BI, Git, Jenkins, Ansible  
-**ML Techniques:** Regression, Forecasting, Optimization  
-**Databases:** Oracle, MySQL, Postgres, Vertica  
-
----
-
-## 📄 Resume & Certifications
-
-- [View my CV](./CV%20-%20MARIO%20ZAMUDIO.pdf)
-- [LinkedIn Profile](https://linkedin.com/in/mzamudio)
-- Certified SCRUM Fundamentals & SAFe® 6 Product Owner
+- **Languages:** Python, SQL, Java, Shell, C++
+- **Tools:** Jupyter, Git, Jenkins, Ansible
+- **Visualization:** Power BI, Tableau
+- **Databases:** Oracle, MySQL, Postgres, Vertica
+- **Methods:** Regression, Clustering, Forecasting, Optimization
 
 ---
 
-## 🌐 Contact & Socials
+## 🎓 Education & Certifications
 
-📧 mzamudio@gmail.com  
-🌐 [mfzamudio.github.io](https://mfzamudio.github.io)
+- 🎓 [Master in Data Analytics – University of Niagara Falls (2024–2026)](https://unfcanada.ca/)
+- 🎓 [Electronic Engineering – Universidad Nacional de Colombia (1996–2002)](https://www.unal.edu.co/)
+- 📘 [Project Management Specialist – Universidad Santo Tomás](https://www.usta.edu.co/)
+- 📘 [Mobile Telecommunications Specialist – Universidad Distrital Francisco José de Caldas](https://www.udistrital.edu.co/)
+- 📜 [SCRUM Fundamentals Certified – SCRUMstudy](https://www.scrumstudy.com/)
+- 📜 [Certified SAFe® 6 Product Owner/Product Manager – Scaled Agile](https://scaledagile.com/certification/certified-safe-product-owner-product-manager/)
 
-[![Instagram](images/icons/instagram.svg)](https://www.instagram.com/mfzamudio)
-[![X](images/icons/x.svg)](https://x.com/mfzamudio)
-[![LinkedIn](images/icons/linkedin.svg)](https://linkedin.com/in/mzamudio)
-[![Indeed](images/icons/indeed.svg)](https://profile.indeed.com/p/wg2i33u)
-[![GitHub](images/icons/github.svg)](https://github.com/mfzamudio)
+📄 View full CV: [`CV - MARIO ZAMUDIO.pdf`](./CV%20-%20MARIO%20ZAMUDIO.pdf)
 
 ---
 
-🧭 *This repository is built using HTML, CSS, and GitHub Pages — fully responsive and optimized for personal branding.*
+## 🌐 Contact
+
+📍 Niagara Falls, ON, Canada  
+📧 Email: [mzamudio@gmail.com](mailto:mzamudio@gmail.com)
+
+---
+
+## 🔗 Follow Me
+
+| Platform | Link |
+|----------|------|
+| ![Instagram](images/icons/instagram.svg) [Instagram](https://www.instagram.com/mfzamudio) |
+| ![X](images/icons/x.svg) [X (Twitter)](https://x.com/mfzamudio) |
+| ![LinkedIn](images/icons/linkedin.png) [LinkedIn](https://linkedin.com/in/mzamudio) |
+| ![Indeed](images/icons/indeed.svg) [Indeed](https://profile.indeed.com/p/wg2i33u) |
+| ![GitHub](images/icons/github.svg) [GitHub](https://github.com/mfzamudio) |
+
+---
+
+🔧 *This website was built with HTML and CSS, published via GitHub Pages, and designed to be fully responsive across devices.*
