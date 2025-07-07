@@ -15,6 +15,7 @@ body {
 
 main {
   color: #1e293b; /* texto oscuro para buena lectura */
+  padding-top: 180px; /* ajusta según la altura real de tu header */
 }
 
 header {
