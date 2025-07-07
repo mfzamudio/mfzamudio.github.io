@@ -1,52 +1,83 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SQL Analysis – Bicycle Store</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Bicycles Store – SQL Project</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4faff;
+      color: #003366;
+      margin: 0;
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #002244;
+    }
+    img {
+      display: block;
+      margin: 1rem auto;
+      max-width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #003366;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <h1>SQL Analysis – Bicycle Store</h1>
+  <h1>🚲 Bicycles Store – SQL Project</h1>
+
+  <div class="section">
+    <h2>📝 Project Overview</h2>
+    <p>
+      This SQL-based project models a bike store’s database to manage key business components such as customers, staff, stores, brands, categories, and inventory. 
+      The goal is to execute queries to support operations like sales tracking, product analysis, and staff performance.
+    </p>
   </div>
-</header>
 
-<main>
-  <section class="project-detail">
-    <h2>📌 Project Overview</h2>
-    <p>This project involved the complete design and analysis of a bicycle store management system using SQL. The scope included customer management, product inventory, orders, repairs, and employee scheduling.</p>
+  <div class="section">
+    <h2>🗂 Entity-Relationship Diagram</h2>
+    <img src="images/project-bicycles.png" alt="Bicycles Store ER Diagram" />
+  </div>
 
-    <h2>📐 Entity-Relationship Diagram</h2>
-    <img src="images/project-bicycles.png" alt="ERD - Bicycle Store" style="max-width: 100%; border: 1px solid #ccc;" />
-
-    <h2>📂 SQL Artifacts</h2>
+  <div class="section">
+    <h2>🛠 Technologies & Skills Applied</h2>
     <ul>
-      <li><a href="DDL.bycycle_store.sql" target="_blank">📄 DDL – Schema Definition</a></li>
-      <li><a href="DQL.Bicycles_retrievedatasets.sql" target="_blank">📊 DQL – Query Examples</a></li>
-      <li><a href="Final Report Project - Bicycles Store.pdf" target="_blank">📝 Final Report PDF</a></li>
+      <li>Database schema creation (DDL)</li>
+      <li>Data retrieval with advanced SQL queries (DQL)</li>
+      <li>Joins, aggregations, filtering, ordering, grouping</li>
+      <li>Data modeling and normalization</li>
     </ul>
+  </div>
 
-    <h2>📈 Key Features</h2>
+  <div class="section">
+    <h2>📂 Resources</h2>
     <ul>
-      <li>10 interrelated tables covering customers, orders, employees, repairs, and inventory.</li>
-      <li>SQL constraints including `CHECK`, `REGEXP`, `DEFAULT`, and `FOREIGN KEY` references.</li>
-      <li>Use of advanced SQL: `VIEW`, `CTE`, `WINDOW FUNCTIONS`, and aggregations.</li>
-      <li>Data quality validations for emails, phone numbers, and order constraints.</li>
+      <li><a href="../DDL.bycycle_store.sql" target="_blank">📄 DDL - Schema Creation</a></li>
+      <li><a href="../DQL.Bicycles_retrievedatasets.sql" target="_blank">📄 DQL - Data Queries</a></li>
+      <li><a href="../Final Report Project - Bicycles Store.pdf" target="_blank">📘 Final Report (PDF)</a></li>
     </ul>
+  </div>
 
-    <h2>🧠 Insights</h2>
-    <p>We generated views and analytical queries to extract customer spending patterns, service appointments, and sales distribution by item type. These helped identify high-value customers and optimize business operations.</p>
-  </section>
-
-  <p><a href="index.html">⬅️ Back to Portfolio</a></p>
-</main>
-
-<footer>
-  <p>&copy; 2025 Mario Zamudio</p>
-</footer>
+  <div class="section">
+    <p><a href="../index.html">🔙 Back to Portfolio</a></p>
+  </div>
 
 </body>
 </html>
