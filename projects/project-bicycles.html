@@ -1,83 +1,60 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bicycles Store – SQL Project</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4faff;
-      color: #003366;
-      margin: 0;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-    h1, h2 {
-      text-align: center;
-      color: #002244;
-    }
-    img {
-      display: block;
-      margin: 1rem auto;
-      max-width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .section {
-      margin-bottom: 2rem;
-    }
-    a {
-      color: #003366;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>SQL Analysis – Bicycle Store</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <h1>🚲 Bicycles Store – SQL Project</h1>
+<header>
+  <h1>🚲 SQL Analysis – Bicycle Store</h1>
+  <p><a href="index.html">← Back to Home</a></p>
+</header>
 
-  <div class="section">
-    <h2>📝 Project Overview</h2>
-    <p>
-      This SQL-based project models a bike store’s database to manage key business components such as customers, staff, stores, brands, categories, and inventory. 
-      The goal is to execute queries to support operations like sales tracking, product analysis, and staff performance.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>🗂 Entity-Relationship Diagram</h2>
-    <img src="images/project-bicycles.png" alt="Bicycles Store ER Diagram" />
-  </div>
-
-  <div class="section">
-    <h2>🛠 Technologies & Skills Applied</h2>
+<main>
+  <section class="project-section">
+    <h2>📘 SQL Project Overview</h2>
+    <p>This project demonstrates the full cycle of a database solution for a retail bicycle store, including:</p>
     <ul>
-      <li>Database schema creation (DDL)</li>
-      <li>Data retrieval with advanced SQL queries (DQL)</li>
-      <li>Joins, aggregations, filtering, ordering, grouping</li>
-      <li>Data modeling and normalization</li>
+      <li>Database Design</li>
+      <li>Data Definition Language (DDL)</li>
+      <li>Data Manipulation Language (DML)</li>
+      <li>Data Query Language (DQL)</li>
     </ul>
-  </div>
+    <img src="images/sql-design.png" alt="SQL Project Overview" style="max-width:100%; margin-top:20px;" />
+  </section>
 
-  <div class="section">
-    <h2>📂 Resources</h2>
-    <ul>
-      <li><a href="../DDL.bycycle_store.sql" target="_blank">📄 DDL - Schema Creation</a></li>
-      <li><a href="../DQL.Bicycles_retrievedatasets.sql" target="_blank">📄 DQL - Data Queries</a></li>
-      <li><a href="../Final Report Project - Bicycles Store.pdf" target="_blank">📘 Final Report (PDF)</a></li>
-    </ul>
-  </div>
+  <section class="project-section">
+    <h2>🧱 Entity-Relationship Model</h2>
+    <p>The ER model outlines relationships between customers, bicycles, suppliers, employees, and repair orders.</p>
+    <img src="images/project-bicycles.png" alt="ER Diagram" style="max-width:100%; margin-top:20px;" />
+  </section>
 
-  <div class="section">
-    <p><a href="../index.html">🔙 Back to Portfolio</a></p>
-  </div>
+  <section class="project-section">
+    <h2>🗃️ DDL Script</h2>
+    <p>The DDL script defines tables and constraints used to implement the database.</p>
+    <p><a href="DDL.bycycle_store.sql" download>📄 Download DDL Script</a></p>
+  </section>
+
+  <section class="project-section">
+    <h2>🔍 DQL Script</h2>
+    <p>This script retrieves meaningful insights from the database using SELECT queries.</p>
+    <p><a href="DQL.Bicycles_retrievedatasets.sql" download>📄 Download DQL Script</a></p>
+  </section>
+
+  <section class="project-section">
+    <h2>📄 Final Report</h2>
+    <p>The final report summarizes the problem, methodology, design decisions, and results.</p>
+    <p><a href="Final Report Project - Bicycles Store.pdf" download>📑 Download Final Report</a></p>
+  </section>
+</main>
+
+<footer>
+  <p><a href="index.html">← Back to Home</a></p>
+  <p>&copy; 2025 Mario Zamudio</p>
+</footer>
 
 </body>
 </html>
