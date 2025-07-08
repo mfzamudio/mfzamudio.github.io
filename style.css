@@ -41,13 +41,13 @@ header {
 .header-top h1 {
   text-align: left;
   padding: 1rem 1.5rem;
-  font-size: 2rem;
+  font-size: 3rem;
   color: #ffffff;
 }
 
 .header-subtitle {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 2rem;
   color: #cfdffb; /* azul pastel muy claro */
   margin-bottom: 0.5rem;
 }
