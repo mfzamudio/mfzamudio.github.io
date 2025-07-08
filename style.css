@@ -20,6 +20,7 @@ body, p, li {
 main {
   color: #1e293b; /* texto oscuro para buena lectura */
   padding-top: 200px;  ajusta según la altura real de tu header */
+  line-height: 2;
 }
 
 header {
@@ -33,7 +34,7 @@ header {
   color: white;
   z-index: 1000;
   text-align: center;
-  padding: 1rem 1rem 1rem; /* más espacio arriba */
+  padding: 0.5rem 1rem 0.5rem; /* más espacio arriba */
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
