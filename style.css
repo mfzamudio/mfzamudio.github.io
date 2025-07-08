@@ -10,16 +10,16 @@ body {
   color: #0d1b2a;
   margin: 0;
   padding: 0;
-  line-height: 1.5; /* Añadir o modificar esta línea */
+  line-height: 2; /* Añadir o modificar esta línea */
 }
 
 body, p, li {
-  line-height: 1.5;
+  line-height: 2;
 }
 
 main {
   color: #1e293b; /* texto oscuro para buena lectura */
-  padding-top: 220px; /* ajusta según la altura real de tu header */
+  /* padding-top: 220px;  ajusta según la altura real de tu header */
 }
 
 header {
