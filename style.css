@@ -19,7 +19,7 @@ body, p, li {
 
 main {
   color: #1e293b; /* texto oscuro para buena lectura */
-  padding-top: 200px;  ajusta según la altura real de tu header */
+  padding-top: 100px;  ajusta según la altura real de tu header */
   line-height: 2;
 }
 
@@ -47,7 +47,7 @@ header {
 
 .header-subtitle {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #cfdffb; /* azul pastel muy claro */
   margin-bottom: 0.5rem;
 }
@@ -68,7 +68,7 @@ header {
 }
 
 .header-contact {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #cfdffb;
   padding: 0.5rem 1rem;
 }
@@ -83,7 +83,7 @@ main section {
   max-width: 1000px;
   margin: auto;
   padding: 2rem;
-  padding-top: 200px; /* ajusta según la altura real de tu header */
+  padding-top: 100px; /* ajusta según la altura real de tu header */
 }
 
 main section h2 {
@@ -196,4 +196,8 @@ footer .social-icons a:hover img {
 main section p,
 main section li {
   line-height: 2;
+}
+
+section:target {
+  scroll-margin-top: 100px;
 }
