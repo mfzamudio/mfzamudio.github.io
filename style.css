@@ -18,8 +18,8 @@ body, p, li {
 }
 
 main {
-  color: #1e293b; /* texto oscuro para buena lectura */
-  padding-top: 0;  /* ajusta según la altura real de tu header */
+  color: #1e293b; 
+  padding-top: 0;  
   line-height: 2;
 }
 
@@ -34,7 +34,7 @@ header {
   color: white;
   z-index: 1000;
   text-align: center;
-  padding: 0.5rem 1rem 0.5rem; /* más espacio arriba */
+  padding: 0.5rem 1rem 0.5rem; 
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
@@ -48,7 +48,7 @@ header {
 .header-subtitle {
   text-align: center;
   font-size: 2rem;
-  color: #cfdffb; /* azul pastel muy claro */
+  color: #cfdffb; 
   margin-bottom: 0.5rem;
 }
 
@@ -83,12 +83,12 @@ main section {
   max-width: 1000px;
   margin: auto;
   padding: 2rem;
-  padding-top: 0; /* ajusta según la altura real de tu header */
+  padding-top: 0; 
 }
 
 main section h2 {
   text-align: center;
-  color: #0b1120; /* azul oscuro */
+  color: #0b1120; 
   font-size: 1.6rem;
   margin-bottom: 1rem;
 }
@@ -137,10 +137,10 @@ footer .social-icons a:hover img {
 }
 .thumbnail-image {
   width: 100%;
-  max-width: 500px; /* Ajusta según lo que se vea mejor */
+  max-width: 500px; 
   height: auto;
   display: block;
-  margin: 0 auto; /* Centrado */
+  margin: 0 auto; 
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -281,13 +281,13 @@ main section li {
 }
 .qr-contact-item a[href^="mailto:"] {
   font-size: 0.8em;
-  word-break: break-all; /* (opcional, ya lo tienes) */
+  word-break: break-all; 
   letter-spacing: 0.2px;
 }
 .about-section {
-  margin-top: 48px; /* Más espacio bajo el header */
+  margin-top: 48px; 
   margin-bottom: 32px;
-  padding-left: 32px;
+  padding-left: 24px;
 }
 
 .about-container {
@@ -330,7 +330,7 @@ main section li {
 
 .header-nav ul {
   display: flex;
-  gap: 14px;         /* antes: 32px */
+  gap: 5px;         /* antes: 32px */
   list-style: none;
   padding: 0;
   margin: 0;
@@ -339,13 +339,12 @@ main section li {
 
 .header-nav a {
   display: block;
-  padding: 6px 18px; /* antes: 8px 22px */
-  border: 2px solid rgba(100,130,220,0.22);
-  border-radius: 15px;   /* antes: 18px */
+  padding: 5px 16px; /* antes: 8px 22px */
+  border: 1px solid rgba(100,130,220,0.22);
+  border-radius: 3px;   /* antes: 18px */
   background: rgba(255,255,255,0.02);
   color: #fff;
-  font-weight: bold;
-  font-size: 1em;    /* antes: 1.15em */
+  font-size: 1em;    
   letter-spacing: 0.1px;
   text-decoration: none;
   transition: 
