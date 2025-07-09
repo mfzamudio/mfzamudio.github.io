@@ -300,7 +300,7 @@ main section li {
 }
 
 .about-photo img {
-  width: 320px;
+  width: 280px;
   height: 320px;
   object-fit: cover;
   border-radius: 50%;
