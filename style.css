@@ -19,7 +19,7 @@ body, p, li {
 
 main {
   color: #1e293b; /* texto oscuro para buena lectura */
-  padding-top: 20px;  /* ajusta según la altura real de tu header */
+  padding-top: 0;  /* ajusta según la altura real de tu header */
   line-height: 2;
 }
 
