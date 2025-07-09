@@ -284,3 +284,45 @@ main section li {
   word-break: break-all; /* (opcional, ya lo tienes) */
   letter-spacing: 0.2px;
 }
+.about-section {
+  margin-top: 48px; /* Más espacio bajo el header */
+  margin-bottom: 32px;
+}
+
+.about-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 56px; /* Separación entre foto y texto */
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.about-photo img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #ecf1f7;
+  box-shadow: 0 4px 28px rgba(70, 110, 255, 0.08);
+  background: #fff;
+  display: block;
+}
+
+.about-info {
+  flex: 1 1 0%;
+  text-align: left;
+}
+
+@media (max-width: 800px) {
+  .about-container {
+    flex-direction: column;
+    gap: 32px;
+    text-align: center;
+    padding: 20px 0;
+  }
+  .about-info {
+    text-align: center;
+  }
+}
