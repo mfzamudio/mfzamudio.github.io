@@ -280,7 +280,7 @@ main section li {
   }
 }
 .qr-contact-item a[href^="mailto:"] {
-  font-size: 0.98em;
+  font-size: 0.8em;
   word-break: break-all; /* (opcional, ya lo tienes) */
   letter-spacing: 0.2px;
 }
