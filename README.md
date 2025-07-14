@@ -2,6 +2,7 @@
 
 Welcome! This is the official repository and GitHub Pages site for my professional **Data Analytics Portfolio**.
 
+🔗 **Live site:** [mzamudio.com](https://www.mzamudio.com)
 🔗 **Live site:** [mfzamudio.github.io](https://mfzamudio.github.io)
 
 ---
@@ -82,7 +83,7 @@ Here are some of the most relevant projects from my portfolio.
 ---
 
 🔧 *This site is fully responsive, built with HTML/CSS, and published via GitHub Pages.*
-
+www.mzamudio.com
 ---
 
 *Last updated: July 2025*
