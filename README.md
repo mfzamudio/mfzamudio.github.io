@@ -60,6 +60,17 @@ Here are some of the most relevant projects from my portfolio.
 - 📜 [SCRUM Fundamentals Certified – SCRUMstudy](https://www.scrumstudy.com/)
 - 📜 [Certified SAFe® 6 Product Owner/Product Manager – Scaled Agile](https://scaledagile.com/certification/certified-safe-product-owner-product-manager/)
 
+---
+
+## 🏅 Honors & Awards
+
+- **President’s Academic Distinction List** (University of Niagara Falls Canada)
+  - *Fall 2024, Winter 2025, Spring 2025*
+  - Awarded for achieving a minimum 4.00 GPA (90%+) while enrolled full-time.
+  - Each distinction included a $1,000 academic performance scholarship.
+
+---
+
 📄 **Full CV:** [`CV - MARIO ZAMUDIO.pdf`](./CV%20-%20MARIO%20ZAMUDIO.pdf)
 
 ---
