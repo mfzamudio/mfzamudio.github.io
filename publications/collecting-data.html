@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📥 Collecting Data | Descriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" style="text-decoration: none; font-size: 1.1rem;">⬅ Back to Publications</a>
+    <h2>📥 Collecting Data</h2>
+    <h3>The Foundation of Descriptive Analytics</h3>
+
+    <p>
+      Collecting data is the <strong>first and most critical step</strong> in any data analytics process. 
+      Without reliable, comprehensive, and well-structured data, even the most advanced models and analyses 
+      cannot produce meaningful insights. The goal of this stage is to gather raw information that truly 
+      represents the phenomena we want to analyze.
+    </p>
+
+    <h3>🔎 Typical Sources of Data</h3>
+    <ul>
+      <li><strong>Databases:</strong> SQL databases such as MySQL, PostgreSQL, Oracle, and enterprise data warehouses.</li>
+      <li><strong>APIs:</strong> REST or GraphQL APIs providing data from platforms like Twitter, Google Analytics, or financial services.</li>
+      <li><strong>Spreadsheets:</strong> Excel or CSV files often used in business reporting and small-scale analytics.</li>
+      <li><strong>Surveys & Questionnaires:</strong> Data collected directly from users or customers.</li>
+      <li><strong>System Logs:</strong> Information captured from web servers, applications, or IoT devices.</li>
+      <li><strong>Open Data Portals:</strong> Government datasets (e.g., data.gov, WHO data) and academic repositories.</li>
+      <li><strong>Third-Party Data Providers:</strong> Commercial data providers for financial, demographic, or market data.</li>
+    </ul>
+
+    <h3>⚙️ ETL (Extract, Transform, Load) in Data Collection</h3>
+    <p>
+      In professional environments, data collection is often part of an <strong>ETL process</strong>:
+    </p>
+    <ol>
+      <li><strong>Extract:</strong> Retrieve raw data from multiple sources (databases, APIs, flat files).</li>
+      <li><strong>Transform:</strong> Clean, normalize, and format data into a consistent structure.</li>
+      <li><strong>Load:</strong> Store the processed data in a target system, such as a data warehouse or cloud platform, ready for analysis.</li>
+    </ol>
+
+    <p>
+      Tools commonly used in ETL processes include:
+      <ul>
+        <li><strong>Python libraries:</strong> Pandas, PySpark for handling large-scale data.</li>
+        <li><strong>ETL platforms:</strong> Talend, Apache Nifi, Informatica, Microsoft SSIS.</li>
+        <li><strong>Cloud services:</strong> AWS Glue, Azure Data Factory, Google Cloud Dataflow.</li>
+      </ul>
+    </p>
+
+    <h3>💡 Best Practices</h3>
+    <ul>
+      <li>Define clear <strong>data requirements</strong> aligned with the business question.</li>
+      <li>Ensure <strong>data quality</strong> by validating formats, completeness, and accuracy.</li>
+      <li>Document <strong>data lineage</strong>: the origin, transformations, and flow of the data.</li>
+      <li>Respect <strong>data privacy and compliance</strong> (e.g., GDPR, HIPAA).</li>
+      <li>Automate data collection pipelines to reduce human error and improve efficiency.</li>
+    </ul>
+
+    <h3>📊 Example: Collecting Traffic Data</h3>
+    <p>
+      For a project predicting traffic accidents, data may come from multiple sources:
+    </p>
+    <ul>
+      <li>Government open data portals (collision reports, road safety records).</li>
+      <li>Weather APIs (temperature, precipitation, visibility).</li>
+      <li>Traffic sensors and GPS systems providing vehicle flow and congestion levels.</li>
+      <li>Historical accident databases maintained by municipalities or insurance companies.</li>
+    </ul>
+    <p>
+      Integrating these sources through an ETL pipeline ensures analysts can work with a unified and consistent dataset.
+    </p>
+
+    <h3>📥 Process Diagram</h3>
+    <img src="../../publications/images/data-collection-etl.png" alt="Data Collection ETL Process" class="project-image" />
+
+    <div style="margin-top: 32px;"> 
+      <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>
