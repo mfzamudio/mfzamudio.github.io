@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚙️ Transforming & Aggregation | Descriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" style="text-decoration: none; font-size: 1.1rem;">⬅ Back to Publications</a>
+    <h2>⚙️ Transforming & Aggregation</h2>
+    <h3>Making Data Ready for Analysis</h3>
+    <img src="../../images/data-transformation-aggregation.png" alt="Transformation and Aggregation Process" class="project-image" />
+    <p>
+      After collecting and cleaning data, the next step is <strong>Transforming and Aggregating</strong>. 
+      At this stage, raw but clean data is reshaped into structures that are easier to analyze and interpret. 
+      <em>Transformation</em> focuses on adjusting the format, scale, and relationships within the dataset — for example, converting categorical text into numerical codes, normalizing values to ensure comparability, or merging different sources into a unified dataset. 
+      This process often involves feature engineering, where new variables are created to capture additional insights that may not be directly available from the raw data.
+    </p>
+    <p>
+      <em>Aggregation</em>, on the other hand, condenses detailed records into higher-level summaries that highlight key trends and reduce complexity. 
+      This could mean grouping transactions by month, calculating averages or totals per category, or computing rolling metrics like moving averages to smooth fluctuations. 
+      The combination of transformation and aggregation not only makes large datasets more manageable but also ensures that the analysis focuses on metrics that are consistent, relevant, and aligned with business objectives. 
+      In essence, this step bridges the gap between raw data and actionable insights, preparing the ground for advanced analytics, visualization, and reporting.
+    </p>
+
+    <h3>🔄 Data Transformation</h3>
+    <p>Transformation involves converting data into a format suitable for analysis. Common techniques include:</p>
+    <ul>
+      <li><strong>Normalization:</strong> Scaling values into a common range to avoid bias (e.g., 0–1 for machine learning).</li>
+      <li><strong>Encoding Categorical Data:</strong> Converting text categories into numeric codes (e.g., one-hot encoding).</li>
+      <li><strong>Data Type Conversion:</strong> Ensuring consistency across formats (e.g., date strings to DateTime).</li>
+      <li><strong>Feature Engineering:</strong> Creating new variables from existing data (e.g., age from date of birth).</li>
+      <li><strong>Joining and Merging:</strong> Combining multiple datasets into a single, unified structure.</li>
+    </ul>
+
+    <h3>📊 Data Aggregation</h3>
+    <p>Aggregation helps summarize data into higher-level views:</p>
+    <ul>
+      <li><strong>Summation:</strong> Total sales, revenue, or counts.</li>
+      <li><strong>Averages:</strong> Mean order value, average customer rating.</li>
+      <li><strong>Grouping:</strong> Results by time periods, regions, or product categories.</li>
+      <li><strong>Percentages and Ratios:</strong> Market share, churn rate, or profitability ratios.</li>
+      <li><strong>Rolling Calculations:</strong> Moving averages to smooth trends.</li>
+    </ul>
+
+    <h3>⚙️ Tools for Transformation & Aggregation</h3>
+    <ul>
+      <li><strong>Python:</strong> Pandas (`groupby`, `pivot_table`), NumPy, PySpark.</li>
+      <li><strong>SQL:</strong> `GROUP BY`, `JOIN`, `CAST`, and window functions for aggregation.</li>
+      <li><strong>Power BI / Tableau:</strong> Built-in transformations, calculated columns, and aggregation measures.</li>
+      <li><strong>ETL Pipelines:</strong> Talend, Informatica, AWS Glue, or Azure Data Factory for large-scale operations.</li>
+    </ul>
+
+    <h3>💡 Best Practices</h3>
+    <ul>
+      <li>Apply <strong>consistent transformations</strong> across all datasets to ensure comparability.</li>
+      <li>Document every transformation for <strong>data lineage</strong>.</li>
+      <li>Use <strong>aggregations carefully</strong> — avoid over-summarizing and losing valuable detail.</li>
+      <li>Validate aggregated results against raw data to ensure accuracy.</li>
+    </ul>
+
+    <h3>📌 Example: Sales Data Transformation</h3>
+    <p>
+      Consider a dataset of retail transactions. Transformations may include:
+    </p>
+    <ul>
+      <li>Converting transaction timestamps into calendar dates and extracting week or month.</li>
+      <li>Joining product tables to attach category and supplier details.</li>
+      <li>Encoding customer loyalty levels as numeric values.</li>
+    </ul>
+    <p>
+      Aggregations could include:
+    </p>
+    <ul>
+      <li>Total monthly sales per region.</li>
+      <li>Average basket size per customer segment.</li>
+      <li>Moving average of revenue to identify seasonal patterns.</li>
+    </ul>
+
+    <div style="margin-top: 32px;"> 
+      <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>
