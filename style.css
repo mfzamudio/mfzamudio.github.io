@@ -305,6 +305,7 @@ main section li {
   height: 320px;
   object-fit: cover;
   border-radius: 50%;
+  object-position: center; /* Centra tu rostro en el óvalo */
   border: 5px solid #ecf1f7;
   box-shadow: 0 4px 28px rgba(70, 110, 255, 0.08);
   background: #fff;
