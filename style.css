@@ -309,6 +309,8 @@ main section li {
   box-shadow: 0 4px 28px rgba(70, 110, 255, 0.08);
   background: #fff;
   display: block;
+  image-rendering: -webkit-optimize-contrast; /* Para Chrome/Safari */
+  image-rendering: high-quality;             /* Para otros navegadores */
 }
 
 .about-info {
