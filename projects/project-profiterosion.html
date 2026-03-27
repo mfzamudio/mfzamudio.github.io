@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profit Erosion from E-Commerce Returns – Mario Zamudio</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main class="project-detail">
+  <section>
+    <h2>🛒 Profit Erosion from E-Commerce Returns</h2>
+    <p><em>MDA Capstone Project — University of Niagara Falls Canada | DAMO-699-4 | Winter 2026</em></p>
+    <img src="../../images/profiterosion-thumbnail.png" alt="Project Overview" class="project-image" />
+    <p>
+      This capstone project quantifies the financial losses caused by product returns in e-commerce through
+      a multi-method analytics framework. The core concept: <strong>Profit Erosion = Margin Reversal + Processing Cost</strong>.
+      Using Google BigQuery's <code>thelook_ecommerce</code> dataset, the project identifies which product
+      categories, brands, and customer segments drive the most erosion — and builds predictive models to
+      flag high-risk customers before losses occur.
+    </p>
+
+    <div style="margin: 1.5rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
+      <a href="https://profiterosion.streamlit.app/" target="_blank" class="home-link">🚀 Live Streamlit App</a>
+      <a href="https://github.com/mfzamudio/unfc-mda-capstone-project" target="_blank" class="home-link">💻 GitHub Repository</a>
+    </div>
+
+    <h3>🔬 Research Questions & Methods</h3>
+    <ul>
+      <li>
+        <strong>RQ1 — Category & brand differences in erosion:</strong>
+        Kruskal-Wallis test (p = 2.63 × 10⁻³³). Top erosion categories: Outerwear/Coats (~$2,000),
+        Sweaters (~$1,600), Jeans (~$1,400).
+      </li>
+      <li>
+        <strong>RQ2 — Customer behavioral segmentation:</strong>
+        K-Means clustering · Gini coefficient: 0.409. Distinct segments identified by return behavior
+        and erosion contribution.
+      </li>
+      <li>
+        <strong>RQ3 — Predictive modeling for high-erosion customers:</strong>
+        Random Forest classifier · AUC = 0.9798. Enables proactive intervention before losses accumulate.
+      </li>
+      <li>
+        <strong>RQ4 — Behavioral drivers of erosion:</strong>
+        Log-linear regression · R² = 0.7188. Return frequency is the strongest predictor (r = 0.614).
+      </li>
+    </ul>
+
+    <h3>⚙️ Tools & Techniques</h3>
+    <ul>
+      <li><strong>Languages & Libraries:</strong> Python 3.11+, Pandas, NumPy, scikit-learn, statsmodels</li>
+      <li><strong>Visualization:</strong> Matplotlib, Seaborn</li>
+      <li><strong>Dashboard:</strong> Streamlit (5 interactive pages, live deployment)</li>
+      <li><strong>Data source:</strong> Google BigQuery — <code>thelook_ecommerce</code> dataset</li>
+      <li><strong>Statistical tests:</strong> Kruskal-Wallis, log-linear regression, K-Means clustering</li>
+      <li><strong>ML model:</strong> Random Forest classification with AUC evaluation</li>
+      <li><strong>Testing & CI/CD:</strong> 512+ pytest unit tests, GitHub Actions pipeline</li>
+      <li><strong>Validation:</strong> External dataset (School Specialty LLC) for cross-domain confirmation</li>
+    </ul>
+
+    <h3>💡 Key Insights</h3>
+    <ul>
+      <li>Top 20% of customers generate <strong>47.6% of total profit erosion</strong> (Pareto principle confirmed).</li>
+      <li>A tiered processing cost model ($12–$15.60 per return by category) reveals that operational costs amplify margin reversal significantly.</li>
+      <li>Return frequency is the single strongest behavioral predictor of erosion (r = 0.614).</li>
+      <li>The Random Forest model achieves AUC = 0.9798, enabling reliable early identification of high-erosion customers.</li>
+      <li>Directional patterns validated on an external B2B dataset, confirming generalizability of the framework.</li>
+    </ul>
+
+    <h3>📊 Business Impact</h3>
+    <p>
+      The framework provides e-commerce operators with a replicable methodology to measure, segment, and
+      predict profit erosion from returns. Actionable outputs include targeted retention strategies for
+      high-erosion customer segments, category-level pricing adjustments, and automated flagging of
+      at-risk customers — directly supporting revenue protection decisions.
+    </p>
+
+    <h3>🔗 Resources</h3>
+    <ul>
+      <li><a href="https://profiterosion.streamlit.app/" target="_blank">🚀 Interactive Dashboard — profiterosion.streamlit.app</a></li>
+      <li><a href="https://github.com/mfzamudio/unfc-mda-capstone-project" target="_blank">💻 Full Source Code & Notebooks — GitHub</a></li>
+    </ul>
+
+    <div style="margin-top: 2rem;">
+      <a href="/projects.html" class="home-link">← Back to Projects</a>
+    </div>
+  </section>
+</main>
+<div id="footer-placeholder"></div>
+<script src="/scripts/include-layout.js"></script>
+</body>
+</html>

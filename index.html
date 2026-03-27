@@ -4,318 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mario Zamudio – Data Analytics Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div id="header-placeholder"></div>
   <main>
+
     <section id="about" class="about-section">
       <div class="about-container">
         <div class="about-photo">
-          <img src="images/Profile_Github.png" alt="Mario Zamudio">
+          <img src="/images/Profile_Github.png" alt="Mario Zamudio">
         </div>
         <div class="about-info">
-          <h2>👨‍💼 About Me</h2>
-          <p>I am an electronic engineer with 23 years of experience in telecommunications. I specialize in configuring, implementing, testing, and supporting complex solutions
-            for major carriers. 
-            Over the last decade, I have transitioned into a Solution Architect, focusing on provisioning, charging control, and analytics while solving complex 
-            problems and leading technical teams with strong attention to detail.
-          </p>
-          
-          <p>My main goal is to deliver creative results that meet customer expectations and tackle challenges effectively. I can analyze client needs, 
-            review technical specs, define configurations, design solutions, plan projects, document testing procedures, and guide technical teams. 
-            I can also deploy solutions and integrate with third-party applications, facilitate go-live processes, and offer ongoing support.
-          </p>
-          
-          <p>As a Master’s candidate in Data Analytics at the University of Niagara Falls, I have significantly expanded my technical and analytical toolkit. 
-            My training has deepened my expertise in Python, Power BI, Tableau, SPSS, and SQL, as well as statistical modelling, data visualization, data warehousing, and machine learning. 
-            I am skilled in exploratory data analysis (EDA), regression analysis, predictive modelling, dashboard development, and leveraging data to generate actionable insights 
-            for business decision-making. Throughout my graduate studies, I have strengthened my abilities in data cleaning, hypothesis testing, advanced analytics, 
-            and the integration of multiple tools and platforms. These skills have been applied to real-world projects involving statistical inference, 
-            ETL processes and business intelligence. 
-            This blend of engineering experience and advanced data analytics empowers me to deliver end-to-end solutions, bridge the gap between business and technology, 
-            and add value to organizations in a data-driven world.
-          </p>
-          
+          <p class="about-name">Mario Zamudio</p>
+          <p class="about-title">Solution Architect &amp; Data Analytics Professional</p>
+
+          <p>Electronic engineer with 23+ years in telecommunications, transitioning into data analytics. I specialize in designing scalable solutions, leading technical teams, and applying data-driven methods to solve complex business problems — from provisioning and charging systems to predictive modelling and business intelligence.</p>
+
+          <p>I completed a Master's in Data Analytics at the University of Niagara Falls (GPA 4.0, President's Distinction List every term). My work bridges engineering rigour with modern analytics: EDA, regression, machine learning, ETL pipelines, and interactive dashboards built for decision-makers.</p>
+
+          <p>I actively integrate AI tools — including <strong>Claude</strong>, <strong>Claude Code</strong>, <strong>Gemini</strong>, and <strong>Comet</strong> — to accelerate development, refine technical pipelines, and apply prompt engineering across the full analytics workflow.</p>
+
+          <div class="skill-badges">
+            <span class="skill-badge">Python</span>
+            <span class="skill-badge">SQL</span>
+            <span class="skill-badge">Power BI</span>
+            <span class="skill-badge">Tableau</span>
+            <span class="skill-badge">SPSS</span>
+            <span class="skill-badge">Streamlit</span>
+            <span class="skill-badge">Machine Learning</span>
+            <span class="skill-badge">EDA</span>
+            <span class="skill-badge">ETL</span>
+            <span class="skill-badge">Claude Code</span>
+            <span class="skill-badge">Gemini</span>
+            <span class="skill-badge">Prompt Engineering</span>
+          </div>
         </div>
       </div>
     </section>
 
-<section id="publications">
-  <h2>📝 Publications</h2>
-  <p>
-    I regularly share articles about Data Analytics techniques, tools, and processes I’ve been learning. 
-    These posts cover topics such as Python, SQL, Power BI, Tableau, and SPSS, as well as methods like regression, EDA, and hypothesis testing. 
-  </p>
-  <div style="margin-top: 16px;">
-    <a href="publications/publications.html" class="home-link">📖 Explore My Publications</a>
-  </div>
-</section>
-    
-    
-<section id="projects">
-  <h2>📊 Featured Projects</h2>
-  <div class="project-grid">
-      <div class="card">
-        <h3>1. 🎵 Spotify Data 2023 – Top Songs Analysis (SPSS)</h3>
-        <a href="projects/project-spotify.html">
-          <img src="images/project-spotify.png" alt="Spotify 2023 Data" class="thumbnail-image" />  
-        </a>
-        <p>Exploratory analysis of Spotify's top tracks in 2023 using SPSS and statistical correlation techniques.</p>
-        <a href="projects/project-spotify.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>2. 🚦 Traffic Accident Prediction (Python)</h3>
-        <a href="projects/project-accidents.html">
-          <img src="images/project-accidents.png" alt="Traffic Accident Prediction" class="thumbnail-image" />
-        </a>      
-        <p>Regression modelling to forecast traffic accident risk in Toronto using weather and location data.</p>
-        <a href="projects/project-accidents.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>3. 📈 Sales Forecasting (Power BI)</h3>
-        <a href="projects/project-salesforecast.html">
-        <img src="images/Powerbi2.sales.png" alt="Sales Forecasting Power BI" class="thumbnail-image">
-          </a>
-        <p>Forecast sales performance, customers, and profitability using interactive visuals in Power BI.</p>
-        <a href="projects/project-salesforecast.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>4. 🔋 Electric Vehicles Analysis (Python + Power BI)</h3>
-        <a href="projects/project-electricvehicles.html">
-          <img src="images/project-electricvehicles.png" alt="Electric Vehicles Project Screenshot" class="thumbnail-image">
-        </a>
-        <p>Exploratory and statistical analysis of electric vehicle registrations using Python and Power BI. Includes regression models, data consistency validation by state, and growth trends over time.</p>
-        <a href="projects/project-electricvehicles.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>5. 🕵️‍♂️ LAPD Crime Data Analysis (Python)</h3>
-        <a href="projects/project-lapdcrimes.html">
-          <img src="images/lapd-crime-mosaic.png" alt="LAPD Crime Project Mosaic" class="thumbnail-image">
-        </a>
-        <p>
-          Predictive and exploratory analysis of the Los Angeles Police Department Crime Dataset using Python. Includes EDA, feature engineering, demographic insights, spatial heatmaps, and Random Forest modeling to identify the key drivers of crime case solvability.
-        </p>
-        <a href="projects/project-lapdcrimes.html">🔗 View Details</a>
-      </div>
-
-      <div class="card">
-        <h3>6. 📊 Superstore Sales Analysis (Tableau)</h3>
-        <a href="projects/project-superstore-tableau.html">
-          <img src="images/superstore-tableau-thumbnail.png" alt="Superstore Tableau Dashboard" class="thumbnail-image">
-        </a>
-        <p>
-          An interactive business dashboard for the popular Superstore dataset, built with Tableau. Explore regional sales, profit trends, category breakdowns, and key KPIs through dynamic maps and charts. Two linked dashboards provide actionable insights for managers and analysts.
-        </p>
-        <a href="projects/project-superstore-tableau.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>7. 🌎 Global Superstore Analysis (Tableau)</h3>
-        <a href="projects/project-global-superstore-tableau.html">
-          <img src="images/global-superstore-tableau-thumbnail.png" alt="Global Superstore Tableau Dashboard" class="thumbnail-image">
-        </a>
-        <p>
-          Advanced Tableau dashboards analyzing global sales, profits, customer segments, and trends in the Global Superstore dataset. Features regional performance, category analysis, and interactive insights for strategic business decisions.
-        </p>
-        <a href="projects/project-global-superstore-tableau.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>8. 📦 Global Orders & Profit Dashboard (Tableau)</h3>
-        <a href="projects/project-assignment3-tableau.html">
-          <img src="images/globalorders-tableau-thumbnail.png" alt="Global Orders Tableau Dashboard" class="thumbnail-image">
-        </a>
-        <p>
-          Dual Tableau dashboards exploring global orders, profitability, shipping performance, and key metrics. Features interactive KPIs, geographic analysis, and data-driven insights for decision makers.
-        </p>
-        <a href="projects/project-globalorders-tableau.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>9. 🌐 Global Trade Analytics (Python & Tableau)</h3>
-        <a href="projects/project-global-trade-analytics.html">
-          <img src="images/global-trade-analytics-thumbnail.png" alt="Global Trade Analytics" class="thumbnail-image">
-        </a>
-        <p>
-          End-to-end analysis of 34 years of global trade, tariffs, and economic disruptions using Python (EDA, regression, Random Forest) and Tableau (interactive dashboards, world maps). Hypothesis-driven insights for policymakers and business leaders.
-        </p>
-        <a href="projects/project-global-trade-analytics.html">🔗 View Details</a>
-      </div>
-
-    </div>
-
-    <div style="margin-top: 32px;">
-       <a href="index.html" class="home-link">🏠 Back to Home</a>
-    </div>
-  </section>
-  
-  <section id="Additional Projects">
-    <h2>📊 Other interesting Projects</h2>
-    <div class="project-grid">
-      <div class="card">
-        <h3>1. 🚲 Bicycle Store (SQL Analysis)</h3>
-        <a href="projects/project-bicycles.html">
-          <img src="images/project-bicycles.png" alt="Bicycles SQL Project" class="thumbnail-image">
-        </a>
-        <p>Database modelling and SQL analysis for a retail bicycle store.</p>
-        <a href="projects/project-bicycles.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>2. 🚌 Bus Scheduling Optimization (Python)</h3>
-        <a href="projects/project-operations.html">
-          <img src="images/project-operations.png" alt="Bus Scheduling Optimization" class="thumbnail-image">
-        </a>
-        <p>Optimization of bus resources for urban public transportation using LP and advanced modelling using Phyton Solvers.</p>
-        <a href="projects/project-operations.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>3. 📊 Sales Modeling & DAX (Power BI)</h3>
-          <a href="projects/project-powerbi1.html">
-          <img src="images/Powerbi1.sales.png" alt="Power BI Sales Analysis" class="thumbnail-image">
-          </a> 
-          <p>Descriptive analysis of sales data using Power BI and advanced DAX measures.</p>
-          <a href="projects/project-powerbi1.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>4. 🌸 Iris Dataset Analysis (Python + Power BI)</h3>
-        <a href="projects/project-iris.html">
-          <img src="images/project-iris.png" alt="Iris Analysis" class="thumbnail-image">
-        </a>
-        <p>Data exploration of the Iris dataset using Python preprocessing and Power BI dashboards.</p>
-        <a href="projects/project-iris.html">🔗 View Details</a>
-      </div>
-      <div class="card">
-        <h3>5. 🏠📉 Housing Prices & Bike Sharing (Python + Power BI)</h3>
-        <a href="projects/project-housing-bikeshare.html">
-          <img src="images/project-housing-bikeshare.png" alt="Housing Prices & Bike Sharing" class="thumbnail-image">
-        </a>
-        <p>End-to-end workflow using Python notebooks for preparation and prediction, paired with Power BI dashboards for housing prices and bike sharing.</p>
-        <a href="projects/project-housing-bikeshare.html">🔗 View Details</a>
-      </div>
-
-      <div class="card">
-        <h3>6. 🧩 Advanced Visualizations & Insights (Tableau)</h3>
-        <a href="projects/project-masterycheck1-tableau.html">
-          <img src="images/masterycheck1-advancedviz-thumbnail.png" alt="Advanced Visualizations Tableau Dashboard" class="thumbnail-image">
-        </a>
-        <p>
-          A Tableau dashboard showcasing advanced visualizations for multi-dimensional data analysis. Combines interactive filters, dynamic charts, and spatial analysis for deeper business insights and discovery.
-        </p>
-        <a href="projects/project-masterycheck1-tableau.html">🔗 View Details</a>
-      </div>
-
-      <div class="card">
-        <h3>7. ❤️ Heart Attack Risk Dashboard (Tableau)</h3>
-        <a href="projects/project-heartattack-tableau.html">
-          <img src="images/heartattack-tableau-thumbnail.png" alt="Heart Attack Risk Tableau Dashboard" class="thumbnail-image">
-        </a>
-        <p>
-          Tableau dashboard analyzing heart attack risk factors and patient profiles. Includes interactive filters, risk segmentation, and trend analysis for healthcare analytics and preventive care insights.
-        </p>
-        <a href="projects/project-heartattack-tableau.html">🔗 View Details</a>
-      </div>
-      
-      <div class="card">
-        <h3>8. 📉 Sales Decline Analysis Dashboard (Tableau)</h3>
-        <a href="projects/project-salesdecline-tableau.html">
-          <img src="images/salesdecline-tableau-thumbnail.png" alt="Sales Decline Tableau Dashboard" class="thumbnail-image">
-        </a>
-        <p>
-          Interactive Tableau dashboards investigating the causes, patterns, and impacts of sales decline. Explore time trends, segment breakdowns, and actionable insights for business recovery and strategy.
-        </p>
-        <a href="projects/project-salesdecline-tableau.html">🔗 View Details</a>
-      </div>
-
-
-  </div>
-  <div style="margin-top: 32px;">
-    <a href="index.html" class="home-link">🏠 Back to Home</a>
-  </div>
-</section>
-    <section id="resume">
-      <h2>Resume</h2>
-         <h3>🧪 Experience</h3>
-
-          <p><strong>Solution Architect – Integration & Innovation – Corus Consulting</strong><br>
-          <em>Sep 2025 – Present | Colombia (Remote)</em><br>
-          Provide strategic consulting for enterprise integration and digital transformation. Specializing in designing scalable architectures using APIs, Docker, and Ansible, while leading R&D initiatives and Proofs of Concept for AI-driven automation.</p>
-      
-          <p><strong>Solution Architect – Hewlett Packard Enterprise (HPE)</strong><br>
-          <em>May 2010 – Oct 2024 | Colombia</em><br>
-          Led full-cycle solution design and delivery for telecommunications clients in Latin America and Canada. Specializing in provisioning systems, charging control, analytics solutions, and automated testing.</p>
-        
-          <p><strong>Technical Consultant – Indra</strong><br>
-          <em>2008 – 2010 | Colombia</em><br>
-          Implemented enterprise integration architecture (SOA)</p>
-        
-          <p><strong>System Analyst – Tigo</strong><br>
-          <em>2005 – 2008 | Colombia</em><br>
-          Designed mediation platforms and satellite applications for operational efficiency across telecom systems.</p>
-        
-          <p><strong>Developer – Hewlett Packard (HP)</strong><br>
-          <em>2004 – 2005 | Colombia</em><br>
-          Developing a third-party payment platform to reconcile mobile network events with content providers. It was built using scripting and Java J2EE framework, and it features a server core for recording events in a database and a graphical user interface (Swing GUI and HTML) for clients to interact with processed information</p>
-          
-          <p><strong>Developer – Proyectos Compartidos</strong><br>
-          <em>2002 – 2004 | Colombia</em><br>
-          Developing as part of the team, different routines in Mainframe’s banking using COBOL, scripting and Java using J2EE framework, using neuronal networks to forecast cash flow</p>
-
-          <h3>🛠 Skills</h3>
-          <ul>
-            <li><strong>Languages:</strong> Python, SQL, Java, C++, Shell</li>
-            <li><strong>Tools:</strong> SPSS, Tableau, Power BI, Jupyter, Git, Jenkins, Ansible</li>
-            <li><strong>Databases:</strong> Oracle, MySQL, Postgres, Vertica</li>
-            <li><strong>Methods:</strong> Regression, Clustering, Forecasting, Optimization</li>
-          </ul>
-
-      <h3>🎓 Education & Certifications</h3>
-      <ul>
-        <li><a href="https://www.unfc.ca/" target="_blank">Master in Data Analytics – University of Niagara Falls (2024–2026)</a>
-          <ul>
-            <li>
-              <strong>President’s Academic Distinction List:</strong>
-              Fall 2024, Winter 2025, Spring 2025, Fall 2025<br>
-              (Awarded for a 4.00 GPA / 90%+ in full course load. Each term included a $1,000 scholarship.)
-            </li>
-          </ul>
-        </li>        
-        <li><a href="https://unal.edu.co/" target="_blank">Electronic Engineering – Universidad Nacional de Colombia (1996–2002)</a></li>
-        <li><a href="https://www.usta.edu.co/" target="_blank">Project Management Specialist – Universidad Santo Tomás (2009–2010)</a></li>
-        <li><a href="https://www.udistrital.edu.co/" target="_blank">Mobile Telecommunications Specialist – Universidad Distrital Francisco José de Caldas (2003–2004)</a></li>
-        <li><a href="https://www.scrumstudy.com/certification/verify?type=SFC&number=810948" target="_blank">SCRUM Fundamentals Certified – SCRUMstudy (2020)</a></li>
-        <li><a href="https://www.credly.com/badges/77c40aed-2069-4d97-a6d1-124af0ba77ed/linked_in_profile" target="_blank">Certified SAFe® 6 Product Owner/Product Manager – Scaled Agile (2023)</a></li>
-      </ul>
-      <p>View my full experience on <a href="https://linkedin.com/in/mzamudio" target="_blank">LinkedIn</a> or download my <a href="CV - MARIO ZAMUDIO.pdf" target="_blank">CV</a>.</p>
-    </section>
-
-    <section id="contact" class="contact-section">
-      <h2>Contact</h2>
-      <div class="qr-contact-list">
-        <!-- Email -->
-        <div class="qr-contact-item">
-          <img src="images/qr-email.png" alt="Email QR">
-          <a href="mailto:mzamudio@gmail.com">mzamudio@gmail.com</a>
-        </div>
-        <!-- LinkedIn -->
-        <div class="qr-contact-item">
-          <img src="images/qr-linkedin.png" alt="LinkedIn QR">
-          <a href="https://linkedin.com/in/mzamudio" target="_blank">LinkedIn</a>
-        </div>
-        <!-- Indeed -->
-        <div class="qr-contact-item">
-          <img src="images/qr-indeed.png" alt="Indeed QR">
-          <a href="https://profile.indeed.com/p/wg2i33u" target="_blank">Indeed</a>
-        </div>
-        <!-- GitHub -->
-        <div class="qr-contact-item">
-          <img src="images/qr-github.png" alt="GitHub QR">
-          <a href="https://github.com/mfzamudio" target="_blank">GitHub</a>
-        </div>
-      </div>
-      <div style="margin-top: 32px;">
-        <a href="index.html" class="home-link">🏠 Back to Home</a>
-      </div>
-    </section>
   </main>
   <div id="footer-placeholder"></div>
-  <script src="./scripts/include-layout.js"></script>
+  <script src="/scripts/include-layout.js"></script>
 </body>
 </html>
