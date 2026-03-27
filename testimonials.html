@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Testimonials – Mario Zamudio</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      margin-top: 1.5rem;
+    }
+    .testimonial-card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 28px 24px 20px;
+      box-shadow: var(--shadow-md);
+      border-left: 4px solid var(--accent);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-blue);
+    }
+    .testimonial-quote {
+      font-size: 0.97rem;
+      color: var(--text);
+      line-height: 1.75;
+      font-style: italic;
+      flex: 1;
+    }
+    .testimonial-quote::before {
+      content: '\201C';
+      font-size: 2rem;
+      color: var(--accent);
+      line-height: 0;
+      vertical-align: -0.5rem;
+      margin-right: 4px;
+    }
+    .testimonial-author {
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+    .testimonial-author strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .testimonial-author span {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+    .testimonial-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <main>
+    <section id="testimonials">
+      <h2>💬 Testimonials</h2>
+      <p style="text-align:center; color: var(--text-muted); margin-bottom: 0.5rem;">
+        Recommendations from colleagues, managers, and partners — sourced from LinkedIn.
+      </p>
+
+      <div class="testimonials-grid">
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            I had the opportunity to work closely with Mario at HPE, where I was his manager, and I can confidently say he is an outstanding professional. Mario consistently demonstrated strong technical expertise combined with a deep understanding of the business and the client's needs, which allowed him to deliver solutions with real impact. He built excellent relationships with customers, earning their trust through his professionalism, reliability, and clear communication. Mario is someone you can truly rely on — technically solid, customer-focused, and highly professional.
+          </p>
+          <div class="testimonial-author">
+            <strong>Alfredo Reales</strong>
+            <span>Principal | Delivery & Transformation Advisory — Independent Advisory Practice</span>
+            <p class="testimonial-date">February 2026 · Former Manager at HPE</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            Mario joined HPE in 2010 as an outsourced technical consultant. From his first assignments he demonstrated strong commitment, analytical skills, and a data-driven approach that led HPE to hire him as a full-time employee and entrust him with greater responsibilities as a Solution Architect. He led key deployments for tier-1 carriers in the region, including AMX, Claro Colombia, AT&T Mexico and Rogers Canada. Over time Mario became a core member of the HPE CTG team and a point of reference for his colleagues. I highly recommend Mario for his extensive professional experience in telecom projects and, most importantly, for the personal qualities he brings to the workplace, which are rare to find in the market.
+          </p>
+          <div class="testimonial-author">
+            <strong>Alejandro Jimenez Pinzon</strong>
+            <span>Sales Director — HCLTech (formerly HPE Account Manager)</span>
+            <p class="testimonial-date">January 2026 · Colleague at HPE</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            Mario is a highly accomplished professional whose technical depth and collaborative leadership stand out, particularly in the telecommunications industry. He combines a strong customer-centric mindset with the ability to quickly grasp complex business needs and translate them into clear, actionable technical specifications for engineering and development teams. His professionalism, strategic vision, and deep industry expertise make him a trusted and highly valuable partner in any organisation. Having known Mario for over 20 years, I can recommend him with the utmost confidence and without hesitation.
+          </p>
+          <div class="testimonial-author">
+            <strong>Mauricio Andres Russi Ardila</strong>
+            <span>Solutions Architect — Expenti</span>
+            <p class="testimonial-date">March 2026 · 20+ year professional relationship</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            I strongly recommend Mario as an excellent results-oriented professional and a great human being. Always taking accountability and ownership of his work, and trying to be part of teams, promoting communication and collaboration.
+          </p>
+          <div class="testimonial-author">
+            <strong>Luis Manuel Rey Velo</strong>
+            <span>Solution Architect — Wikitek SA de CV</span>
+            <p class="testimonial-date">March 2026</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            I have worked with Mario in the past and he showcased his amazing technical skills and knowledge, and now with his latest achievement in the Data Analytics space I strongly recommend interacting with him. I hope our professional paths cross again.
+          </p>
+          <div class="testimonial-author">
+            <strong>Miguel Torres</strong>
+            <span>Technical Solution Presales Manager — HCLTech</span>
+            <p class="testimonial-date">February 2026 · Former colleague at HPE</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            I had the opportunity and the privilege of working with Mario on several mission-critical projects across the LATAM geography. No matter the challenge complexity, Mario would always approach with attention to detail and, most importantly, to the customer needs. His solid background in Enterprise Solution Architecture ensures the technical solutions will be fully aligned with customer business requirements on every single project. The usual outcome of Mario's engagement on any project is an improvement on customer satisfaction and confidence in products and services being delivered.
+          </p>
+          <div class="testimonial-author">
+            <strong>Antonio Duarte, MBA</strong>
+            <span>Account Delivery Manager — Self Employed</span>
+            <p class="testimonial-date">February 2026 · LATAM project collaboration</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            I highly recommend Mario Zamudio for any Solution Architect role. Mario is an exceptional professional with a deep understanding of OSS/BSS solutions. Beyond his technical expertise, what truly sets him apart is his commitment to continuous learning and his strong customer orientation. He is a dedicated professional who consistently adds value to every project he joins.
+          </p>
+          <div class="testimonial-author">
+            <strong>Maximiliano Valencia, PMP®</strong>
+            <span>Consulting Director — Truval Consulting LLC</span>
+            <p class="testimonial-date">January 2026</p>
+          </div>
+        </div>
+
+      </div>
+
+      <p style="text-align:center; margin-top: 2rem; font-size: 0.88rem; color: var(--text-muted);">
+        View all recommendations on <a href="https://linkedin.com/in/mzamudio" target="_blank">LinkedIn</a>.
+      </p>
+    </section>
+  </main>
+  <div id="footer-placeholder"></div>
+  <script src="/scripts/include-layout.js"></script>
+</body>
+</html>

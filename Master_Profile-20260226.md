@@ -93,9 +93,18 @@ Results-oriented technical leader with deep experience guiding cross-functional,
  - Context: Implemented SOA solutions to integrate provisioning platforms at Indra.  
 \\- \\\*\\\*Salesforce & Oracle CRM\\\*\\\*: Customer relationship management.  
  - Context: Integrated these platforms to produce client insights and support marketing analytics.  
+\\\#\#\#\# Architecture Frameworks
+\\- \\\*\\\*TOGAF\\\*\\\*: Enterprise Architecture framework.
+ - Context: Applied in solution architecture work at HPE and Corus Consulting for defining architectural principles, governance, and integration patterns.
+\\- \\\*\\\*Microservices\\\*\\\*: Distributed systems architecture.
+ - Context: Used in integration workflows at Corus Consulting.
+\\- \\\*\\\*Data Architecture & Data Engineering\\\*\\\*: Design of data flows, pipelines, and storage systems.
+ - Context: Applied across academic analytics projects and professional ETL pipeline design.
+\\- \\\*\\\*Prescriptive Analytics\\\*\\\*: Recommending actions based on predictive model outputs.
+ - Context: Extension of predictive modelling work in MDA program and professional analytics projects.
 \\\#\#\# Soft Skills (Leadership, Communication, Adaptability, Methodology & Strategy)  
 \\- \\\*\\\*Solution Architecture\\\*\\\*: Translating business needs into technical system designs.  
- - Context: Designing complex provisioning and analytics solutions for Bell Canada, AT\&T, and Claro.  
+ - Context: Designing complex provisioning and analytics solutions for Bell Canada, Rogers Canada, AT\&T, and Claro.  
 \\- \\\*\\\*Agile / Scrum / SAFe\\\*\\\*: Project management methodologies.  
  - Context: Certified SAFe 6 Product Owner and Scrum Master; used these methodologies to manage cross-functional teams and reduce deployment times.  
 \\- \\\*\\\*Project Management\\\*\\\*: Managing the full Software Development Life Cycle (SDLC).  
@@ -397,15 +406,15 @@ Results-oriented technical leader with deep experience guiding cross-functional,
  - \\\*\\\*Issuing Organization\\\*\\\*: SCRUMstudy  
  - \\\*\\\*Date\\\*\\\*: October 1, 2020  
  - \\\*\\\*ID\\\*\\\*: 810948  
-\\\#\#\#\# Technical & Integration (Software AG)  
+\\\#\#\#\# Technical & Integration (IBM)  
 \\- \\\*\\\*webMethods Hybrid Integration Sales Foundation\\\*\\\*  
- - \\\*\\\*Issuing Organization\\\*\\\*: Software AG (Found in LinkedIn Profile)  
+ - \\\*\\\*Issuing Organization\\\*\\\*: IBM (formerly Software AG)  
  - \\\*\\\*Date\\\*\\\*: (Date not explicitly listed in source, but listed as valid certification)  
 \\- \\\*\\\*webMethods Hybrid Integration Intermediate\\\*\\\*  
- - \\\*\\\*Issuing Organization\\\*\\\*: Software AG (Found in LinkedIn Profile)  
+ - \\\*\\\*Issuing Organization\\\*\\\*: IBM (formerly Software AG)  
  - \\\*\\\*Date\\\*\\\*: (Date not explicitly listed in source, but listed as valid certification)  
 \\- \\\*\\\*webMethods API Management Technical Sales Intermediate\\\*\\\*  
- - \\\*\\\*Issuing Organization\\\*\\\*: Software AG (Found in LinkedIn Profile)  
+ - \\\*\\\*Issuing Organization\\\*\\\*: IBM (formerly Software AG)  
  - \\\*\\\*Date\\\*\\\*: (Date not explicitly listed in source, but listed as valid certification)  
 \\---  
 \\\#\#\# Local & Regulatory Licenses (Ontario/Canada Specific)  
@@ -469,5 +478,27 @@ Ontario-based certifications validate compliance with local safety and workplace
 \\\#\#\#\# Customer Focus & Communication  
 \\- \\\*\\\*Evidence\\\*\\\*: Serving as a VIP Greeter and assisting diverse passengers  
 \\- \\\*\\\*Transferable Value\\\*\\\*: As a Solution Architect, previously bridged the gap between technical teams and business clients. Current public-facing roles maintain English communication skills and demonstrate ability to handle diverse client interactions professionally.  
-\\\#\# Languages  
-English (fluent), Spanish (native).  
+\\\#\# Languages
+English (Full professional proficiency), Spanish (Native).
+\\\#\# LinkedIn Learning – Recent Courses (2025–2026)
+\\- Microsoft Azure AI Essentials Professional Certificate – Microsoft & LinkedIn (in progress, Mar 2026)
+\\- AI Agents for Everyday Professionals: Simple Automations (Mar 2026)
+\\- Everyday Productivity with Claude Cowork (Mar 2026)
+\\- Python in Excel: Working with pandas DataFrames (Mar 2026)
+\\- Estadística avanzada / Advanced Statistics (Feb 2026)
+\\- Guía para la integración y gestión de agentes de IA en startups y pymes (Nov 2025)
+\\- Fundamentos de IA: Ideación y creación de prototipos (Nov 2025)
+\\- Fundamentos de agentes de IA: Arquitecturas, Marcos y Aplicaciones (Oct 2025)
+\\- Power BI: Solución de problemas comunes (Aug 2025)
+\\- Python avanzado (Nov 2025)
+\\- Azure: Autenticación (Jul 2024)
+\\- DevSecOps: Building a Secure Continuous Delivery Pipeline (2020)
+\\- Azure AZ-900: Microsoft Azure Fundamentals Prep (2021)
+\\\#\# Recommendations (LinkedIn – Selected)
+\\- \\\*\\\*Alfredo Reales\\\*\\\* (Principal, Delivery & Transformation Advisory – ex-HPE Manager): "Technically solid, customer-focused, and highly professional. I would gladly recommend him to any organization." (Feb 2026)
+\\- \\\*\\\*Alejandro Jimenez Pinzon\\\*\\\* (Sales Director, HCLTech): "Data-driven approach… led key deployments for AMX, Claro Colombia, AT&T Mexico and Rogers Canada… a point of reference for his colleagues." (Jan 2026)
+\\- \\\*\\\*Mauricio Russi Ardila\\\*\\\* (Solutions Architect, Expenti): "Known for over 20 years… recommend with the utmost confidence and without hesitation." (Mar 2026)
+\\- \\\*\\\*Luis Manuel Rey Velo\\\*\\\* (Solution Architect, Wikitek): "Excellent results-oriented professional… taking accountability and ownership." (Mar 2026)
+\\- \\\*\\\*Miguel Torres\\\*\\\* (Technical Solution Presales Manager, HCLTech): "Amazing technical skills and now with his latest achievement in the Data Analytics space I strongly recommend." (Feb 2026)
+\\- \\\*\\\*Antonio Duarte, MBA\\\*\\\* (Account Delivery Manager): "Attention to detail and to customer needs… improvement on customer satisfaction on every single project." (Feb 2026)
+\\- \\\*\\\*Maximiliano Valencia, PMP®\\\*\\\* (Consulting Director, Truval Consulting): "Commitment to continuous learning and strong customer orientation." (Jan 2026)
