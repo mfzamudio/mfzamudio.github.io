@@ -46,6 +46,10 @@ Results-oriented technical leader with deep experience guiding cross-functional,
  - Context: Used for Exploratory Data Analysis (EDA) and visualizing trends in traffic and crime data.  
 \\- \\\*\\\*Jupyter / Anaconda / PyCharm / Google Colab\\\*\\\*: Development environments.  
  - Context: The primary IDEs and platforms used for your Master's data analytics coursework.  
+\\- \\\*\\\*Databricks\\\*\\\*: Unified analytics platform for big data and machine learning.  
+ - Context: Used for large-scale data processing and collaborative data engineering workflows.  
+\\- \\\*\\\*Google BigQuery\\\*\\\*: Serverless, highly scalable cloud data warehouse.  
+ - Context: Used for querying and analyzing large datasets in cloud-native analytics projects.  
 \\- \\\*\\\*SPSS\\\*\\\*: Statistical analysis software.  
  - Context: Used for advanced statistical modelling in your Master's program.  
 \\\#\#\#\# Business Intelligence (BI) & Visualization  
