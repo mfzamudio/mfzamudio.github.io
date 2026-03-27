@@ -83,14 +83,12 @@ header {
   display: block;
 }
 
-/* Right column: subtitle + nav stacked */
-.header-right {
+/* Center column: subtitle */
+.header-subtitle {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: flex-end;
-  gap: 6px;
 }
 
 .header-subtitle p {
@@ -101,8 +99,10 @@ header {
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
   margin: 0;
   line-height: 1.2;
+  text-align: center;
 }
 
+/* Right column: nav */
 .header-nav ul {
   display: flex;
   list-style: none;
@@ -509,9 +509,9 @@ footer .social-icons a:hover img {
     padding: 0 1rem;
   }
 
-  .header-right {
-    align-items: center;
+  .header-subtitle {
     width: 100%;
+    justify-content: center;
   }
 
   .header-subtitle p {
