@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 3 — Data Architect: The Strategist | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      padding: 40px 32px;
+      border-radius: 12px;
+      margin: 24px 0 36px;
+      text-align: center;
+    }
+    .pub-hero .series-label {
+      display: inline-block;
+      background: rgba(37,99,235,0.35);
+      color: #bfdbfe;
+      border: 1px solid rgba(191,219,254,0.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 640px; margin: 0 auto; line-height: 1.65; }
+    .diagram-wrap {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 28px 12px 20px;
+      margin: 28px 0 8px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section {
+      border-left: 4px solid #6d28d9;
+      padding-left: 20px;
+      margin: 28px 0;
+    }
+    .concept-section h4 { color: #6d28d9; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .concept-section ul { margin: 8px 0 0; padding-left: 20px; }
+    .concept-section li { font-size: 0.9rem; color: #0f172a; line-height: 1.7; }
+    .arch-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.88rem; }
+    .arch-table th { background: #1e1b4b; color: white; padding: 10px 14px; text-align: left; }
+    .arch-table td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #0f172a; vertical-align: top; line-height: 1.55; }
+    .arch-table tr:nth-child(even) td { background: #f8fafc; }
+    .arch-table .layer-bronze { color: #92400e; font-weight: 700; }
+    .arch-table .layer-silver { color: #374151; font-weight: 700; }
+    .arch-table .layer-gold { color: #78350f; font-weight: 700; }
+    .cloud-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.88rem; }
+    .cloud-table th { background: #0f172a; color: white; padding: 10px 14px; text-align: left; }
+    .cloud-table td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: top; line-height: 1.55; }
+    .cloud-table tr:nth-child(even) td { background: #f8fafc; }
+    .cloud-table .cat { color: #475569; font-size: 0.8rem; font-style: italic; }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .tool-item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .tool-item h5 { margin: 0 0 6px; font-size: 0.88rem; color: #6d28d9; font-weight: 700; }
+    .tool-item p { margin: 0; font-size: 0.82rem; color: #475569; line-height: 1.55; }
+    .skill-summary {
+      background: #f5f3ff;
+      border-radius: 10px;
+      padding: 24px;
+      margin: 28px 0;
+    }
+    .skill-summary h4 { color: #6d28d9; margin: 0 0 14px; font-size: 1rem; }
+    .skill-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .skill-cols ul { margin: 0; padding-left: 18px; }
+    .skill-cols li { font-size: 0.88rem; color: #0f172a; line-height: 1.7; }
+    .highlight-box {
+      background: #f5f3ff;
+      border-left: 4px solid #6d28d9;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; }
+    .series-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0 24px;
+    }
+    .series-nav a {
+      display: block;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: #0f172a;
+      transition: border-color 0.2s, transform 0.2s;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .series-nav a:hover { border-color: #6d28d9; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #6d28d9; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) {
+      .skill-cols { grid-template-columns: 1fr; }
+      .series-nav { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="modern-data-ecosystem.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">The Modern Data Ecosystem &mdash; Part 3</div>
+      <h2>Data Architect: The Strategist</h2>
+      <p class="subtitle">The role that defines where data lives, how it flows, who owns it, and how it stays trustworthy — at the scale of an entire organization.</p>
+    </div>
+
+    <h3>What a Data Architect Actually Does</h3>
+    <p>
+      If the Data Engineer builds roads, the Data Architect designs the city. A Data Architect is not writing daily pipeline code — they are defining the standards, patterns, and governance policies that make hundreds of pipelines coherent over a 3–5 year horizon.
+    </p>
+    <p>
+      The role requires deep technical knowledge (storage formats, cloud services, modeling paradigms) combined with the ability to influence stakeholders, lead governance committees, and communicate architectural tradeoffs to executives. It is simultaneously one of the most technical and the most political roles in a data organization.
+    </p>
+
+    <h3>Core Concepts</h3>
+
+    <div class="concept-section">
+      <h4>1. The Medallion Architecture (Bronze / Silver / Gold)</h4>
+      <p>
+        The Medallion Architecture is the most widely adopted pattern for organizing data in a Lakehouse. It structures data into three progressively refined layers, each serving a distinct purpose:
+      </p>
+      <table class="arch-table">
+        <thead>
+          <tr><th>Layer</th><th>Also Called</th><th>Contents</th><th>Who Writes</th><th>Who Reads</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="layer-bronze">🥉 Bronze</span></td>
+            <td>Raw / Landing</td>
+            <td>Exact copy of source data, immutable. No transformations. Stores original JSON, CSV, or CDC events.</td>
+            <td>Ingestion pipelines</td>
+            <td>Processing jobs, auditors</td>
+          </tr>
+          <tr>
+            <td><span class="layer-silver">🥈 Silver</span></td>
+            <td>Conformed / Cleansed</td>
+            <td>Validated, deduplicated, standardized schema. Business rules applied. Referential integrity enforced.</td>
+            <td>dbt models, Spark jobs</td>
+            <td>Data analysts, downstream pipelines</td>
+          </tr>
+          <tr>
+            <td><span class="layer-gold">🥇 Gold</span></td>
+            <td>Business / Curated</td>
+            <td>Aggregated KPIs, semantic models, denormalized fact tables, feature store for ML.</td>
+            <td>dbt models, semantic layer</td>
+            <td>BI tools, executives, ML models, APIs</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        The key insight is that Bronze is never modified — it is your audit trail. Silver is where quality is enforced. Gold is where business logic lives. Each layer has its own access controls, retention policies, and SLA expectations.
+      </p>
+    </div>
+
+    <h3>Medallion Architecture &mdash; Full Flow</h3>
+
+    <div class="diagram-wrap">
+      <pre class="mermaid">
+flowchart TD
+    subgraph EXT["External Source Systems"]
+        CRM["CRM Systems\nSalesforce · HubSpot"]
+        ERP["ERP / SAP\nTransactional DBs"]
+        EVT["Event Streams\nKafka · Kinesis"]
+        API["APIs &amp; Webhooks\nThird-Party Data"]
+    end
+
+    subgraph BRONZE["🥉 Bronze Layer — Raw Zone"]
+        B_RAW[("Raw Parquet Files\nExact Copy · Immutable")]
+        B_CDC["CDC Events\nDebezium · Change Streams"]
+        B_META["Schema Registry\nMetadata &amp; Lineage Tags"]
+    end
+
+    subgraph SILVER["🥈 Silver Layer — Conformed Zone"]
+        S_VAL["Validated &amp; Deduplicated\nData Quality Checks Pass"]
+        S_STD["Standardized Schema\nConsistent Types &amp; Formats"]
+        S_BIZ["Business Rules Applied\nReferential Integrity Enforced"]
+    end
+
+    subgraph GOLD["🥇 Gold Layer — Business Zone"]
+        G_KPI["KPI Aggregations\nFact &amp; Dimension Tables"]
+        G_SEM["Semantic Layer\ndbt Metrics &amp; Exposures"]
+        G_FEAT["Feature Store\nML-Ready Datasets"]
+    end
+
+    subgraph CONSUMERS["Data Consumers"]
+        BI["BI &amp; Tableau\nDashboards"]
+        DS["Data Science\n&amp; ML Training"]
+        EXEC["Executive Reports\nC-Suite Dashboards"]
+        PROD["Data Products\n&amp; APIs"]
+    end
+
+    EXT --> BRONZE
+    B_RAW --> S_VAL
+    B_CDC --> S_VAL
+    S_VAL --> S_STD --> S_BIZ
+    S_BIZ --> G_KPI
+    S_BIZ --> G_SEM
+    S_BIZ --> G_FEAT
+    G_KPI --> BI
+    G_KPI --> EXEC
+    G_KPI --> PROD
+    G_SEM --> BI
+    G_SEM --> DS
+    G_FEAT --> DS
+      </pre>
+    </div>
+    <p class="diagram-caption">The Medallion Architecture: data is ingested raw (Bronze), cleaned and conformed (Silver), then curated for business consumption (Gold).</p>
+
+    <div class="concept-section">
+      <h4>2. Data Warehouse vs. Data Lake vs. Data Lakehouse</h4>
+      <p>
+        These three terms describe different approaches to storing and serving analytical data. Understanding their tradeoffs is fundamental to any architectural decision:
+      </p>
+      <ul>
+        <li><strong>Data Warehouse:</strong> Highly structured, schema-on-write, excellent query performance, high cost per byte stored. Best for well-understood, stable analytical queries. Examples: Snowflake, BigQuery, Redshift.</li>
+        <li><strong>Data Lake:</strong> Unstructured or semi-structured, schema-on-read, cheap storage, poor governance by default. Best for exploratory work, ML, and storing raw events. Problems: Data Swamps, no ACID guarantees.</li>
+        <li><strong>Data Lakehouse:</strong> Open table formats (Delta Lake, Apache Iceberg, Apache Hudi) add ACID transactions, schema enforcement, and time travel to cheap object storage. Combines the cost benefits of a lake with the governance of a warehouse. This is the dominant pattern for new platforms built from 2021 onwards.</li>
+      </ul>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. Data Mesh — From Centralized to Domain-Oriented</h4>
+      <p>
+        Data Mesh (introduced by Zhamak Dehghani, 2019) is an organizational and architectural paradigm, not a technology. It has four core principles:
+      </p>
+      <ul>
+        <li><strong>Domain Ownership:</strong> Each business domain (Orders, Customers, Products) owns the data it produces, rather than handing raw data to a central data team.</li>
+        <li><strong>Data as a Product:</strong> Each domain team treats its datasets as products — with SLAs, documentation, discoverability, and consumer-facing contracts.</li>
+        <li><strong>Self-Serve Data Platform:</strong> A central platform team provides the tooling, infrastructure, and standards that allow domain teams to publish and consume data products independently.</li>
+        <li><strong>Federated Computational Governance:</strong> Global policies (security, privacy, interoperability) are enforced through automated tooling, not manual gatekeeping.</li>
+      </ul>
+      <p>
+        Data Mesh solves the scaling problem of central data teams: as the number of domains grows, a single team becomes a bottleneck. In a mesh, domain teams move at their own speed while adhering to platform-wide standards.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>4. Data Governance — DAMA-DMBOK &amp; DCAM</h4>
+      <p>
+        Governance is the set of policies, processes, and organizational roles that ensure data is accurate, available, consistent, and secure across the enterprise. The two primary frameworks are:
+      </p>
+      <ul>
+        <li><strong>DAMA-DMBOK (Data Management Body of Knowledge):</strong> The most widely used framework, covering 11 knowledge areas: Data Architecture, Data Modeling, Data Storage, Data Integration, Document &amp; Content Management, Reference &amp; Master Data, Data Warehousing, Metadata Management, Data Quality, Data Security, and Data Governance itself.</li>
+        <li><strong>DCAM (Data Management Capability Assessment Model):</strong> An EDM Council standard focused on assessing and maturing an organization's data management capabilities. More prescriptive on the journey from ad-hoc to optimized maturity levels.</li>
+      </ul>
+      <p>
+        In practice, a Data Architect implements governance through: a Data Catalog (Alation, Collibra, DataHub), Data Steward assignments, Data Classification policies (PII, sensitive, public), access control frameworks, and automated lineage tracking.
+      </p>
+    </div>
+
+    <h3>Cloud Provider Equivalents</h3>
+    <p>A Data Architect must map architectural requirements to cloud services. The following table shows the major service categories across the three hyperscalers:</p>
+
+    <table class="cloud-table">
+      <thead>
+        <tr><th>Capability</th><th>AWS</th><th>Azure</th><th>Google Cloud</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Object Storage</td><td>S3</td><td>ADLS Gen2 / Blob</td><td>Cloud Storage (GCS)</td></tr>
+        <tr><td>Managed Warehouse</td><td>Redshift</td><td>Azure Synapse</td><td>BigQuery</td></tr>
+        <tr><td>Spark / Lakehouse</td><td>EMR / Glue</td><td>Azure Databricks / Synapse Spark</td><td>Dataproc / Databricks on GCP</td></tr>
+        <tr><td>Stream Ingestion</td><td>Kinesis Data Streams</td><td>Event Hubs</td><td>Pub/Sub</td></tr>
+        <tr><td>ETL Orchestration</td><td>AWS Glue / MWAA</td><td>Azure Data Factory</td><td>Cloud Dataflow / Composer</td></tr>
+        <tr><td>Metadata / Catalog</td><td>AWS Glue Catalog</td><td>Microsoft Purview</td><td>Dataplex / Data Catalog</td></tr>
+        <tr><td>ML Platform</td><td>SageMaker</td><td>Azure ML</td><td>Vertex AI</td></tr>
+        <tr><td>Secrets / IAM</td><td>IAM + Secrets Manager</td><td>Entra ID + Key Vault</td><td>IAM + Secret Manager</td></tr>
+      </tbody>
+    </table>
+
+    <h3>The Tool Stack, Explained</h3>
+
+    <div class="tool-grid">
+      <div class="tool-item">
+        <h5>Kimball / Star Schema</h5>
+        <p>Dimensional modeling approach: fact tables (events/transactions) surrounded by dimension tables (context). Optimized for BI query patterns. Gold layer tables are often star schemas.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Data Vault 2.0</h5>
+        <p>Modeling methodology for enterprise data warehouses. Separates business keys (Hubs), relationships (Links), and descriptive attributes (Satellites). Highly auditable and append-only.</p>
+      </div>
+      <div class="tool-item">
+        <h5>dbt Semantic Layer</h5>
+        <p>Define reusable business metrics in YAML (dbt MetricFlow). Any BI tool or API querying the semantic layer gets consistent, governance-controlled metric definitions instead of divergent SQL logic in every dashboard.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Apache Iceberg</h5>
+        <p>Open table format for huge analytic datasets. Adds ACID transactions, schema evolution, partition pruning, and time travel to files on S3 or GCS. Becoming the default open standard, supported by all major engines.</p>
+      </div>
+      <div class="tool-item">
+        <h5>DataHub / Collibra</h5>
+        <p>Data catalog and governance platforms. DataHub (open-source, LinkedIn) provides lineage, discovery, and metadata. Collibra is enterprise-grade with stewardship workflows, policy management, and compliance reporting.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Terraform</h5>
+        <p>Infrastructure as Code for provisioning cloud resources. Data Architects define the platform topology (warehouses, lakes, networks, IAM) in version-controlled Terraform modules, ensuring environments are reproducible.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <p>
+        <strong>Architect vs. Engineer:</strong> The Data Architect defines what the Bronze/Silver/Gold zones look like, what the access policies are, and which open table format to use. The Data Engineer implements the pipelines that populate them. Both roles must understand the Medallion pattern deeply, but they own different decisions within it.
+      </p>
+    </div>
+
+    <div class="skill-summary">
+      <h4>Key Skills for Data Architects in 2025</h4>
+      <div class="skill-cols">
+        <ul>
+          <li>Dimensional modeling (Kimball, Inmon, Data Vault 2.0)</li>
+          <li>Lakehouse design (Delta Lake, Iceberg, Hudi)</li>
+          <li>Data Mesh principles and implementation patterns</li>
+          <li>Cloud architecture on AWS, Azure, and/or GCP</li>
+          <li>DAMA-DMBOK knowledge areas (especially governance)</li>
+          <li>Data Catalog and lineage tooling</li>
+        </ul>
+        <ul>
+          <li>dbt Semantic Layer and metric definitions</li>
+          <li>Data Contract design and enforcement</li>
+          <li>Access control: RBAC, ABAC, column/row-level security</li>
+          <li>Cost modeling for cloud data platforms</li>
+          <li>Executive communication and storytelling</li>
+          <li>Cross-functional stakeholder alignment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="series-nav">
+      <a href="data-engineer.html">
+        <span class="nav-dir">&#8592; Part 2</span>
+        Data Engineer: The Builder
+      </a>
+      <a href="ml-ai-engineer.html" class="next">
+        <span class="nav-dir">Part 4 &#8594;</span>
+        ML/AI Engineer: The Deployer
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#6d28d9',
+      primaryTextColor: '#ffffff',
+      primaryBorderColor: '#4c1d95',
+      lineColor: '#6d28d9',
+      secondaryColor: '#2563eb',
+      tertiaryColor: '#f5f3ff',
+      clusterBkg: '#f5f3ff',
+      clusterBorder: '#ddd6fe',
+      titleColor: '#0f172a',
+      edgeLabelBackground: '#f8fafc',
+      fontFamily: 'Inter, Segoe UI, sans-serif'
+    },
+    flowchart: { curve: 'basis', padding: 16 }
+  });
+</script>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

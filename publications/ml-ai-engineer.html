@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 4 — ML/AI Engineer: The Deployer | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #0c4a6e 100%);
+      color: white;
+      padding: 40px 32px;
+      border-radius: 12px;
+      margin: 24px 0 36px;
+      text-align: center;
+    }
+    .pub-hero .series-label {
+      display: inline-block;
+      background: rgba(3,105,161,0.4);
+      color: #bae6fd;
+      border: 1px solid rgba(186,230,253,0.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bae6fd; font-size: 1rem; max-width: 640px; margin: 0 auto; line-height: 1.65; }
+    .diagram-wrap {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 28px 12px 20px;
+      margin: 28px 0 8px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section {
+      border-left: 4px solid #0369a1;
+      padding-left: 20px;
+      margin: 28px 0;
+    }
+    .concept-section h4 { color: #0369a1; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .concept-section ul { margin: 8px 0 0; padding-left: 20px; }
+    .concept-section li { font-size: 0.9rem; color: #0f172a; line-height: 1.7; }
+    .lifecycle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    .lifecycle-step {
+      background: white;
+      padding: 16px;
+      text-align: center;
+    }
+    .lifecycle-step .step-num { font-size: 1.4rem; margin-bottom: 6px; }
+    .lifecycle-step h5 { margin: 0 0 4px; font-size: 0.88rem; color: #0369a1; }
+    .lifecycle-step p { margin: 0; font-size: 0.8rem; color: #475569; line-height: 1.5; }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .tool-item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .tool-item h5 { margin: 0 0 6px; font-size: 0.88rem; color: #0369a1; font-weight: 700; }
+    .tool-item p { margin: 0; font-size: 0.82rem; color: #475569; line-height: 1.55; }
+    .skill-summary {
+      background: #f0f9ff;
+      border-radius: 10px;
+      padding: 24px;
+      margin: 28px 0;
+    }
+    .skill-summary h4 { color: #0369a1; margin: 0 0 14px; font-size: 1rem; }
+    .skill-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .skill-cols ul { margin: 0; padding-left: 18px; }
+    .skill-cols li { font-size: 0.88rem; color: #0f172a; line-height: 1.7; }
+    .highlight-box {
+      background: #f0f9ff;
+      border-left: 4px solid #0369a1;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; }
+    .highlight-box.warning {
+      background: #fffbeb;
+      border-left-color: #d97706;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+    .metric-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px;
+      border-top: 3px solid #0369a1;
+    }
+    .metric-card h5 { margin: 0 0 6px; font-size: 0.88rem; color: #0369a1; }
+    .metric-card p { margin: 0; font-size: 0.82rem; color: #475569; line-height: 1.5; }
+    .series-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0 24px;
+    }
+    .series-nav a {
+      display: block;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: #0f172a;
+      transition: border-color 0.2s, transform 0.2s;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .series-nav a:hover { border-color: #0369a1; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #0369a1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) {
+      .skill-cols { grid-template-columns: 1fr; }
+      .series-nav { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="modern-data-ecosystem.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">The Modern Data Ecosystem &mdash; Part 4</div>
+      <h2>ML/AI Engineer: The Deployer</h2>
+      <p class="subtitle">The role that closes the gap between a data scientist's notebook and a production system serving real users at scale, reliably, and with observable behavior.</p>
+    </div>
+
+    <h3>The Last-Mile Problem in AI</h3>
+    <p>
+      Research shows that fewer than 15% of machine learning models built in organizations ever reach production. The bottleneck is rarely the model quality — it is the infrastructure required to serve it reliably. Containerization, API design, monitoring, drift detection, retraining pipelines, feature stores, latency budgets, and token cost management are all engineering problems that data scientists are typically not trained to solve.
+    </p>
+    <p>
+      The ML/AI Engineer exists to own this last mile. They understand model internals well enough to instrument them correctly, and they understand production infrastructure well enough to run them safely. With the rise of LLMs, the role has expanded significantly to include RAG architecture, AI agent orchestration, and LLMOps observability.
+    </p>
+
+    <div class="highlight-box warning">
+      <p>
+        <strong>Common misconception:</strong> The ML/AI Engineer is not a data scientist who "also does DevOps." It is a distinct engineering discipline — closer to a backend software engineer who specializes in the deployment and reliability of AI systems. The data scientist builds the model; the ML/AI Engineer makes it run.
+      </p>
+    </div>
+
+    <h3>Core Concepts</h3>
+
+    <div class="concept-section">
+      <h4>1. The MLOps Lifecycle</h4>
+      <p>
+        MLOps (Machine Learning Operations) is the practice of applying DevOps principles — automation, reproducibility, monitoring, continuous delivery — to the full lifecycle of a machine learning model. Unlike software, ML systems have a unique failure mode: a model can <strong>silently degrade</strong> as the real-world data distribution shifts, without any runtime error.
+      </p>
+    </div>
+
+    <div class="lifecycle-grid">
+      <div class="lifecycle-step">
+        <div class="step-num">1️⃣</div>
+        <h5>Data Prep</h5>
+        <p>Feature engineering, validation, versioning with a feature store</p>
+      </div>
+      <div class="lifecycle-step">
+        <div class="step-num">2️⃣</div>
+        <h5>Training</h5>
+        <p>Experiment tracking with MLflow; reproducible runs; hyperparameter tuning</p>
+      </div>
+      <div class="lifecycle-step">
+        <div class="step-num">3️⃣</div>
+        <h5>Evaluation</h5>
+        <p>Automated testing: accuracy, fairness, robustness, and regression benchmarks</p>
+      </div>
+      <div class="lifecycle-step">
+        <div class="step-num">4️⃣</div>
+        <h5>Packaging</h5>
+        <p>Docker containers, ONNX export, model registry (MLflow, Hugging Face Hub)</p>
+      </div>
+      <div class="lifecycle-step">
+        <div class="step-num">5️⃣</div>
+        <h5>Serving</h5>
+        <p>FastAPI or TorchServe; Kubernetes for autoscaling; A/B traffic routing</p>
+      </div>
+      <div class="lifecycle-step">
+        <div class="step-num">6️⃣</div>
+        <h5>Monitoring</h5>
+        <p>Drift detection, prediction quality, latency, and cost dashboards</p>
+      </div>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. RAG — Retrieval-Augmented Generation</h4>
+      <p>
+        Large Language Models are trained on static corpora. They do not know about your company's internal documents, your product catalog, or any events after their training cutoff. <strong>RAG</strong> solves this by giving the model access to a dynamic, external knowledge base at inference time.
+      </p>
+      <p>
+        The architecture has two phases:
+      </p>
+      <ul>
+        <li><strong>Ingestion:</strong> Documents are chunked, converted into embedding vectors by an embedding model, and stored in a vector database (Pinecone, Weaviate, pgvector). This runs offline.</li>
+        <li><strong>Retrieval &amp; Generation:</strong> When a user asks a question, the query is also embedded, the top-K most similar chunks are retrieved, and those chunks are injected into the LLM's prompt as context. The model answers based on the retrieved knowledge, not just its training data.</li>
+      </ul>
+      <p>
+        RAG reduces hallucination, enables up-to-date knowledge without retraining, and makes AI responses auditable (you can show which source documents grounded the answer).
+      </p>
+    </div>
+
+    <h3>Complete RAG Pipeline Architecture</h3>
+
+    <div class="diagram-wrap">
+      <pre class="mermaid">
+flowchart TD
+    subgraph INGEST["Offline: Document Ingestion Pipeline"]
+        DOCS["Knowledge Base\nPDFs · HTML · Markdown · Confluence"]
+        LOAD["Document Loaders\nLangChain · LlamaIndex"]
+        SPLIT["Text Chunker\nRecursive Character Splitter"]
+        EMB["Embedding Model\nOpenAI text-embedding-3 · BGE · E5"]
+        VDB[("Vector Database\nPinecone · Weaviate · pgvector")]
+    end
+
+    subgraph QUERY["Online: Query &amp; Generation Pipeline"]
+        USER(["User Question"])
+        QEMB["Query Embedding\nSame Model as Ingestion"]
+        RETR["Semantic Retriever\nTop-K Similar Chunks"]
+        RERANK["Optional Re-Ranker\nCross-Encoder · Cohere Rerank"]
+        CTX["Prompt Template\nSystem + Context + Question"]
+        LLM["LLM\nClaude · GPT-4o · Llama 3"]
+        RESP(["Grounded Response\n+ Source Citations"])
+    end
+
+    subgraph OBS["Observability &amp; Evaluation"]
+        SMITH["LangSmith\nTrace · Log · Debug"]
+        EVAL["deepeval\nFaithfulness · Relevance · Groundedness"]
+        COST["Token Cost Monitor\nPer-Query Budget Alerts"]
+    end
+
+    DOCS --> LOAD --> SPLIT --> EMB --> VDB
+    USER --> QEMB
+    QEMB --> RETR
+    RETR <-->|"ANN Search"| VDB
+    RETR --> RERANK
+    RERANK --> CTX
+    USER --> CTX
+    CTX --> LLM --> RESP
+    LLM -.->|"traces"| SMITH
+    RESP -.->|"evaluation"| EVAL
+    LLM -.->|"usage"| COST
+      </pre>
+    </div>
+    <p class="diagram-caption">A production RAG pipeline: documents are vectorized offline; at query time, semantically similar chunks are retrieved and injected into the LLM prompt as grounding context.</p>
+
+    <div class="concept-section">
+      <h4>3. AI Agents and Agentic Architectures</h4>
+      <p>
+        An AI Agent is an LLM that can take actions — calling tools (web search, database queries, code execution, API calls) in a loop until it reaches a goal. Unlike RAG (which is a single retrieval + generation step), agents engage in multi-step reasoning: plan, act, observe, and iterate.
+      </p>
+      <p>
+        Frameworks like <strong>LangGraph</strong> model agents as state machines with conditional edges, enabling complex workflows: a research agent that searches the web, extracts facts, drafts a report, and self-critiques before delivering a final answer. The ML/AI Engineer is responsible for designing the agent graph, defining tool interfaces, handling failures gracefully, and keeping total compute and token cost within budget.
+      </p>
+      <ul>
+        <li><strong>ReAct (Reason + Act):</strong> The foundational pattern — alternate between reasoning steps and tool calls.</li>
+        <li><strong>Multi-Agent:</strong> Orchestrator delegates to specialized sub-agents (researcher, writer, reviewer).</li>
+        <li><strong>Human-in-the-Loop:</strong> LangGraph checkpoints pause execution for human approval on high-risk actions.</li>
+      </ul>
+    </div>
+
+    <div class="concept-section">
+      <h4>4. Model Evaluation and Production Monitoring</h4>
+      <p>
+        Traditional software tests check if code does what it's supposed to. ML/AI systems require a different class of tests, because the "output" is probabilistic and context-dependent:
+      </p>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <h5>Faithfulness</h5>
+          <p>Does the model's answer stay within the boundaries of the retrieved context? (No hallucination check)</p>
+        </div>
+        <div class="metric-card">
+          <h5>Answer Relevance</h5>
+          <p>Does the answer actually address the user's question, or does it go off-topic?</p>
+        </div>
+        <div class="metric-card">
+          <h5>Context Precision</h5>
+          <p>Were the retrieved chunks actually relevant, or did the retriever pull noisy documents?</p>
+        </div>
+        <div class="metric-card">
+          <h5>Data Drift</h5>
+          <p>Has the statistical distribution of inputs shifted from what the model was trained on?</p>
+        </div>
+        <div class="metric-card">
+          <h5>Latency P99</h5>
+          <p>How slow is the slowest 1% of requests? Critical for user-facing applications.</p>
+        </div>
+        <div class="metric-card">
+          <h5>Token Cost / Query</h5>
+          <p>How much does each query cost in LLM API tokens? Essential for FinOps at scale.</p>
+        </div>
+      </div>
+      <p>
+        <strong>LangSmith</strong> provides distributed tracing for LangChain applications — every LLM call, tool invocation, and retrieval step is logged with inputs, outputs, latency, and token usage. <strong>deepeval</strong> provides an automated evaluation framework with LLM-as-judge metrics for RAG quality (faithfulness, relevance, groundedness).
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>5. Fine-Tuning vs. RAG — When to Use Which</h4>
+      <p>
+        Two complementary approaches exist for making an LLM know about your domain, and the ML/AI Engineer must choose between them deliberately:
+      </p>
+      <ul>
+        <li><strong>RAG:</strong> Best for large, frequently-updated knowledge bases. No GPU training budget required. Knowledge is inspectable and auditable. Cannot change model behavior or communication style. Adds latency for retrieval.</li>
+        <li><strong>Fine-Tuning:</strong> Best for teaching the model a new skill, a specific communication style, or a domain-specific vocabulary. Requires a curated training dataset, compute budget, and evaluation infrastructure. Does not easily update for new information after training.</li>
+        <li><strong>Both together:</strong> A fine-tuned model can be improved further with RAG. Fine-tuning teaches how to reason in a domain; RAG provides the current knowledge.</li>
+      </ul>
+    </div>
+
+    <h3>The Tool Stack, Explained</h3>
+
+    <div class="tool-grid">
+      <div class="tool-item">
+        <h5>FastAPI</h5>
+        <p>Python async web framework for building model-serving APIs. Auto-generates OpenAPI docs. Handles concurrent requests efficiently. Standard choice for wrapping ML models as REST endpoints.</p>
+      </div>
+      <div class="tool-item">
+        <h5>PyTorch / TensorFlow</h5>
+        <p>Deep learning frameworks. PyTorch is dominant in research and increasingly in production. Most Hugging Face models are PyTorch-based. TensorFlow/Keras remains common in legacy and Google-heavy stacks.</p>
+      </div>
+      <div class="tool-item">
+        <h5>LangChain / LangGraph</h5>
+        <p>LangChain provides composable primitives for LLM apps (chains, agents, tools). LangGraph extends LangChain with stateful, graph-based agent workflows with conditional branching and human-in-the-loop support.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Pinecone / Weaviate</h5>
+        <p>Vector databases purpose-built for semantic search. Pinecone is fully managed and production-proven. Weaviate is open-source with multi-modal and hybrid (vector + keyword) search. Both support metadata filtering and real-time updates.</p>
+      </div>
+      <div class="tool-item">
+        <h5>MLflow</h5>
+        <p>Open-source platform for ML experiment tracking, model versioning, and deployment. Logs parameters, metrics, artifacts, and model code per run. Model Registry manages staging → production promotion workflows.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Docker + Kubernetes</h5>
+        <p>Docker packages model code + dependencies into portable images. Kubernetes orchestrates containers at scale: autoscaling, rolling deployments, GPU scheduling, and traffic routing for A/B tests and canary releases.</p>
+      </div>
+      <div class="tool-item">
+        <h5>LangSmith</h5>
+        <p>Observability platform for LangChain applications. Records every LLM trace in a searchable UI. Enables evaluation datasets, regression testing, and prompt iteration based on real production traffic.</p>
+      </div>
+      <div class="tool-item">
+        <h5>deepeval</h5>
+        <p>Open-source LLM evaluation framework. Implements G-Eval and LLM-as-judge metrics: faithfulness, answer relevance, context recall, contextual precision, hallucination detection. Integrates with CI/CD pipelines.</p>
+      </div>
+    </div>
+
+    <div class="skill-summary">
+      <h4>Key Skills for ML/AI Engineers in 2025</h4>
+      <div class="skill-cols">
+        <ul>
+          <li>Python (async, type hints, testing)</li>
+          <li>FastAPI for model-serving APIs</li>
+          <li>PyTorch / HuggingFace Transformers</li>
+          <li>LangChain and LangGraph agent design</li>
+          <li>RAG architecture and vector DB operations</li>
+          <li>MLflow experiment tracking and model registry</li>
+        </ul>
+        <ul>
+          <li>Docker and Kubernetes deployment</li>
+          <li>LangSmith tracing and evaluation setup</li>
+          <li>deepeval / RAGAS quality metrics</li>
+          <li>Token cost monitoring and optimization</li>
+          <li>Drift detection and model monitoring</li>
+          <li>Fine-tuning pipelines (LoRA, QLoRA basics)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="series-nav">
+      <a href="data-architect.html">
+        <span class="nav-dir">&#8592; Part 3</span>
+        Data Architect: The Strategist
+      </a>
+      <a href="modern-data-ecosystem.html" class="next">
+        <span class="nav-dir">Series Overview &#8594;</span>
+        Back to The Modern Data Ecosystem
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#0369a1',
+      primaryTextColor: '#ffffff',
+      primaryBorderColor: '#0c4a6e',
+      lineColor: '#0369a1',
+      secondaryColor: '#2563eb',
+      tertiaryColor: '#f0f9ff',
+      clusterBkg: '#f0f9ff',
+      clusterBorder: '#bae6fd',
+      titleColor: '#0f172a',
+      edgeLabelBackground: '#f8fafc',
+      fontFamily: 'Inter, Segoe UI, sans-serif'
+    },
+    flowchart: { curve: 'basis', padding: 16 }
+  });
+</script>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

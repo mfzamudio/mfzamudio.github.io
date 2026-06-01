@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Modern Data Ecosystem | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      padding: 44px 32px;
+      border-radius: 12px;
+      margin: 24px 0 36px;
+      text-align: center;
+    }
+    .pub-hero .series-label {
+      display: inline-block;
+      background: rgba(37,99,235,0.35);
+      color: #bfdbfe;
+      border: 1px solid rgba(191,219,254,0.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .pub-hero h2 {
+      color: white !important;
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle {
+      color: #bfdbfe;
+      font-size: 1.05rem;
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+    .diagram-wrap {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 28px 12px 20px;
+      margin: 28px 0 8px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .diagram-caption {
+      text-align: center;
+      font-size: 0.83rem;
+      color: #475569;
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin: 28px 0;
+    }
+    .role-card {
+      background: white;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 1px 4px rgba(15,23,42,.06);
+      border-top: 4px solid #2563eb;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .role-card:hover { transform: translateY(-4px); box-shadow: 0 4px 16px rgba(15,23,42,.1); }
+    .role-card.purple { border-top-color: #6d28d9; }
+    .role-card.teal { border-top-color: #0369a1; }
+    .role-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .role-card h3 { font-size: 1.1rem; margin: 0 0 2px; color: #0f172a; }
+    .role-title { font-size: 0.82rem; color: #2563eb; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .role-card.purple .role-title { color: #6d28d9; }
+    .role-card p { font-size: 0.9rem; color: #475569; margin-bottom: 12px; line-height: 1.65; }
+    .role-tools { font-size: 0.82rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 10px; margin-top: 4px; line-height: 1.6; }
+    .series-parts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 28px 0 40px;
+    }
+    .part-link {
+      display: block;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      text-decoration: none;
+      color: #0f172a;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .part-link:hover {
+      border-color: #2563eb;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.1);
+      transform: translateY(-3px);
+      color: #0f172a;
+    }
+    .part-number { font-size: 0.75rem; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+    .part-link h4 { font-size: 0.95rem; margin: 0 0 6px; color: #0f172a; line-height: 1.35; }
+    .part-link p { font-size: 0.82rem; color: #475569; margin: 0; line-height: 1.5; }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Publications</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learning in Public &mdash; 4-Part Series</div>
+      <h2>The Modern Data Ecosystem</h2>
+      <p class="subtitle">A practitioner's guide to the three specialized roles shaping data-driven organizations: Data Engineer, Data Architect, and ML/AI Engineer.</p>
+    </div>
+
+    <h3>Why Three Roles?</h3>
+    <p>
+      The era of the all-knowing "data person" is over. The explosion of cloud infrastructure, real-time streaming, machine learning, and large language models has created enough complexity that the field has split into at least three distinct, highly specialized engineering disciplines — each owning a critical layer of the data value chain.
+    </p>
+    <p>
+      Understanding where each role begins and ends — and how they interact — is essential whether you are hiring a team, planning your own career transition, or designing an organizational data strategy. This series covers all three, starting with how we got here.
+    </p>
+
+    <h3>How Data Flows Through the Ecosystem</h3>
+    <p>The diagram below maps how raw data is transformed into business value across all three roles:</p>
+
+    <div class="diagram-wrap">
+      <pre class="mermaid">
+flowchart TB
+    SRC[("📦 Data Sources\n— APIs · Databases · IoT · Event Streams —")]
+
+    subgraph ROLES["The Three Pillars of the Modern Data Organization"]
+        direction LR
+        DE["🔧 Data Engineer\nBuilds &amp; operates pipelines"]
+        DA["🗺️ Data Architect\nDesigns strategy &amp; governance"]
+        ML["🤖 ML/AI Engineer\nDeploys models &amp; AI systems"]
+    end
+
+    DW[("🏛️ Data Lakehouse\n— Cleaned · Governed · Modeled —")]
+    OUT["📊 Business Value\n— Decisions · Products · AI Applications —"]
+
+    SRC -->|"Ingestion"| DE
+    DE -->|"Quality Data"| DW
+    DA -->|"Governance & Design"| DW
+    DA -.->|"Architecture Blueprint"| DE
+    DA -.->|"Data Contracts"| ML
+    DW -->|"Analytics"| OUT
+    DW -->|"Training Data"| ML
+    ML -->|"Deployed Models & AI"| OUT
+
+    style DE fill:#6d28d9,color:#fff,stroke:#4c1d95
+    style DA fill:#2563eb,color:#fff,stroke:#1e3a8a
+    style ML fill:#0369a1,color:#fff,stroke:#0c4a6e
+      </pre>
+    </div>
+    <p class="diagram-caption">Solid arrows = data flow &nbsp;|&nbsp; Dashed arrows = design influence</p>
+
+    <h3>Meet the Three Roles</h3>
+
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-icon">🔧</div>
+        <h3>Data Engineer</h3>
+        <div class="role-title">The Builder</div>
+        <p>
+          Designs and operates the pipelines and infrastructure that reliably move, transform, and deliver data at scale. Owns quality, observability, and the operational cost of the data platform.
+        </p>
+        <div class="role-tools">
+          <strong>Core tools:</strong> Python &middot; PySpark &middot; Apache Airflow &middot; dbt &middot; Apache Kafka &middot; Snowflake &middot; BigQuery &middot; Databricks &middot; Docker &middot; Terraform
+        </div>
+      </div>
+
+      <div class="role-card purple">
+        <div class="role-icon">🗺️</div>
+        <h3>Data Architect</h3>
+        <div class="role-title">The Strategist</div>
+        <p>
+          Sets the long-term data strategy and enforces the standards that keep it sustainable. Designs warehouses, lakehouses, and data mesh domains. Leads governance, modeling, and security policy across the entire organization.
+        </p>
+        <div class="role-tools">
+          <strong>Core tools:</strong> Kimball &middot; Inmon &middot; Data Vault 2.0 &middot; AWS / Azure / GCP &middot; DAMA-DMBOK &middot; dbt Semantic Layer &middot; Medallion Architecture &middot; DCAM
+        </div>
+      </div>
+
+      <div class="role-card teal">
+        <div class="role-icon">🤖</div>
+        <h3>ML/AI Engineer</h3>
+        <div class="role-title">The Deployer</div>
+        <p>
+          Closes the gap between a data scientist's notebook and a production system. Builds the serving infrastructure, integrates RAG pipelines and AI agents, and monitors model performance, drift, token costs, and latency in production.
+        </p>
+        <div class="role-tools">
+          <strong>Core tools:</strong> FastAPI &middot; PyTorch &middot; LangChain &middot; LangGraph &middot; Pinecone &middot; Weaviate &middot; Kubernetes &middot; MLflow &middot; LangSmith &middot; deepeval
+        </div>
+      </div>
+    </div>
+
+    <h3>Read the Series</h3>
+    <p>Each part is self-contained, but reading in order builds the complete mental model:</p>
+
+    <div class="series-parts">
+      <a href="data-evolution.html" class="part-link">
+        <div class="part-number">Part 1 &rarr;</div>
+        <h4>The Evolution of Data Architecture</h4>
+        <p>From on-premise RDBMS to Data Mesh and LLMOps — the 30-year journey that made these roles inevitable.</p>
+      </a>
+      <a href="data-engineer.html" class="part-link">
+        <div class="part-number">Part 2 &rarr;</div>
+        <h4>Data Engineer: The Builder</h4>
+        <p>ETL vs ELT, streaming pipelines, data quality, observability, data contracts, and FinOps in practice.</p>
+      </a>
+      <a href="data-architect.html" class="part-link">
+        <div class="part-number">Part 3 &rarr;</div>
+        <h4>Data Architect: The Strategist</h4>
+        <p>Medallion Architecture, Data Lakehouse, Data Mesh domains, and enterprise governance frameworks.</p>
+      </a>
+      <a href="ml-ai-engineer.html" class="part-link">
+        <div class="part-number">Part 4 &rarr;</div>
+        <h4>ML/AI Engineer: The Deployer</h4>
+        <p>MLOps lifecycle, RAG pipelines, AI agents, model evaluation, and production monitoring.</p>
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#6d28d9',
+      primaryTextColor: '#ffffff',
+      primaryBorderColor: '#2563eb',
+      lineColor: '#2563eb',
+      secondaryColor: '#2563eb',
+      tertiaryColor: '#eff6ff',
+      clusterBkg: '#eff6ff',
+      clusterBorder: '#bfdbfe',
+      titleColor: '#0f172a',
+      edgeLabelBackground: '#f8fafc',
+      fontFamily: 'Inter, Segoe UI, sans-serif'
+    },
+    flowchart: { curve: 'basis', padding: 20 }
+  });
+</script>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

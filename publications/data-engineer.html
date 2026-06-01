@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 2 — Data Engineer: The Builder | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      padding: 40px 32px;
+      border-radius: 12px;
+      margin: 24px 0 36px;
+      text-align: center;
+    }
+    .pub-hero .series-label {
+      display: inline-block;
+      background: rgba(37,99,235,0.35);
+      color: #bfdbfe;
+      border: 1px solid rgba(191,219,254,0.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .diagram-wrap {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 28px 12px 20px;
+      margin: 28px 0 8px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section {
+      border-left: 4px solid #2563eb;
+      padding-left: 20px;
+      margin: 28px 0;
+    }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .vs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .vs-card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+    }
+    .vs-card h5 { margin: 0 0 8px; font-size: 0.9rem; color: #2563eb; }
+    .vs-card ul { margin: 0; padding-left: 18px; }
+    .vs-card li { font-size: 0.85rem; color: #475569; line-height: 1.65; }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .tool-item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .tool-item h5 { margin: 0 0 6px; font-size: 0.88rem; color: #6d28d9; font-weight: 700; }
+    .tool-item p { margin: 0; font-size: 0.82rem; color: #475569; line-height: 1.55; }
+    .skill-summary {
+      background: #f5f3ff;
+      border-radius: 10px;
+      padding: 24px;
+      margin: 28px 0;
+    }
+    .skill-summary h4 { color: #6d28d9; margin: 0 0 14px; font-size: 1rem; }
+    .skill-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .skill-cols ul { margin: 0; padding-left: 18px; }
+    .skill-cols li { font-size: 0.88rem; color: #0f172a; line-height: 1.7; }
+    .highlight-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; }
+    .series-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0 24px;
+    }
+    .series-nav a {
+      display: block;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: #0f172a;
+      transition: border-color 0.2s, transform 0.2s;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) {
+      .vs-grid { grid-template-columns: 1fr; }
+      .skill-cols { grid-template-columns: 1fr; }
+      .series-nav { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="modern-data-ecosystem.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">The Modern Data Ecosystem &mdash; Part 2</div>
+      <h2>Data Engineer: The Builder</h2>
+      <p class="subtitle">The role responsible for designing, building, and operating the pipelines and infrastructure that make data reliable, accessible, and cost-effective at scale.</p>
+    </div>
+
+    <h3>What a Data Engineer Actually Does</h3>
+    <p>
+      A Data Engineer's core output is <strong>reliable data delivery</strong>. If a Data Scientist needs a clean, well-structured dataset to train a model, or a BI dashboard needs fresh sales figures every morning, it is the Data Engineer who built the system that makes that happen — and who gets paged when it breaks.
+    </p>
+    <p>
+      The role sits between source systems (operational databases, APIs, event streams) and the consuming layers (analytics, ML, BI). It is fundamentally an infrastructure engineering role that requires both software engineering discipline and deep knowledge of data semantics.
+    </p>
+
+    <h3>Core Concepts</h3>
+
+    <div class="concept-section">
+      <h4>1. ETL vs. ELT — The Paradigm Shift</h4>
+      <p>
+        Traditional <strong>ETL (Extract, Transform, Load)</strong> transformed data before loading it into a warehouse. With cloud warehouses that have essentially unlimited compute (Snowflake, BigQuery, Databricks), it became cheaper and more flexible to load raw data first and transform it inside the warehouse — this is <strong>ELT (Extract, Load, Transform)</strong>.
+      </p>
+      <div class="vs-grid">
+        <div class="vs-card">
+          <h5>ETL — Transform First</h5>
+          <ul>
+            <li>Transformation happens outside the warehouse</li>
+            <li>Only clean data lands in the target</li>
+            <li>Hard to reprocess historical data</li>
+            <li>Common with on-premise warehouses</li>
+            <li>Tools: SSIS, Informatica, Talend</li>
+          </ul>
+        </div>
+        <div class="vs-card">
+          <h5>ELT — Load First</h5>
+          <ul>
+            <li>Raw data lands in a Bronze layer</li>
+            <li>Transformations run inside the warehouse</li>
+            <li>Easy to reprocess with new logic</li>
+            <li>Standard pattern with cloud warehouses</li>
+            <li>Tools: dbt, Spark, SQL on Snowflake/BQ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. Batch Processing vs. Real-Time Streaming</h4>
+      <p>
+        <strong>Batch processing</strong> is the traditional model: collect data over a period, then process the whole batch at once (nightly runs, hourly jobs). It is simple, cost-effective, and sufficient for most analytical use cases. <strong>Streaming</strong> processes each event as it arrives — essential for fraud detection, real-time recommendations, IoT monitoring, and any use case where latency in minutes is unacceptable.
+      </p>
+      <p>
+        Apache Kafka has become the dominant streaming backbone: a distributed, fault-tolerant message queue that decouples producers from consumers. AWS Kinesis and Google Pub/Sub offer managed alternatives in cloud environments. The modern pattern is often a <strong>Lambda Architecture</strong> (separate batch and streaming paths) or increasingly a <strong>Kappa Architecture</strong> (single streaming path that handles both real-time and reprocessing).
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. Data Quality &amp; Observability</h4>
+      <p>
+        A pipeline that runs reliably but delivers wrong data is worse than a pipeline that fails visibly. <strong>Data quality</strong> means asserting contracts on your data: row counts are within expected range, null rates are below a threshold, referential integrity between tables is maintained, value distributions match historical patterns.
+      </p>
+      <p>
+        <strong>Data observability</strong> is the broader practice of having visibility into the health of your entire data platform in near-real time — analogous to application monitoring (Prometheus/Grafana) but for data assets. Tools like Monte Carlo, Soda Core, and Great Expectations embed quality checks directly into pipelines. dbt tests (singular and generic) are the most common entry point for SQL-based quality assertions.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>4. Data Contracts</h4>
+      <p>
+        A <strong>Data Contract</strong> is a formal, machine-readable agreement between a data producer (a microservice, an operational system) and a data consumer (a pipeline, a dashboard, an ML model) about the structure, semantics, and SLAs of a dataset. Think of it as an API contract applied to data.
+      </p>
+      <p>
+        Without contracts, schema changes in an upstream system silently break downstream pipelines — often discovered only when a dashboard shows zeros or an ML model starts producing nonsense. Data Contracts, often defined in YAML using frameworks like Data Contract CLI or Soda, make these agreements explicit and enforceable, shifting schema breaks from silent runtime failures to detectable deployment-time violations.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>5. FinOps for Data Teams</h4>
+      <p>
+        Cloud warehouses charge by compute and storage. A poorly tuned dbt model that scans a full 10TB table on every run can cost thousands of dollars per month in BigQuery or Snowflake credits. <strong>FinOps for Data</strong> means treating cloud spend as a first-class engineering concern: partitioning tables by date, clustering by frequently-filtered columns, caching intermediate results, right-sizing Databricks clusters, and setting query cost alerts.
+      </p>
+    </div>
+
+    <h3>Modern Real-Time + Batch Pipeline Architecture</h3>
+    <p>The following diagram shows how a production data pipeline integrates streaming and batch ingestion, processing, and the Medallion storage pattern:</p>
+
+    <div class="diagram-wrap">
+      <pre class="mermaid">
+flowchart LR
+    subgraph SRC["Data Sources"]
+        DB[("RDBMS\nPostgres · Oracle")]
+        API["REST APIs\nWebhooks"]
+        IOT["IoT / Events\nSensors · Logs"]
+    end
+
+    subgraph INGEST["Ingestion Layer"]
+        KAFKA["Apache Kafka\nReal-Time Streams"]
+        KINESIS["AWS Kinesis\nCloud Events"]
+        BATCH["Batch Jobs\nS3 · SFTP · Files"]
+    end
+
+    subgraph PROC["Processing &amp; Orchestration"]
+        SPARK["PySpark\nDatabricks"]
+        DBT["dbt\nTransformations"]
+        AF["Apache Airflow\nOrchestration"]
+    end
+
+    subgraph STORE["Medallion Storage"]
+        B[("🥉 Bronze\nRaw Data")]
+        S[("🥈 Silver\nCleaned Data")]
+        G[("🥇 Gold\nBusiness-Ready")]
+    end
+
+    subgraph SERVE["Serving Layer"]
+        SF["Snowflake\nBigQuery"]
+        BI["BI Dashboards\nTableau · Looker"]
+        ML["ML Training\nFeature Store"]
+    end
+
+    DB --> KAFKA
+    API --> KAFKA
+    IOT --> KINESIS
+    DB --> BATCH
+    KAFKA --> SPARK
+    KINESIS --> SPARK
+    BATCH --> SPARK
+    SPARK --> B
+    B --> DBT
+    DBT --> S
+    S --> DBT
+    DBT --> G
+    AF -.->|"schedules"| SPARK
+    AF -.->|"schedules"| DBT
+    G --> SF
+    SF --> BI
+    SF --> ML
+      </pre>
+    </div>
+    <p class="diagram-caption">A modern pipeline: Kafka handles real-time; batch handles file-based sources; PySpark processes into Bronze; dbt transforms to Silver and Gold; Airflow orchestrates the whole flow.</p>
+
+    <h3>The Tool Stack, Explained</h3>
+
+    <div class="tool-grid">
+      <div class="tool-item">
+        <h5>Apache Airflow</h5>
+        <p>Python-based workflow orchestrator. Define DAGs (Directed Acyclic Graphs) to schedule and monitor pipelines. The de-facto standard for batch orchestration. Alternatives: Prefect, Dagster.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Apache Spark / PySpark</h5>
+        <p>Distributed in-memory processing engine. Handles datasets too large for a single machine. Essential for batch transformation at scale. Managed via Databricks or EMR. PySpark = Python API for Spark.</p>
+      </div>
+      <div class="tool-item">
+        <h5>dbt (data build tool)</h5>
+        <p>SQL-based transformation framework. Write SELECT statements; dbt handles the CREATE TABLE/VIEW, incremental logic, documentation, lineage graphs, and quality tests. Runs inside your warehouse.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Apache Kafka</h5>
+        <p>Distributed, fault-tolerant event streaming platform. Producers publish events; consumers read at their own pace. Retention is configurable (hours to forever). Used as the backbone of real-time architectures.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Snowflake</h5>
+        <p>Cloud data warehouse with separated storage and compute. Supports semi-structured data (JSON), time travel, and data sharing across organizations. Cost model: pay per query compute second.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Google BigQuery</h5>
+        <p>Serverless, columnar cloud warehouse. Serverless means no cluster management. Excellent for large-scale ad-hoc analysis. Integrates natively with GCP services and Vertex AI.</p>
+      </div>
+      <div class="tool-item">
+        <h5>Databricks</h5>
+        <p>Unified analytics platform built on Apache Spark. Combines batch and streaming processing, ML model training, and Delta Lake (open table format with ACID transactions).</p>
+      </div>
+      <div class="tool-item">
+        <h5>Docker &amp; Terraform</h5>
+        <p>Docker containerizes pipeline code for reproducible execution. Terraform provisions cloud infrastructure as code — warehouses, buckets, Kafka clusters, IAM roles — in a version-controlled, repeatable way.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The Medallion Architecture</strong> (Bronze → Silver → Gold) is the most widely adopted storage pattern for modern data platforms. It is covered in depth in Part 3 (Data Architect), but the Data Engineer is responsible for <em>implementing</em> the pipelines that populate each layer. Understanding the pattern is essential for both roles.
+      </p>
+    </div>
+
+    <div class="skill-summary">
+      <h4>Key Skills for Data Engineers in 2025</h4>
+      <div class="skill-cols">
+        <ul>
+          <li>Advanced SQL (window functions, CTEs, partitioning)</li>
+          <li>Python for pipeline scripting and testing</li>
+          <li>PySpark for distributed processing</li>
+          <li>Airflow / Prefect DAG authoring</li>
+          <li>dbt models, tests, and documentation</li>
+          <li>Data Contract design and enforcement</li>
+        </ul>
+        <ul>
+          <li>Snowflake or BigQuery administration</li>
+          <li>Kafka producer/consumer patterns</li>
+          <li>Docker and container orchestration basics</li>
+          <li>Terraform for IaC provisioning</li>
+          <li>Data quality frameworks (Great Expectations, Soda)</li>
+          <li>Cloud cost monitoring and query optimization</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="series-nav">
+      <a href="data-evolution.html">
+        <span class="nav-dir">&#8592; Part 1</span>
+        The Evolution of Data Architecture
+      </a>
+      <a href="data-architect.html" class="next">
+        <span class="nav-dir">Part 3 &#8594;</span>
+        Data Architect: The Strategist
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#6d28d9',
+      primaryTextColor: '#ffffff',
+      primaryBorderColor: '#2563eb',
+      lineColor: '#2563eb',
+      secondaryColor: '#2563eb',
+      tertiaryColor: '#eff6ff',
+      clusterBkg: '#eff6ff',
+      clusterBorder: '#bfdbfe',
+      titleColor: '#0f172a',
+      edgeLabelBackground: '#f8fafc',
+      fontFamily: 'Inter, Segoe UI, sans-serif'
+    },
+    flowchart: { curve: 'basis', padding: 16 }
+  });
+</script>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>
