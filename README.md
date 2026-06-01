@@ -46,16 +46,34 @@ Completed a **Master of Data Analytics** at the University of Niagara Falls Cana
 
 ---
 
+## Publications
+
+**The Modern Data Ecosystem** — 4-Part Series (June 2026)
+A practitioner's guide to the three specialized engineering roles shaping data organizations.
+
+| Part | Title |
+|------|-------|
+| Landing | [The Modern Data Ecosystem — Series Overview](publications/modern-data-ecosystem.html) |
+| Part 1 | [The Evolution of Data Architecture](publications/data-evolution.html) |
+| Part 2 | [Data Engineer: The Builder](publications/data-engineer.html) |
+| Part 3 | [Data Architect: The Strategist](publications/data-architect.html) |
+| Part 4 | [ML/AI Engineer: The Deployer](publications/ml-ai-engineer.html) |
+
+**Descriptive Analytics Series** (July 2025) — [Data Analytics: Tackling the Data](publications/descriptive-analytics.html)
+
+---
+
 ## Technical Skills
 
 - **Languages & ML:** Python, SQL, R, scikit-learn, Pandas, NumPy, Java, Shell, C++
-- **Data & BI:** Google BigQuery, Power BI, Tableau, Streamlit, Chart.js, MicroStrategy, Jupyter, SPSS, Databricks
-- **AI & LLM Engineering:** Claude, Claude Code, Gemini, GitHub Copilot, Prompt Engineering, AI Agents
-- **Cloud:** AWS (ECS, EKS, Lambda, S3), OpenStack, OpenShift (enterprise Kubernetes)
-- **DevOps & Containers:** Docker, Podman, Kubernetes, Helm, Jenkins, Ansible, Maven, GitHub Actions
+- **Data Engineering:** PySpark, Apache Airflow, dbt, Apache Kafka, AWS Kinesis, Snowflake, Google BigQuery, Databricks, Delta Lake, Apache Iceberg
+- **AI & LLM Engineering:** Claude, Claude Code, LangChain, LangGraph, Pinecone, Weaviate, MLflow, FastAPI, LangSmith, deepeval, Prompt Engineering, RAG
+- **BI & Visualization:** Power BI (DAX), Tableau, Streamlit, Chart.js, MicroStrategy, Jupyter, SPSS
+- **Cloud:** AWS (ECS, EKS, Lambda, S3, Glue, Kinesis), Azure, GCP, OpenStack, OpenShift
+- **DevOps & IaC:** Docker, Podman, Kubernetes, Helm, Terraform, Jenkins, Ansible, Maven, GitHub Actions
 - **Databases:** Oracle 19c, PostgreSQL, MySQL, Vertica, SQL Server, TimesTen
 - **Observability:** Prometheus, Grafana, Elasticsearch, Kibana
-- **Architecture:** TOGAF, SOA, ESB, Microservices, API Gateway, TM Forum SID
+- **Architecture:** TOGAF, Data Mesh, Medallion Architecture, DAMA-DMBOK, SOA, ESB, Microservices, API Gateway, TM Forum SID
 - **Integration:** IBM webMethods, TIBCO EAI/BPM, Siebel CRM, Salesforce
 
 ---

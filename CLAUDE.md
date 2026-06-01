@@ -35,18 +35,23 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 
 ## Design System
 
-### Colors
+### Colors (CSS custom properties in `style.css`)
 | Token | Value | Usage |
 |---|---|---|
-| Background | `#f5faff` | Page background |
-| Text primary | `#0d1b2a` | Body text |
-| Accent purple | `#522389` | Headings, highlights |
-| Accent blue | `#2d2088` | Links, CTAs |
-| Accent mid | `#456fc3` | Hover states, borders |
+| `--bg` | `#f8fafc` | Page background |
+| `--surface` | `#ffffff` | Card / panel background |
+| `--text` | `#0f172a` | Body text |
+| `--text-muted` | `#475569` | Secondary text |
+| `--border` | `#e2e8f0` | Dividers, card borders |
+| `--accent` | `#2563eb` | Links, CTAs, primary highlights |
+| `--accent-light` | `#eff6ff` | Accent backgrounds |
+| `--accent-mid` | `#bfdbfe` | Accent borders |
+| `--purple` | `#6d28d9` | Secondary accent, home-link |
+| `--purple-light` | `#f5f3ff` | Purple backgrounds |
 
 ### Typography
-- Font: `Segoe UI`, sans-serif
-- Line height: `2` (double — important for readability)
+- Font: `Inter` (Google Fonts), fallback `Segoe UI`, sans-serif
+- Line height: `1.65–1.75` body, `1.2` headings
 
 ### Layout Patterns
 - **Project grid**: `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))`
@@ -88,9 +93,24 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 - [ ] If SQL: include `.sql` source file in `projects/`
 
 ### Adding a New Publication — Checklist
-- [ ] Create `publications/SLUG.html` (use `publications/descriptive-analytics.html` as template)
+- [ ] Create `publications/SLUG.html` (use `publications/data-engineer.html` as template — it has the hero, Mermaid diagram wrapper, concept sections, and series-nav pattern)
 - [ ] Add link card to `publications/publications.html`
 - [ ] Add reference in the Publications section of `index.html`
+
+### Mermaid Diagrams in Publications
+Publications can include architecture diagrams via Mermaid.js CDN. Load it at the bottom of `<body>`, before `include-layout.js`:
+```html
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true, theme: 'base',
+    themeVariables: { primaryColor: '#6d28d9', primaryTextColor: '#ffffff',
+      primaryBorderColor: '#2563eb', lineColor: '#2563eb',
+      clusterBkg: '#eff6ff', clusterBorder: '#bfdbfe', titleColor: '#0f172a' }
+  });
+</script>
+```
+Use `<pre class="mermaid">` blocks wrapped in a `<div class="diagram-wrap">` container.
 
 ---
 
@@ -114,19 +134,38 @@ Bicycle Store SQL, Bus Scheduling Optimization (LP), Sales Modeling DAX, Iris Da
 
 ---
 
+## Existing Publications
+
+### Descriptive Analytics Series
+Sub-pages linked from `descriptive-analytics.html`: `collecting-data.html`, `cleaning-data.html`, `transforming-aggregation.html`. Steps 4–10 (Filtering, Segmentation, Visualization, Comparing, Reporting, Patterns, Sharing) do not yet have sub-pages — pending work.
+
+### The Modern Data Ecosystem (4-Part Series) — Published June 2026
+| File | Title |
+|---|---|
+| `modern-data-ecosystem.html` | Landing page — ecosystem map, role overview cards, series navigation |
+| `data-evolution.html` | Part 1 — Evolution of Data Architecture (timeline diagram) |
+| `data-engineer.html` | Part 2 — Data Engineer: The Builder (pipeline diagram, ETL/ELT, data contracts) |
+| `data-architect.html` | Part 3 — Data Architect: The Strategist (Medallion diagram, Data Mesh, cloud table) |
+| `ml-ai-engineer.html` | Part 4 — ML/AI Engineer: The Deployer (RAG pipeline diagram, MLOps lifecycle) |
+
+LinkedIn promotion: 5 posts scheduled Mon/Wed Jun 1–15 2026.
+
+---
+
 ## Skills & Tools Inventory
 
 | Category | Technologies |
 |---|---|
 | Languages | Python, SQL, R, Java, Shell, C++ |
 | ML / Data | scikit-learn, Pandas, NumPy, statsmodels, Jupyter, SPSS, Databricks, Google BigQuery |
+| Data Engineering | PySpark, Apache Airflow, Prefect, dbt, Apache Kafka, AWS Kinesis, Snowflake, Delta Lake, Apache Iceberg |
 | BI | Power BI (DAX), Tableau, Streamlit, Chart.js, MicroStrategy |
-| AI | Claude, Claude Code, Gemini, GitHub Copilot, Prompt Engineering |
-| Cloud | AWS (ECS/EKS/Lambda/S3), OpenStack, OpenShift |
-| DevOps | Docker, Podman, Kubernetes, Helm, Jenkins, Ansible, Maven, GitHub Actions |
+| AI / LLM | Claude, Claude Code, LangChain, LangGraph, Pinecone, Weaviate, MLflow, FastAPI, LangSmith, deepeval |
+| Cloud | AWS (ECS/EKS/Lambda/S3/Glue/Kinesis), Azure, GCP, OpenStack, OpenShift |
+| DevOps | Docker, Podman, Kubernetes, Helm, Jenkins, Ansible, Maven, GitHub Actions, Terraform |
 | Databases | Oracle 19c, PostgreSQL, MySQL, Vertica, SQL Server, TimesTen |
 | Observability | Prometheus, Grafana, Elasticsearch, Kibana |
-| Architecture | TOGAF, SOA, ESB, Microservices, API Gateway, TM Forum SID |
+| Architecture | TOGAF, SOA, ESB, Microservices, API Gateway, TM Forum SID, Data Mesh, Medallion, DAMA-DMBOK |
 | Integration | IBM webMethods, TIBCO EAI/BPM, Siebel CRM, Salesforce |
 
 ---
