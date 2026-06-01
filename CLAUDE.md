@@ -2,17 +2,16 @@
 
 ## Owner
 
-**Mario Zamudio** — Solution Architect & Data Analytics professional
-- 23+ years in telecommunications and enterprise solution architecture
-- Currently completing Master in Data Analytics, University of Niagara Falls (2024–2026), GPA 4.0
-- Transitioning into data analytics roles while active as Solution Architect at Corus Consulting (Sep 2025–Present)
+**Mario Zamudio** — Solution Architect & ML/Data Engineer
+- 15 years of hands-on delivery for Bell Canada, AT&T, and Claro; currently Solution Architect at Corus Consulting (Sep 2025–Present, remote)
+- Master of Data Analytics, University of Niagara Falls Canada (2024–2026, completed), GPA 4.13, President's Distinction List
 - Contact: mzamudio@gmail.com | mzamudio.com | GitHub: mfzamudio | LinkedIn: /in/mzamudio
 
 ---
 
 ## Project Goal
 
-This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that showcases Mario's data analytics work. The primary objective for ongoing development is to **add new data analysis content in English** — projects, publications, and articles that demonstrate applied analytics skills across Python, SQL, Power BI, Tableau, and statistical methods.
+This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that positions Mario as a hands-on Solution Architect and ML/Data Engineer for the Canadian mid-senior market. The primary objective for ongoing development is to **add new cloud-native, AI, and data engineering content in English** — projects, publications, and articles that demonstrate delivery skills across Python, scikit-learn, BigQuery, Docker/Kubernetes, GitHub Actions, and enterprise integration.
 
 ---
 
@@ -119,11 +118,16 @@ Bicycle Store SQL, Bus Scheduling Optimization (LP), Sales Modeling DAX, Iris Da
 
 | Category | Technologies |
 |---|---|
-| Languages | Python, SQL, Java, C++, Shell, COBOL |
-| Analytics / BI | Jupyter, Power BI, Tableau, SPSS |
-| Databases | Oracle, MySQL, PostgreSQL, Vertica |
-| ML / Stats | Regression, Clustering, Random Forest, LP, EDA, Hypothesis Testing |
-| DevOps | Git, Jenkins, Ansible |
+| Languages | Python, SQL, R, Java, Shell, C++ |
+| ML / Data | scikit-learn, Pandas, NumPy, statsmodels, Jupyter, SPSS, Databricks, Google BigQuery |
+| BI | Power BI (DAX), Tableau, Streamlit, Chart.js, MicroStrategy |
+| AI | Claude, Claude Code, Gemini, GitHub Copilot, Prompt Engineering |
+| Cloud | AWS (ECS/EKS/Lambda/S3), OpenStack, OpenShift |
+| DevOps | Docker, Podman, Kubernetes, Helm, Jenkins, Ansible, Maven, GitHub Actions |
+| Databases | Oracle 19c, PostgreSQL, MySQL, Vertica, SQL Server, TimesTen |
+| Observability | Prometheus, Grafana, Elasticsearch, Kibana |
+| Architecture | TOGAF, SOA, ESB, Microservices, API Gateway, TM Forum SID |
+| Integration | IBM webMethods, TIBCO EAI/BPM, Siebel CRM, Salesforce |
 
 ---
 
