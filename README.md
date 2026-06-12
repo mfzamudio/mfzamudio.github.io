@@ -118,7 +118,7 @@ A practitioner's guide to the three specialized engineering roles shaping data o
 | GitHub | [github.com/mfzamudio](https://github.com/mfzamudio) |
 | Portfolio | [www.mzamudio.com](https://www.mzamudio.com) |
 
-📄 **CV:** [`CV - MARIO ZAMUDIO.pdf`](./CV%20-%20MARIO%20ZAMUDIO.pdf) · [`CV - MARIO ZAMUDIO - ATS.pdf`](./CV%20-%20MARIO%20ZAMUDIO%20-%20ATS.pdf)
+📄 **CV:** [`CV - MARIO ZAMUDIO.pdf`](./CV%20-%20MARIO%20ZAMUDIO.pdf)
 
 ---
 
