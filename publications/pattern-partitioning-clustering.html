@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 9 — Partitioning & Clustering | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 9</div>
+      <h2>Partitioning &amp; Clustering</h2>
+      <p class="subtitle">The cheapest, highest-leverage way to make queries fast and bills small — and it comes down to one idea: make the engine read less.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Imagine a library with no shelves — every book in one giant pile. Finding one means reading them all. That's an unpartitioned table.</p>
+      <ol>
+        <li><strong>Partitioning</strong> — split data into folders by a column (usually date).</li>
+        <li><strong>Result</strong> — query "last 7 days" and the engine skips ~99% of the data. Less scanned = faster AND cheaper.</li>
+        <li><strong>Clustering / Z-ordering</strong> — sort data <em>inside</em> each partition.</li>
+        <li><strong>Result</strong> — co-locates rows you filter together (e.g., by customer_id), so even less data is read.</li>
+        <li><strong>The mental model</strong> — engines are fast because they READ LESS. Partition by what you filter on most.</li>
+      </ol>
+    </div>
+
+    <h3>Speed Comes from Reading Less</h3>
+    <p>
+      Every cloud query engine has the same fundamental cost: how much data it has to scan. Pricing on platforms like BigQuery is literally bytes-scanned; on warehouse compute it's time-on-engine, which is also driven by data read. So the highest-leverage optimization is almost never "a faster engine" — it's <strong>arranging the data so the engine can skip most of it</strong>.
+    </p>
+    <p>
+      Two techniques do this, and they stack. <strong>Partitioning</strong> physically separates rows into segments by a column. <strong>Clustering</strong> (a.k.a. Z-ordering) sorts the rows within those segments. Together they let the engine prune away everything irrelevant to your filter before it reads a single byte of it.
+    </p>
+
+    <h3>The Two Levers</h3>
+
+    <div class="concept-section">
+      <h4>1. Partitioning — Divide by Your Most Common Filter</h4>
+      <p>
+        Split the table into segments based on a column you filter on constantly — almost always a <strong>date</strong>. Now a query for "last 7 days" touches 7 partitions instead of years of history. This is called <em>partition pruning</em>, and it's often the difference between a query scanning 10 GB and 10 TB. Rule of thumb: partition by time.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. Clustering / Z-Ordering — Sort Within Partitions</h4>
+      <p>
+        Inside each partition, sort the data by your <em>next</em> most common filter (customer_id, region, product). When rows you query together are physically stored together, the engine reads fewer files/blocks to find them. Clustering refines what partitioning starts.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. The Failure Mode: Over-Partitioning</h4>
+      <p>
+        More partitions is not better. Partition by a high-cardinality column (like user_id) and you get millions of tiny files — the "small files problem" — which actually <em>slows</em> queries and bloats metadata. Partition by something low-cardinality and coarse (day, sometimes month); cluster by the high-cardinality stuff. Getting this balance right is a core data-engineering skill.
+      </p>
+    </div>
+
+    <h3>Partition Pruning, Visualized</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 300" role="img" aria-label="A query prunes skipped partitions and reads only one clustered partition, with flowing particles">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="q3" d="M220,170 C 300,200 330,223 380,223"/>
+          <path id="h" d="M620,223 L760,223"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="30" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Skip the partitions you don't need — read less</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <path d="M220,170 C 300,200 330,223 380,223"/>
+          <path d="M620,223 L760,223"/>
+        </g>
+        <!-- query -->
+        <rect x="30" y="120" width="190" height="100" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+        <text x="125" y="152" text-anchor="middle" font-size="20">🔎</text>
+        <text x="125" y="174" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Query</text>
+        <text x="125" y="190" text-anchor="middle" fill="#dbeafe" font-size="9">WHERE date = '2026-06-10'</text>
+        <text x="125" y="203" text-anchor="middle" fill="#dbeafe" font-size="9">AND customer_id = 42</text>
+        <!-- table label -->
+        <text x="500" y="62" text-anchor="middle" fill="#94a3b8" font-size="10.5" font-style="italic">Partitioned + clustered table</text>
+        <!-- skipped partitions -->
+        <rect x="380" y="75" width="240" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+        <text x="500" y="106" text-anchor="middle" fill="#64748b" font-size="11.5">📁 2026-06-08 — skipped</text>
+        <rect x="380" y="135" width="240" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+        <text x="500" y="166" text-anchor="middle" fill="#64748b" font-size="11.5">📁 2026-06-09 — skipped</text>
+        <!-- active partition -->
+        <rect x="380" y="195" width="240" height="56" rx="10" fill="url(#gBlue)" stroke="#bfdbfe" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2.4s" repeatCount="indefinite"/>
+        </rect>
+        <text x="500" y="220" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">📁 2026-06-10</text>
+        <text x="500" y="237" text-anchor="middle" fill="#dbeafe" font-size="9">sorted by customer_id</text>
+        <!-- hit -->
+        <rect x="760" y="195" width="180" height="56" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+        <text x="850" y="220" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">✅ tiny read</text>
+        <text x="850" y="237" text-anchor="middle" fill="#e0f2fe" font-size="9">fast &amp; cheap</text>
+        <!-- labels on paths -->
+        <text x="300" y="210" text-anchor="middle" fill="#7dd3fc" font-size="9">partition pruning</text>
+        <text x="690" y="214" text-anchor="middle" fill="#7dd3fc" font-size="9">clustering</text>
+        <!-- particles -->
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#q3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#q3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.3s" begin="0.2s" repeatCount="indefinite"><mpath href="#h"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.3s" begin="0.85s" repeatCount="indefinite"><mpath href="#h"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Partitioning skips whole folders; clustering trims what's read inside the surviving one.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Lever</th><th>Snowflake</th><th>Databricks (Delta)</th><th>BigQuery</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Partitioning</td><td>Automatic micro-partitions</td><td>Partition columns / Liquid Clustering</td><td>Partitioned tables (by date/range)</td><td>Delta partitions (Spark/SQL)</td></tr>
+          <tr><td>Clustering</td><td>Clustering keys</td><td>Z-ORDER / Liquid Clustering</td><td>Clustering columns</td><td>Z-ORDER (Delta)</td></tr>
+          <tr><td>Goal</td><td colspan="3" style="text-align:center;color:#475569;font-style:italic;">Read less → faster &amp; cheaper</td><td style="text-align:center;color:#475569;font-style:italic;">Same</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map, and confirm specifics against current vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> every platform gives you the same two levers — partition by your coarse, frequent filter (time); cluster by your fine one (id, region). The names differ (clustering keys, Z-order, Liquid Clustering), but the goal is identical: make the engine read less. It's usually the #1 cost fix on a data team.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-open-table-formats.html">
+        <span class="nav-dir">&#8592; Part 8</span>
+        Open Table Formats
+      </a>
+      <a href="pattern-data-quality.html" class="next">
+        <span class="nav-dir">Part 10 &#8594;</span>
+        Data Quality &amp; Testing
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

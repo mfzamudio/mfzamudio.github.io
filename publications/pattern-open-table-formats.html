@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 8 — Open Table Formats | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 8</div>
+      <h2>Open Table Formats</h2>
+      <p class="subtitle">Delta, Iceberg, and Hudi — the metadata layer that turns a pile of files into a real table, and quietly ends vendor lock-in.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">A pile of Parquet files in object storage isn't a table. Open table formats make it behave like one.</p>
+      <ol>
+        <li><strong>The problem</strong> — raw files can't do transactions, can't time-travel, can't safely handle many writers.</li>
+        <li><strong>The fix</strong> — add a metadata layer on top of the files so they act like a real table.</li>
+        <li><strong>ACID transactions</strong> — no half-written messes.</li>
+        <li><strong>Time travel + schema evolution</strong> — query yesterday's version; add a column without rewriting everything.</li>
+        <li><strong>One copy, many engines</strong> — and that's what ends vendor lock-in.</li>
+      </ol>
+    </div>
+
+    <h3>Files Are Not a Table</h3>
+    <p>
+      The lakehouse (Part 7) stores data as open columnar files — usually <strong>Parquet</strong> — in cheap object storage. But a folder full of Parquet files is just that: files. Try to update one row, run two jobs that write at once, or ask "what did this table look like last Tuesday?" and you hit a wall. There's no transaction log, no schema authority, no notion of a consistent table state.
+    </p>
+    <p>
+      <strong>Open table formats</strong> — Delta Lake, Apache Iceberg, and Apache Hudi — add a metadata layer on top of those files. That layer tracks which files belong to the table, at which version, with which schema. Suddenly the pile of files behaves like a proper database table — while staying open and engine-agnostic.
+    </p>
+
+    <h3>What the Metadata Layer Buys You</h3>
+
+    <div class="concept-section">
+      <h4>1. ACID Transactions</h4>
+      <p>
+        Writes become atomic: a job either fully commits or doesn't change the table at all. No more readers seeing half-written data, no more corrupt states from two jobs colliding. This is the single biggest thing that separates a "table" from "some files."
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. Time Travel</h4>
+      <p>
+        Because each commit creates a new version, you can query the table <em>as of</em> a past version or timestamp. Invaluable for auditing, reproducing an ML training set, or recovering from a bad write — just roll back to the previous version.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. Schema Evolution</h4>
+      <p>
+        Add, rename, or reorder columns without rewriting petabytes of files. The metadata layer tracks schema changes over time, so pipelines don't shatter the moment an upstream source adds a field.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>4. The Real Prize: No Lock-In</h4>
+      <p>
+        Here's why this topic is suddenly everywhere. Because the format is open and the data sits in your own storage, <em>multiple engines can read and write the same table</em>. Your data is no longer trapped inside one vendor's proprietary format — Snowflake, Databricks, BigQuery, and Fabric can all operate on the same Iceberg or Delta table. The convergence on open formats (and interoperability layers between them) is the industry deciding that data should outlive any single engine.
+      </p>
+    </div>
+
+    <h3>The Layers, Visualized</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 360" role="img" aria-label="Many engines read and write one open table format on top of Parquet files, with flowing particles">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <path id="dn" d="M470,108 L470,150"/>
+          <path id="up" d="M530,150 L530,108"/>
+          <path id="mf" d="M500,222 L500,266"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="360" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="26" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">One open table — many engines read &amp; write it</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="470" y1="108" x2="470" y2="150"/>
+          <line x1="530" y1="108" x2="530" y2="150"/>
+          <line x1="500" y1="222" x2="500" y2="266"/>
+        </g>
+        <rect x="230" y="46" width="540" height="62" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+        <text x="500" y="74" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">⚙️ Many engines</text>
+        <text x="500" y="92" text-anchor="middle" fill="#ede9fe" font-size="9.5">Snowflake · Databricks · BigQuery · Fabric</text>
+        <rect x="290" y="150" width="420" height="72" rx="14" fill="url(#gBlue)" stroke="#bfdbfe" stroke-width="2.5">
+          <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2.6s" repeatCount="indefinite"/>
+        </rect>
+        <text x="500" y="182" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">🧊 Open table format — Delta / Iceberg / Hudi</text>
+        <text x="500" y="201" text-anchor="middle" fill="#dbeafe" font-size="10">ACID · time travel · schema evolution</text>
+        <rect x="300" y="266" width="400" height="64" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.45"/>
+        <text x="500" y="294" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">📄 Parquet files</text>
+        <text x="500" y="311" text-anchor="middle" fill="#dbeafe" font-size="9.5">in open object storage</text>
+        <text x="445" y="135" text-anchor="end" fill="#7dd3fc" font-size="9">read</text>
+        <text x="555" y="135" text-anchor="start" fill="#c4b5fd" font-size="9">write</text>
+        <g fill="#7dd3fc" filter="url(#glow)">
+          <circle r="3.6"><animateMotion dur="1.3s" repeatCount="indefinite"><mpath href="#dn"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.3s" begin="0.65s" repeatCount="indefinite"><mpath href="#dn"/></animateMotion></circle>
+        </g>
+        <g fill="#c4b5fd" filter="url(#glow)">
+          <circle r="3.6"><animateMotion dur="1.3s" begin="0.3s" repeatCount="indefinite"><mpath href="#up"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.3s" begin="0.95s" repeatCount="indefinite"><mpath href="#up"/></animateMotion></circle>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.5s" repeatCount="indefinite"><mpath href="#mf"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.5s" begin="0.75s" repeatCount="indefinite"><mpath href="#mf"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">The metadata layer sits between the engines and the raw files — letting many engines share one table.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Pattern</th><th>Snowflake</th><th>Databricks</th><th>BigQuery</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Native format</td><td>Apache Iceberg</td><td>Delta Lake (also Iceberg)</td><td>Iceberg via BigLake</td><td>Delta Lake (OneLake)</td></tr>
+          <tr><td>ACID + time travel</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td>Cross-engine reads</td><td>Iceberg tables</td><td>Delta / Uniform (Iceberg)</td><td>BigLake / external tables</td><td>OneLake shortcuts</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names and interoperability options evolve quickly here — confirm current support (e.g., Delta⇄Iceberg interop) against vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> the format is the pattern; the engine is the product. Open table formats put a real table on top of open files, so your data stays portable across Snowflake, Databricks, BigQuery, and Fabric. This is the most concrete expression of "learn the pattern, not the product" in the whole stack.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-lake-warehouse-lakehouse.html">
+        <span class="nav-dir">&#8592; Part 7</span>
+        Lake vs Warehouse vs Lakehouse
+      </a>
+      <a href="pattern-partitioning-clustering.html" class="next">
+        <span class="nav-dir">Part 9 &#8594;</span>
+        Partitioning &amp; Clustering
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

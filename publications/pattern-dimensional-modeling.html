@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 6 — Dimensional Modeling & the Star Schema | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 6</div>
+      <h2>Dimensional Modeling &amp; the Star Schema</h2>
+      <p class="subtitle">A modeling technique from the 1990s that still powers Power BI, Tableau, Looker, and Fabric semantic models today — because it matches how humans actually ask questions.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Picture your business as one question: "What happened, and along which angles?"</p>
+      <ol>
+        <li><strong>Facts</strong> — what happened (the measurements): sales amount, quantity, clicks, duration. Many rows, mostly numbers + keys.</li>
+        <li><strong>Dimensions</strong> — the angles you slice by: Customer, Product, Date, Store, Region. Fewer rows, rich descriptive text.</li>
+        <li><strong>The star</strong> — one fact table in the middle, dimensions around it. It literally looks like a star.</li>
+        <li><strong>Why it wins</strong> — humans think in "metric BY dimension" (sales by region by month).</li>
+        <li><strong>Still the default</strong> — it powers virtually every BI tool today.</li>
+      </ol>
+    </div>
+
+    <h3>Facts and Dimensions</h3>
+    <p>
+      Dimensional modeling, popularized by Ralph Kimball in the 1990s, splits the analytical world into two kinds of tables. <strong>Fact tables</strong> hold the measurements of business events — a sale, a click, a shipment — as numbers plus foreign keys. <strong>Dimension tables</strong> hold the descriptive context you slice those measurements by — who, what, where, when.
+    </p>
+    <p>
+      Put one fact table in the center and connect each dimension to it, and the diagram looks like a <strong>star</strong>. That shape is not an accident — it mirrors the structure of almost every analytical question a business asks.
+    </p>
+
+    <h3>Why This Shape Endures</h3>
+
+    <div class="concept-section">
+      <h4>1. It Matches How People Ask Questions</h4>
+      <p>
+        Every BI question is a measure sliced by attributes: "revenue (fact) <em>by</em> region <em>by</em> month (dimensions)." The star schema encodes exactly that structure, so translating a business question into a query becomes almost mechanical — pick the fact, pick the dimensions, group.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. The Grain Is the Most Important Decision</h4>
+      <p>
+        The <strong>grain</strong> of a fact table is what a single row represents — one order line? one daily account balance? one website session? Declaring the grain first, before adding any column, is the single most important step in dimensional modeling. Get the grain right and everything else follows; get it wrong and the model never quite works.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. Slowly Changing Dimensions (SCD)</h4>
+      <p>
+        Dimensions change — a customer moves, a product gets recategorized. Do you overwrite the old value (Type 1) or keep history by adding a new versioned row (Type 2)? Handling these <strong>slowly changing dimensions</strong> correctly is what lets you answer "what did this look like at the time?" — essential for trustworthy historical reporting.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>4. Star vs. Snowflake Schema</h4>
+      <p>
+        A pure <strong>star</strong> keeps each dimension as one flat, denormalized table. A <strong>snowflake</strong> schema normalizes dimensions into sub-tables (e.g., product → category → department). Stars are simpler and faster for BI; snowflakes save space and tighten consistency. Most modern warehouses favor stars, because storage is cheap and query simplicity wins.
+      </p>
+    </div>
+
+    <h3>The Star, Visualized</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 360" role="img" aria-label="Star schema: four dimensions feeding a central fact table, with particles flowing inward">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <path id="d1" d="M270,95 L430,150"/>
+          <path id="d2" d="M730,95 L570,150"/>
+          <path id="d3" d="M270,270 L430,210"/>
+          <path id="d4" d="M730,270 L570,210"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="360" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="32" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Dimensions point inward to one fact — the star</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="270" y1="95" x2="430" y2="150"/>
+          <line x1="730" y1="95" x2="570" y2="150"/>
+          <line x1="270" y1="270" x2="430" y2="210"/>
+          <line x1="730" y1="270" x2="570" y2="210"/>
+        </g>
+        <!-- dimensions -->
+        <g>
+          <rect x="90" y="45" width="180" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="180" y="80" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">🧑 dim_customer</text>
+        </g>
+        <g>
+          <rect x="730" y="45" width="180" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="820" y="80" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">📦 dim_product</text>
+        </g>
+        <g>
+          <rect x="90" y="255" width="180" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="180" y="290" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">📅 dim_date</text>
+        </g>
+        <g>
+          <rect x="730" y="255" width="180" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="820" y="290" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">🏬 dim_store</text>
+        </g>
+        <!-- fact -->
+        <rect x="410" y="135" width="180" height="90" rx="14" fill="url(#gBlue)" stroke="#bfdbfe" stroke-width="2.5">
+          <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2.4s" repeatCount="indefinite"/>
+        </rect>
+        <text x="500" y="170" text-anchor="middle" font-size="24">⭐</text>
+        <text x="500" y="195" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">fact_sales</text>
+        <text x="500" y="211" text-anchor="middle" fill="#dbeafe" font-size="9.5">qty · amount · keys</text>
+        <!-- particles flowing inward -->
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.7s" repeatCount="indefinite"><mpath href="#d1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.7s" begin="0.85s" repeatCount="indefinite"><mpath href="#d1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.7s" begin="0.2s" repeatCount="indefinite"><mpath href="#d2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.7s" begin="1.05s" repeatCount="indefinite"><mpath href="#d2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.7s" begin="0.4s" repeatCount="indefinite"><mpath href="#d3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.7s" begin="1.25s" repeatCount="indefinite"><mpath href="#d3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.7s" begin="0.6s" repeatCount="indefinite"><mpath href="#d4"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.7s" begin="1.45s" repeatCount="indefinite"><mpath href="#d4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">One fact table at the center; dimensions radiating outward — the classic star.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Concept</th><th>Snowflake</th><th>Databricks</th><th>BigQuery</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Star schema</td><td colspan="4" style="text-align:center;color:#475569;font-style:italic;">Identical — facts + dimensions are a logical pattern, not a feature</td></tr>
+          <tr><td>Build with</td><td>dbt / SQL</td><td>dbt / Spark SQL</td><td>dbt / SQL</td><td>SQL / Dataflows Gen2</td></tr>
+          <tr><td>Consume in</td><td>Any BI tool</td><td>Databricks SQL / BI</td><td>Looker / BI Engine</td><td>Power BI (star is the recommended model)</td></tr>
+          <tr><td>SCD handling</td><td>dbt snapshots / MERGE</td><td>dbt snapshots / MERGE</td><td>dbt snapshots / MERGE</td><td>Dataflows / SQL MERGE</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map, and confirm specifics against current vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> the star schema is a 30-year-old idea that every modern BI engine — including Power BI in Microsoft Fabric — still optimizes for. It's a pattern, not a product. Learn facts, dimensions, and grain once and you can model for any platform's BI layer.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-data-modeling-101.html">
+        <span class="nav-dir">&#8592; Part 5</span>
+        Data Modeling 101
+      </a>
+      <a href="pattern-lake-warehouse-lakehouse.html" class="next">
+        <span class="nav-dir">Part 7 &#8594;</span>
+        Lake vs Warehouse vs Lakehouse
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 10 — Data Quality & Testing | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 10</div>
+      <h2>Data Quality &amp; Testing</h2>
+      <p class="subtitle">A pipeline that runs but delivers wrong data is more dangerous than one that fails loudly — because nobody notices until the decision is already made.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Wrong data is silent. The dashboard still loads. The number is just… wrong. The fix: test your data like you test your code.</p>
+      <ol>
+        <li><strong>Freshness</strong> — is the data recent enough?</li>
+        <li><strong>Volume</strong> — are row counts within the expected range?</li>
+        <li><strong>Nulls</strong> — are required fields actually filled?</li>
+        <li><strong>Uniqueness</strong> — no duplicate keys?</li>
+        <li><strong>Referential</strong> — does every foreign key have a match?</li>
+        <li><strong>Distribution</strong> — do today's values look like history?</li>
+      </ol>
+    </div>
+
+    <h3>The Silent Failure Problem</h3>
+    <p>
+      An application bug is loud — the page errors, someone notices. A <strong>data</strong> bug is silent. The pipeline succeeds, the dashboard renders, and the number is simply wrong. A duplicated join doubled revenue; an upstream schema change turned a column to nulls; a timezone shift moved yesterday's sales into today. Nobody sees it until a decision has already been made on bad data — and by then trust is gone.
+    </p>
+    <p>
+      The cure is to stop treating data as something you only <em>look at</em>, and start treating it as something you <em>test</em> — automatically, inside the pipeline, with failures that stop the build before bad data reaches anyone.
+    </p>
+
+    <h3>The Core Checks</h3>
+
+    <div class="concept-section">
+      <h4>1. The Six Questions Every Table Should Answer</h4>
+      <p>
+        Freshness (is it recent?), volume (right number of rows?), nulls (required fields present?), uniqueness (no duplicate keys?), referential integrity (foreign keys resolve?), and distribution (do the values look like they normally do?). These six cover the overwhelming majority of real-world data incidents — and they're the same questions on every platform.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. Tests Live in the Pipeline, Not in a Person's Memory</h4>
+      <p>
+        Quality checks should run automatically every time data is built, and a failing test should <strong>block</strong> the bad data from being published — exactly like a failing unit test blocks a deploy. Manual spot-checks don't scale and quietly stop happening. dbt tests, Great Expectations, and Soda all embed these assertions directly into the run.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. Quality vs. Observability</h4>
+      <p>
+        <strong>Data quality</strong> is asserting specific rules (this column is never null). <strong>Data observability</strong> is the broader, monitoring-style view of your whole platform's health — freshness, volume, and schema tracked over time with automatic anomaly alerts, analogous to Prometheus/Grafana for applications. Quality catches the rules you thought to write; observability surfaces the problems you didn't.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>4. Contracts Shift Failures Left</h4>
+      <p>
+        A <strong>data contract</strong> is a formal agreement on a dataset's schema and semantics between producer and consumer. It turns silent runtime breakages ("why is this column suddenly null?") into loud, early, deploy-time violations — catching the break before it ever reaches a pipeline.
+      </p>
+    </div>
+
+    <h3>Where Quality Gates Sit</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 300" role="img" aria-label="A pipeline with quality-test gates that stop bad data, with flowing particles">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M150,162 L182,162"/>
+          <path id="c2" d="M317,162 L349,162"/>
+          <path id="c3" d="M484,162 L516,162"/>
+          <path id="c4" d="M651,162 L683,162"/>
+          <path id="c5" d="M818,162 L850,162"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="34" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Test at every gate — stop bad data before it's published</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="150" y1="162" x2="182" y2="162"/>
+          <line x1="317" y1="162" x2="349" y2="162"/>
+          <line x1="484" y1="162" x2="516" y2="162"/>
+          <line x1="651" y1="162" x2="683" y2="162"/>
+          <line x1="818" y1="162" x2="850" y2="162"/>
+        </g>
+        <!-- fail lines -->
+        <g stroke="#ef4444" stroke-opacity="0.6" stroke-width="1.4" stroke-dasharray="4 5">
+          <line x1="249" y1="204" x2="249" y2="236"/>
+          <line x1="583" y1="204" x2="583" y2="236"/>
+        </g>
+        <text x="249" y="252" text-anchor="middle" font-size="15">🚨</text>
+        <text x="583" y="252" text-anchor="middle" font-size="15">🚨</text>
+        <text x="416" y="252" text-anchor="middle" fill="#94a3b8" font-size="9" font-style="italic">fail → stop &amp; alert</text>
+        <!-- nodes -->
+        <g>
+          <rect x="15" y="120" width="135" height="84" rx="11" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="82" y="153" text-anchor="middle" font-size="20">🥉</text>
+          <text x="82" y="176" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Raw</text>
+          <text x="82" y="191" text-anchor="middle" fill="#dbeafe" font-size="8.5">Bronze</text>
+        </g>
+        <g>
+          <rect x="182" y="120" width="135" height="84" rx="11" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2.6s" repeatCount="indefinite"/></rect>
+          <text x="249" y="151" text-anchor="middle" font-size="18">✅</text>
+          <text x="249" y="173" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Quality gate</text>
+          <text x="249" y="187" text-anchor="middle" fill="#e0f2fe" font-size="8">freshness · nulls</text>
+        </g>
+        <g>
+          <rect x="349" y="120" width="135" height="84" rx="11" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="416" y="153" text-anchor="middle" font-size="20">🥈</text>
+          <text x="416" y="176" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Clean</text>
+          <text x="416" y="191" text-anchor="middle" fill="#dbeafe" font-size="8.5">Silver</text>
+        </g>
+        <g>
+          <rect x="516" y="120" width="135" height="84" rx="11" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2.6s" begin="1s" repeatCount="indefinite"/></rect>
+          <text x="583" y="151" text-anchor="middle" font-size="18">✅</text>
+          <text x="583" y="173" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Quality gate</text>
+          <text x="583" y="187" text-anchor="middle" fill="#e0f2fe" font-size="8">volume · refs</text>
+        </g>
+        <g>
+          <rect x="683" y="120" width="135" height="84" rx="11" fill="url(#gBlue)" stroke="#bfdbfe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2.6s" begin="0.5s" repeatCount="indefinite"/></rect>
+          <text x="750" y="153" text-anchor="middle" font-size="20">🥇</text>
+          <text x="750" y="176" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Gold</text>
+          <text x="750" y="191" text-anchor="middle" fill="#dbeafe" font-size="8.5">trusted</text>
+        </g>
+        <g>
+          <rect x="850" y="120" width="135" height="84" rx="11" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="917" y="153" text-anchor="middle" font-size="20">📊</text>
+          <text x="917" y="176" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Dashboards</text>
+          <text x="917" y="191" text-anchor="middle" fill="#e0f2fe" font-size="8.5">decisions</text>
+        </g>
+        <!-- particles -->
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="3.6"><animateMotion dur="1.2s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.2s" begin="0.3s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.2s" begin="0.6s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.2s" begin="0.9s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.2s" begin="0.45s" repeatCount="indefinite"><mpath href="#c5"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.2s" begin="0.75s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Tests gate each stage — bad data is stopped and alerted on, never silently published.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Pattern</th><th>Snowflake</th><th>Databricks</th><th>BigQuery</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>In-pipeline tests</td><td>dbt tests</td><td>dbt tests / DLT expectations</td><td>dbt tests</td><td>dbt / SQL checks in pipelines</td></tr>
+          <tr><td>Quality frameworks</td><td>Great Expectations / Soda</td><td>Great Expectations / Soda</td><td>Great Expectations / Soda</td><td>Great Expectations / Soda</td></tr>
+          <tr><td>The six checks</td><td colspan="4" style="text-align:center;color:#475569;font-style:italic;">Identical questions — only the syntax changes</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map, and confirm specifics against current vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> the six quality questions — freshness, volume, nulls, uniqueness, referential integrity, distribution — are platform-independent. Wire them into the pipeline as blocking tests on any engine and you've built trust. The tool is the product; the six checks are the pattern.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-partitioning-clustering.html">
+        <span class="nav-dir">&#8592; Part 9</span>
+        Partitioning &amp; Clustering
+      </a>
+      <a href="pattern-orchestration-cdc.html" class="next">
+        <span class="nav-dir">Part 11 &#8594;</span>
+        Orchestration &amp; CDC
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

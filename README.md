@@ -48,6 +48,25 @@ Completed a **Master of Data Analytics** at the University of Niagara Falls Cana
 
 ## Publications
 
+**Learn the Pattern, Not the Product** — 12-Part Series (June 2026)
+Platform-agnostic data engineering fundamentals that transfer across Snowflake, Databricks, BigQuery, and Microsoft Fabric. Each concept is explained "in 60 seconds," visualized with an animated particle-flow diagram, and mapped across all four platforms.
+
+| Part | Title |
+|------|-------|
+| Landing | [Series Overview](publications/learn-the-pattern.html) |
+| Part 1 | [Anatomy of a Data Platform](publications/pattern-data-platform-layers.html) |
+| Part 2 | [Storage vs Compute](publications/pattern-storage-vs-compute.html) |
+| Part 3 | [ETL vs ELT](publications/pattern-etl-vs-elt.html) |
+| Part 4 | [Batch vs Streaming](publications/pattern-batch-vs-streaming.html) |
+| Part 5 | [Data Modeling 101](publications/pattern-data-modeling-101.html) |
+| Part 6 | [Dimensional Modeling & the Star Schema](publications/pattern-dimensional-modeling.html) |
+| Part 7 | [Lake vs Warehouse vs Lakehouse](publications/pattern-lake-warehouse-lakehouse.html) |
+| Part 8 | [Open Table Formats](publications/pattern-open-table-formats.html) |
+| Part 9 | [Partitioning & Clustering](publications/pattern-partitioning-clustering.html) |
+| Part 10 | [Data Quality & Testing](publications/pattern-data-quality.html) |
+| Part 11 | [Orchestration & CDC](publications/pattern-orchestration-cdc.html) |
+| Part 12 | [Governance, Catalog & Lineage](publications/pattern-governance-lineage.html) |
+
 **The Modern Data Ecosystem** — 4-Part Series (June 2026)
 A practitioner's guide to the three specialized engineering roles shaping data organizations.
 

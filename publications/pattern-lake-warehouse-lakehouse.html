@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 7 — Lake vs Warehouse vs Lakehouse | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 7</div>
+      <h2>Lake vs Warehouse vs Lakehouse</h2>
+      <p class="subtitle">The biggest architectural convergence of the decade — and why every major platform is now racing to the same place from a different starting point.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Three architectures, one direction of travel.</p>
+      <ol>
+        <li><strong>Data Warehouse</strong> — structured &amp; governed: clean tables, fast SQL, great for BI. Historically pricey and rigid with raw data.</li>
+        <li><strong>Data Lake</strong> — cheap &amp; flexible: dump anything (JSON, images, logs, parquet). Cheap storage… but easily a "data swamp."</li>
+        <li><strong>Lakehouse</strong> — the merge: cheap open storage of a lake + tables, ACID, and SQL performance of a warehouse.</li>
+        <li><strong>What makes it possible</strong> — open table formats (Delta, Iceberg, Hudi). That's Part 8.</li>
+        <li><strong>Why it matters</strong> — this is the architecture you'll be hired to build.</li>
+      </ol>
+    </div>
+
+    <h3>Three Answers to "Where Does Data Live?"</h3>
+    <p>
+      For years you had to choose. A <strong>data warehouse</strong> gave you clean, governed tables and fast SQL — perfect for BI, but expensive and awkward for raw, semi-structured, or unstructured data. A <strong>data lake</strong> gave you dirt-cheap storage for <em>anything</em> — but with no transactions, no schema enforcement, and a strong tendency to rot into an ungoverned "data swamp" nobody trusts.
+    </p>
+    <p>
+      The <strong>lakehouse</strong> ends the choice. It puts warehouse-grade table features — ACID transactions, schema enforcement, fast SQL — directly on top of cheap, open lake storage. One place for raw and refined data, for BI and ML, without copying data between two systems.
+    </p>
+
+    <h3>How Each Evolved</h3>
+
+    <div class="concept-section">
+      <h4>1. The Warehouse Problem</h4>
+      <p>
+        Traditional warehouses stored data in proprietary formats inside a closed system. Powerful for structured BI, but loading images, JSON, or event logs was painful, and the cost of keeping everything was high. ML teams often had to extract data <em>out</em> to work with it.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. The Lake Problem</h4>
+      <p>
+        Data lakes solved cost and flexibility by storing raw files in cheap object storage. But files alone aren't a table: no ACID guarantees, no reliable schema, no easy updates or deletes. Without governance, lakes degraded into swamps — data nobody could find, trust, or query reliably.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. The Lakehouse Synthesis</h4>
+      <p>
+        The lakehouse keeps the cheap open storage of the lake but adds a metadata/table layer that brings ACID transactions, schema enforcement, time travel, and good SQL performance. The result: one architecture serving BI <em>and</em> ML on <em>one</em> copy of the data. This convergence — not "lake vs warehouse" but "lake <em>and</em> warehouse" — is the dominant direction of the industry.
+      </p>
+    </div>
+
+    <h3>The Convergence, Visualized</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 360" role="img" aria-label="Warehouse and lake converging into a lakehouse that serves BI and ML, with flowing particles">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="a1" d="M240,95 C 320,110 350,150 400,170"/>
+          <path id="a2" d="M240,265 C 320,250 350,210 400,200"/>
+          <path id="a3" d="M600,170 C 660,150 700,116 760,103"/>
+          <path id="a4" d="M600,200 C 660,220 700,254 760,267"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="360" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="30" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Lake + Warehouse converge into the Lakehouse</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <path d="M240,95 C 320,110 350,150 400,170"/>
+          <path d="M240,265 C 320,250 350,210 400,200"/>
+          <path d="M600,170 C 660,150 700,116 760,103"/>
+          <path d="M600,200 C 660,220 700,254 760,267"/>
+        </g>
+        <!-- warehouse -->
+        <g>
+          <rect x="40" y="60" width="200" height="70" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="140" y="90" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">🏛️ Warehouse</text>
+          <text x="140" y="107" text-anchor="middle" fill="#e0f2fe" font-size="9">structured · governed</text>
+        </g>
+        <!-- lake -->
+        <g>
+          <rect x="40" y="230" width="200" height="70" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="140" y="260" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">🏞️ Lake</text>
+          <text x="140" y="277" text-anchor="middle" fill="#ede9fe" font-size="9">cheap · flexible</text>
+        </g>
+        <!-- lakehouse -->
+        <rect x="400" y="145" width="200" height="80" rx="14" fill="url(#gBlue)" stroke="#bfdbfe" stroke-width="2.5">
+          <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2.6s" repeatCount="indefinite"/>
+        </rect>
+        <text x="500" y="178" text-anchor="middle" font-size="22">🏠</text>
+        <text x="500" y="200" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Lakehouse</text>
+        <text x="500" y="216" text-anchor="middle" fill="#dbeafe" font-size="9">open storage + ACID + SQL</text>
+        <!-- BI -->
+        <g>
+          <rect x="760" y="70" width="190" height="66" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="855" y="100" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">📊 BI</text>
+          <text x="855" y="117" text-anchor="middle" fill="#e0f2fe" font-size="9">dashboards</text>
+        </g>
+        <!-- ML -->
+        <g>
+          <rect x="760" y="234" width="190" height="66" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="855" y="264" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">🤖 ML / AI</text>
+          <text x="855" y="281" text-anchor="middle" fill="#ede9fe" font-size="9">training</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.9s" repeatCount="indefinite"><mpath href="#a1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="0.95s" repeatCount="indefinite"><mpath href="#a1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="0.3s" repeatCount="indefinite"><mpath href="#a2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="1.25s" repeatCount="indefinite"><mpath href="#a2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="0.6s" repeatCount="indefinite"><mpath href="#a3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="1.55s" repeatCount="indefinite"><mpath href="#a3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="0.45s" repeatCount="indefinite"><mpath href="#a4"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="1.4s" repeatCount="indefinite"><mpath href="#a4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Both worlds converge on the lakehouse — serving BI and ML from one copy of the data.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Pattern</th><th>Snowflake</th><th>Databricks</th><th>BigQuery</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Lakehouse foundation</td><td>Iceberg tables on object storage</td><td>Delta Lake (coined "lakehouse")</td><td>BigLake over object storage</td><td>OneLake (Delta under the hood)</td></tr>
+          <tr><td>Open storage</td><td>External / managed Iceberg</td><td>S3 / ADLS / GCS</td><td>Cloud Storage</td><td>OneLake (one logical lake)</td></tr>
+          <tr><td>Serves BI + ML</td><td>SQL + Snowpark</td><td>SQL + Spark/ML</td><td>SQL + Vertex AI</td><td>SQL endpoint + Notebooks + Power BI</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map, and confirm specifics against current vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> "lake vs warehouse" is yesterday's question. Every major platform — Databricks, Snowflake, BigQuery, and Microsoft Fabric — is converging on the lakehouse. Understand <em>why</em> (cheap open storage + warehouse-grade tables) and you understand where all of them are headed.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-dimensional-modeling.html">
+        <span class="nav-dir">&#8592; Part 6</span>
+        Dimensional Modeling &amp; the Star Schema
+      </a>
+      <a href="pattern-open-table-formats.html" class="next">
+        <span class="nav-dir">Part 8 &#8594;</span>
+        Open Table Formats
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

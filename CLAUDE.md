@@ -139,7 +139,28 @@ Bicycle Store SQL, Bus Scheduling Optimization (LP), Sales Modeling DAX, Iris Da
 ### Descriptive Analytics Series
 Sub-pages linked from `descriptive-analytics.html`: `collecting-data.html`, `cleaning-data.html`, `transforming-aggregation.html`. Steps 4–10 (Filtering, Segmentation, Visualization, Comparing, Reporting, Patterns, Sharing) do not yet have sub-pages — pending work.
 
-### The Modern Data Ecosystem (4-Part Series) — Published June 2026
+### Learn the Pattern, Not the Product (12-Part Series) — June 2026
+Platform-agnostic data engineering fundamentals. The through-line is **transferability** — each concept applies across Snowflake, Databricks, BigQuery, and Microsoft Fabric without vendor lock-in. Every concept page follows a fixed anatomy: an "In 60 seconds" box, "How it actually works" concept sections, an **animated particle-flow inline SVG diagram**, and a **"Same pattern, every platform"** mapping table.
+
+**Diagram style (this series):** diagrams are hand-built inline `<svg>` with animated "particle" dots flowing along the connectors (SMIL `<animateMotion>` + `<mpath>`), on a dark gradient card — **no Mermaid, no JS, no libraries**. Copy the `<svg>` from `pattern-data-platform-layers.html` (Part 1) as the canonical template and adapt the shape. The older "Modern Data Ecosystem" series still uses Mermaid; don't mix the two on a page.
+
+| File | Title |
+|---|---|
+| `learn-the-pattern.html` | Landing page — series overview, 6-layer particle-SVG diagram, 12-part grid |
+| `pattern-data-platform-layers.html` | Part 1 — Anatomy of a Data Platform (6 universal layers) |
+| `pattern-storage-vs-compute.html` | Part 2 — Storage vs Compute: The Great Divorce |
+| `pattern-etl-vs-elt.html` | Part 3 — ETL vs ELT: Where Transformation Lives |
+| `pattern-batch-vs-streaming.html` | Part 4 — Batch vs Streaming: Choosing Your Latency |
+| `pattern-data-modeling-101.html` | Part 5 — Data Modeling 101 (normalized vs analytical) |
+| `pattern-dimensional-modeling.html` | Part 6 — Dimensional Modeling & the Star Schema |
+| `pattern-lake-warehouse-lakehouse.html` | Part 7 — Lake vs Warehouse vs Lakehouse |
+| `pattern-open-table-formats.html` | Part 8 — Open Table Formats (Delta · Iceberg · Hudi) |
+| `pattern-partitioning-clustering.html` | Part 9 — Partitioning & Clustering |
+| `pattern-data-quality.html` | Part 10 — Data Quality & Testing |
+| `pattern-orchestration-cdc.html` | Part 11 — Orchestration & CDC |
+| `pattern-governance-lineage.html` | Part 12 — Governance, Catalog & Lineage |
+
+### The Modern Data Ecosystem (4-Part Series) — June 2026
 | File | Title |
 |---|---|
 | `modern-data-ecosystem.html` | Landing page — ecosystem map, role overview cards, series navigation |
@@ -147,8 +168,6 @@ Sub-pages linked from `descriptive-analytics.html`: `collecting-data.html`, `cle
 | `data-engineer.html` | Part 2 — Data Engineer: The Builder (pipeline diagram, ETL/ELT, data contracts) |
 | `data-architect.html` | Part 3 — Data Architect: The Strategist (Medallion diagram, Data Mesh, cloud table) |
 | `ml-ai-engineer.html` | Part 4 — ML/AI Engineer: The Deployer (RAG pipeline diagram, MLOps lifecycle) |
-
-LinkedIn promotion: 5 posts scheduled Mon/Wed Jun 1–15 2026.
 
 ---
 

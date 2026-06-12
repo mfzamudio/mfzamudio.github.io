@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 11 — Orchestration & CDC | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 11</div>
+      <h2>Orchestration &amp; CDC</h2>
+      <p class="subtitle">How data stays fresh without anyone babysitting it — by running the right steps in the right order, and by moving only what actually changed.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Two problems, two patterns — both about keeping data fresh, automatically.</p>
+      <ol>
+        <li><strong>Orchestration</strong> — run the right steps, in the right order, on schedule. Model it as a DAG (a flow of dependent tasks).</li>
+        <li><strong>If a step fails</strong>, stop and alert; retries, schedules, and backfills are automated.</li>
+        <li><strong>CDC (Change Data Capture)</strong> — move only what changed. Read the source database's transaction log.</li>
+        <li><strong>Capture &amp; apply</strong> inserts/updates/deletes as they happen — no full reloads.</li>
+        <li><strong>Together</strong> they keep the warehouse fresh, cheaply, hands-off.</li>
+      </ol>
+    </div>
+
+    <h3>Keeping Data Fresh, Automatically</h3>
+    <p>
+      A modern platform isn't a one-time load — it's a living system that must refresh continuously and reliably. Two patterns make that happen without a human in the loop. <strong>Orchestration</strong> answers <em>"what runs, in what order, and what happens when something breaks?"</em> <strong>Change Data Capture</strong> answers <em>"how do we move new data efficiently instead of reloading everything?"</em>
+    </p>
+
+    <h3>The Two Patterns</h3>
+
+    <div class="concept-section">
+      <h4>1. Orchestration as a DAG</h4>
+      <p>
+        Pipelines are modeled as a <strong>DAG</strong> — a Directed Acyclic Graph of tasks with dependencies. "Build the staging tables, <em>then</em> the dimensions, <em>then</em> the facts, <em>then</em> refresh the dashboard." The orchestrator runs tasks in dependency order, in parallel where possible, and if a task fails it stops the dependents and alerts you instead of silently producing broken downstream data.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. Schedules, Retries, and Backfills</h4>
+      <p>
+        Orchestrators add the operational muscle: run on a schedule (or trigger on an event), retry transient failures automatically, and <strong>backfill</strong> — re-run a pipeline across a historical date range when you add a new column or fix a bug. This is what turns a fragile script into a dependable production system.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. CDC — Move Only What Changed</h4>
+      <p>
+        Reloading a 500-million-row table every night to capture a few thousand changes is wasteful and slow. <strong>Change Data Capture</strong> reads the database's transaction log (the same log the DB uses for replication) and streams just the inserts, updates, and deletes downstream. The result: near-real-time freshness at a fraction of the cost, with minimal load on the source system.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>4. Why They Belong Together</h4>
+      <p>
+        CDC delivers fresh changes; orchestration sequences the transformations that turn those changes into trustworthy, modeled data. One keeps the raw inputs current; the other keeps the downstream tables correct. Together they are the "freshness engine" of the platform.
+      </p>
+    </div>
+
+    <h3>The Freshness Engine, Visualized</h3>
+    <p>An orchestrator schedules each stage; CDC feeds only the changes; particles show data flowing through:</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 300" role="img" aria-label="Orchestrated CDC pipeline with flowing particles">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M170,195 L222,195"/>
+          <path id="c2" d="M372,195 L424,195"/>
+          <path id="c3" d="M574,195 L626,195"/>
+          <path id="c4" d="M776,195 L828,195"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg)"/>
+
+        <!-- orchestrator -->
+        <rect x="360" y="22" width="280" height="58" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+        <text x="500" y="48" text-anchor="middle" font-size="18">🗓️</text>
+        <text x="500" y="68" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Orchestrator (DAG) — schedules · retries · backfills</text>
+        <g stroke="#a78bfa" stroke-opacity="0.55" stroke-width="1.4" stroke-dasharray="4 5">
+          <line x1="297" y1="80" x2="297" y2="150"/>
+          <line x1="499" y1="80" x2="499" y2="150"/>
+          <line x1="701" y1="80" x2="701" y2="150"/>
+          <line x1="903" y1="80" x2="903" y2="150"/>
+        </g>
+
+        <!-- faint connectors -->
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="170" y1="195" x2="222" y2="195"/>
+          <line x1="372" y1="195" x2="424" y2="195"/>
+          <line x1="574" y1="195" x2="626" y2="195"/>
+          <line x1="776" y1="195" x2="828" y2="195"/>
+        </g>
+
+        <!-- nodes -->
+        <g>
+          <rect x="20" y="150" width="150" height="84" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="95" y="182" text-anchor="middle" font-size="20">🗄️</text>
+          <text x="95" y="204" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Source DB</text>
+          <text x="95" y="220" text-anchor="middle" fill="#dbeafe" font-size="9.5">transaction log</text>
+        </g>
+        <g>
+          <rect x="222" y="150" width="150" height="84" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="297" y="182" text-anchor="middle" font-size="20">🔁</text>
+          <text x="297" y="204" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">CDC Capture</text>
+          <text x="297" y="220" text-anchor="middle" fill="#dbeafe" font-size="9.5">only changes</text>
+        </g>
+        <g>
+          <rect x="424" y="150" width="150" height="84" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="499" y="182" text-anchor="middle" font-size="20">⚙️</text>
+          <text x="499" y="204" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Transform</text>
+          <text x="499" y="220" text-anchor="middle" fill="#ede9fe" font-size="9.5">model &amp; test</text>
+        </g>
+        <g>
+          <rect x="626" y="150" width="150" height="84" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="701" y="182" text-anchor="middle" font-size="20">📥</text>
+          <text x="701" y="204" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Load / Merge</text>
+          <text x="701" y="220" text-anchor="middle" fill="#ede9fe" font-size="9.5">upsert</text>
+        </g>
+        <g>
+          <rect x="828" y="150" width="150" height="84" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="903" y="182" text-anchor="middle" font-size="20">🏛️</text>
+          <text x="903" y="204" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Warehouse</text>
+          <text x="903" y="220" text-anchor="middle" fill="#e0f2fe" font-size="9.5">always fresh</text>
+        </g>
+
+        <!-- particles -->
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.2s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.73s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.26s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.4s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.93s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.46s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.6s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.13s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.07s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">CDC feeds only changes; the orchestrator (top) schedules each stage and stops the flow if a step fails.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Pattern</th><th>Open-source</th><th>Snowflake</th><th>Databricks</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Orchestration</td><td>Airflow · Dagster · Prefect</td><td>Tasks / dbt Cloud</td><td>Jobs / Workflows</td><td>Data Factory pipelines</td></tr>
+          <tr><td>CDC ingest</td><td>Debezium</td><td>Streams / partner connectors</td><td>Delta Live Tables / Auto Loader</td><td>Data Factory / partner CDC</td></tr>
+          <tr><td>Apply changes</td><td>MERGE / upsert</td><td>MERGE / Streams &amp; Tasks</td><td>MERGE INTO</td><td>MERGE / Dataflows Gen2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map, and confirm specifics against current vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> "orchestrate a DAG" and "capture changes from the log" are the same two patterns whether you run Airflow + Debezium yourself or click through Fabric Data Factory. Learn the patterns and the freshness story is the same on every platform.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-data-quality.html">
+        <span class="nav-dir">&#8592; Part 10</span>
+        Data Quality &amp; Testing
+      </a>
+      <a href="pattern-governance-lineage.html" class="next">
+        <span class="nav-dir">Part 12 &#8594;</span>
+        Governance, Catalog &amp; Lineage
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

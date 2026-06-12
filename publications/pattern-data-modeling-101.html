@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 5 — Data Modeling 101 | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+    .vs-card { background: white; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; }
+    .vs-card h5 { margin: 0 0 8px; font-size: 0.9rem; color: #2563eb; }
+    .vs-card ul { margin: 0; padding-left: 18px; }
+    .vs-card li { font-size: 0.85rem; color: #475569; line-height: 1.65; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .vs-grid { grid-template-columns: 1fr; } .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 5</div>
+      <h2>Data Modeling 101</h2>
+      <p class="subtitle">Why one big table is never enough — and why the shape of your data should follow how you use it, not how you collect it.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Two worlds, two opposite goals. Writing fast and reading fast want different shapes.</p>
+      <ol>
+        <li><strong>Operational (normalized)</strong> — built to WRITE: many small tables, no duplication, fast and consistent updates. Your app's database.</li>
+        <li><strong>Analytical (denormalized)</strong> — built to READ: fewer, wider tables, deliberate duplication, fast aggregations. Your warehouse.</li>
+        <li><strong>The core idea</strong> — the shape of data should follow how you USE it.</li>
+        <li><strong>Why two models</strong> — fast writes and fast reads want opposite structures.</li>
+        <li><strong>So we copy</strong> operational data into a model designed for analysis.</li>
+      </ol>
+    </div>
+
+    <h3>Two Jobs, Two Shapes</h3>
+    <p>
+      A data model is just a decision about how to structure tables and the relationships between them. The right structure depends entirely on the job. There are two very different jobs, and they pull in opposite directions.
+    </p>
+    <p>
+      An <strong>operational</strong> system — the database behind an app — is optimized to <em>write</em>: insert an order, update a balance, do it thousands of times a second without conflicts or duplicated facts. An <strong>analytical</strong> system — the warehouse — is optimized to <em>read</em>: scan billions of rows and aggregate them into a chart. Forcing one shape to do both jobs makes it bad at both.
+    </p>
+
+    <div class="vs-grid">
+      <div class="vs-card">
+        <h5>Normalized (3NF) — for writes</h5>
+        <ul>
+          <li>Each fact stored exactly once</li>
+          <li>Many small tables, joined by keys</li>
+          <li>Updates are cheap and safe</li>
+          <li>No duplication, no contradictions</li>
+          <li>Great for transactions, bad for big scans</li>
+        </ul>
+      </div>
+      <div class="vs-card">
+        <h5>Denormalized — for reads</h5>
+        <ul>
+          <li>Deliberate duplication to avoid joins</li>
+          <li>Fewer, wider tables</li>
+          <li>Aggregations are fast</li>
+          <li>Updates are heavier (that's fine — analytics rarely updates)</li>
+          <li>Great for dashboards and ML features</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>The Concepts Behind It</h3>
+
+    <div class="concept-section">
+      <h4>1. Normalization — Eliminating Redundancy</h4>
+      <p>
+        Normalization splits data so every fact lives in exactly one place. Store a customer's address once, and reference it by key everywhere else. Change the address in one row and it's correct everywhere — no risk of three tables disagreeing. This is what keeps operational systems consistent under heavy writes.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. Denormalization — Trading Space for Speed</h4>
+      <p>
+        Analytics flips the priority. Joins across many normalized tables are expensive when you're scanning billions of rows. So we deliberately duplicate data into wider tables, trading cheap storage for fast reads. Storage is cheap (Part 2); analyst time and query latency are not.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. The Conceptual → Logical → Physical Ladder</h4>
+      <p>
+        Modeling moves through three levels: <strong>conceptual</strong> (the business entities — customers, orders, products), <strong>logical</strong> (tables, columns, keys, relationships, independent of any platform), and <strong>physical</strong> (the actual DDL, types, partitioning on a specific engine). Good models are designed at the logical level first — which is exactly why they transfer across platforms.
+      </p>
+    </div>
+
+    <h3>Same Data, Two Shapes</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 320" role="img" aria-label="Normalized operational tables reshaped via ELT into a wide analytical table">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <path id="c1" d="M300,185 L420,185"/>
+          <path id="c2" d="M580,185 L710,185"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="320" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="40" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Same facts, reshaped: normalized → analytical</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="300" y1="185" x2="420" y2="185"/>
+          <line x1="580" y1="185" x2="710" y2="185"/>
+        </g>
+        <!-- operational (normalized) -->
+        <rect x="30" y="82" width="270" height="190" rx="14" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-opacity="0.4" stroke-dasharray="6 5"/>
+        <text x="165" y="104" text-anchor="middle" fill="#93c5fd" font-size="11.5" font-weight="700">🖊️ Operational — normalized (writes)</text>
+        <g>
+          <rect x="60" y="116" width="210" height="38" rx="8" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="165" y="140" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">orders</text>
+          <rect x="60" y="166" width="210" height="38" rx="8" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="165" y="190" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">customers</text>
+          <rect x="60" y="216" width="210" height="38" rx="8" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="165" y="240" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">products</text>
+        </g>
+        <!-- ELT -->
+        <g>
+          <rect x="420" y="150" width="160" height="70" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.6"/>
+          <text x="500" y="182" text-anchor="middle" font-size="20">⚙️</text>
+          <text x="500" y="204" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">ELT / pipeline</text>
+        </g>
+        <!-- analytical (wide) -->
+        <rect x="710" y="92" width="260" height="186" rx="14" fill="rgba(14,165,233,0.08)" stroke="#0ea5e9" stroke-opacity="0.4" stroke-dasharray="6 5"/>
+        <text x="840" y="114" text-anchor="middle" fill="#7dd3fc" font-size="11.5" font-weight="700">📊 Analytical — denormalized (reads)</text>
+        <rect x="740" y="128" width="200" height="130" rx="10" fill="url(#gBlue)" stroke="#bfdbfe" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <text x="840" y="170" text-anchor="middle" font-size="22">🧾</text>
+        <text x="840" y="196" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">wide sales table</text>
+        <text x="840" y="214" text-anchor="middle" fill="#dbeafe" font-size="9.5">order + customer + product</text>
+        <text x="840" y="229" text-anchor="middle" fill="#dbeafe" font-size="9.5">in one row</text>
+        <!-- particles -->
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="1.2s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.3s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="1.5s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">The same business facts, reshaped from many write-friendly tables into a read-friendly model.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <p>Modeling is designed at the logical level, so it's almost entirely platform-independent. Only the physical DDL changes:</p>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Concept</th><th>Snowflake</th><th>Databricks</th><th>BigQuery</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Logical model</td><td colspan="4" style="text-align:center;color:#475569;font-style:italic;">Identical — entities, keys, relationships are platform-agnostic</td></tr>
+          <tr><td>Build the model</td><td>SQL / dbt</td><td>SQL / dbt / Spark</td><td>SQL / dbt</td><td>SQL / Dataflows Gen2 / Notebooks</td></tr>
+          <tr><td>Semantic layer</td><td>dbt Semantic Layer</td><td>Unity Catalog metrics / dbt</td><td>Looker / dbt</td><td>Power BI semantic model</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map, and confirm specifics against current vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> data modeling is the most transferable skill in this whole series. A good logical model — the right entities, keys, and grain — is correct on every platform. Learn to model, and you're not learning Snowflake or Fabric; you're learning something that outlives both.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-batch-vs-streaming.html">
+        <span class="nav-dir">&#8592; Part 4</span>
+        Batch vs Streaming
+      </a>
+      <a href="pattern-dimensional-modeling.html" class="next">
+        <span class="nav-dir">Part 6 &#8594;</span>
+        Dimensional Modeling &amp; the Star Schema
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

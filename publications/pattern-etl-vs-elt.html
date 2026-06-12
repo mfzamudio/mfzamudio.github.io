@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 3 — ETL vs ELT | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+    .vs-card { background: white; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; }
+    .vs-card h5 { margin: 0 0 8px; font-size: 0.9rem; color: #2563eb; }
+    .vs-card ul { margin: 0; padding-left: 18px; }
+    .vs-card li { font-size: 0.85rem; color: #475569; line-height: 1.65; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .vs-grid { grid-template-columns: 1fr; } .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 3</div>
+      <h2>ETL vs ELT: Where Transformation Lives</h2>
+      <p class="subtitle">The entire debate comes down to one question — do you clean the data before it lands, or after? Cheap cloud storage flipped the default answer.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">ETL and ELT use the same three letters. The only thing that moves is WHERE the "T" happens.</p>
+      <ol>
+        <li><strong>ETL</strong> = Extract → Transform → Load. Clean the data <em>before</em> it enters the warehouse. Only polished data lands.</li>
+        <li><strong>ELT</strong> = Extract → Load → Transform. Load the <em>raw</em> data first, then transform it inside the warehouse with SQL.</li>
+        <li><strong>Why the flip</strong> — cloud storage got cheap, so keeping raw data is fine.</li>
+        <li><strong>Reprocessing is easy</strong> — new business logic? Re-run the transform on the raw data you kept.</li>
+        <li><strong>Transforms become code</strong> — versioned, tested SQL (dbt) instead of a black-box tool.</li>
+      </ol>
+    </div>
+
+    <h3>The Same Letters, Reordered</h3>
+    <p>
+      For decades, storage was expensive, so it made no sense to keep raw data you'd throw away. The <strong>ETL</strong> pattern was born of that constraint: a dedicated tool transformed and cleaned data in a separate staging area, and only the finished, modeled result was loaded into the warehouse. The raw data was usually discarded.
+    </p>
+    <p>
+      Then cloud warehouses arrived with cheap storage and nearly unlimited, elastic compute. Suddenly it was cheaper and far more flexible to load the raw data first and transform it <em>in place</em>. That reordering — <strong>ELT</strong> — is now the default pattern of the modern stack.
+    </p>
+
+    <div class="vs-grid">
+      <div class="vs-card">
+        <h5>ETL — Transform First</h5>
+        <ul>
+          <li>Transformation happens outside the warehouse</li>
+          <li>Only clean, modeled data lands</li>
+          <li>Raw data usually discarded</li>
+          <li>Hard to reprocess with new logic</li>
+          <li>Era of expensive storage</li>
+        </ul>
+      </div>
+      <div class="vs-card">
+        <h5>ELT — Load First</h5>
+        <ul>
+          <li>Raw data lands in a Bronze/staging layer</li>
+          <li>Transformations run inside the warehouse</li>
+          <li>Raw data is kept and replayable</li>
+          <li>Easy to reprocess with new logic</li>
+          <li>Era of cheap storage + elastic compute</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Why ELT Won (Mostly)</h3>
+
+    <div class="concept-section">
+      <h4>1. Keep the Raw, Replay Anytime</h4>
+      <p>
+        Because raw data is preserved, a change in business logic doesn't mean re-ingesting from the source — you just re-run the transformation. Found a bug in last quarter's revenue calculation? Fix the SQL and rebuild from the raw data you already have.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. Transformations as Tested Code</h4>
+      <p>
+        ELT pushed transformation into SQL that lives in version control. Tools like dbt turned transformations into a software-engineering discipline: modular models, automated tests, documentation, and lineage — instead of opaque drag-and-drop mappings in a legacy tool.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. When ETL Still Makes Sense</h4>
+      <p>
+        ELT isn't universal. When you must mask or drop sensitive data <em>before</em> it ever lands (PII, compliance), or when a source feeds many systems and should be cleaned once at the edge, transforming first still wins. The honest rule: choose by where it's cheapest and safest to transform — not by fashion.
+      </p>
+    </div>
+
+    <h3>ELT, Visualized</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 290" role="img" aria-label="ELT pipeline: load raw first, transform in place, with flowing particles">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M170,165 L222,165"/>
+          <path id="c2" d="M372,165 L424,165"/>
+          <path id="c3" d="M574,165 L626,165"/>
+          <path id="c4" d="M776,165 L828,165"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="290" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="42" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">ELT — load raw first, transform in place</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="170" y1="165" x2="222" y2="165"/>
+          <line x1="372" y1="165" x2="424" y2="165"/>
+          <line x1="574" y1="165" x2="626" y2="165"/>
+          <line x1="776" y1="165" x2="828" y2="165"/>
+        </g>
+        <g>
+          <rect x="20" y="120" width="150" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="95" y="155" text-anchor="middle" font-size="22">📦</text>
+          <text x="95" y="180" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Sources</text>
+          <text x="95" y="196" text-anchor="middle" fill="#dbeafe" font-size="9.5">DBs · APIs · Files</text>
+        </g>
+        <g>
+          <rect x="222" y="120" width="150" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="297" y="155" text-anchor="middle" font-size="22">📥</text>
+          <text x="297" y="180" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Extract + Load</text>
+          <text x="297" y="196" text-anchor="middle" fill="#dbeafe" font-size="9.5">load raw first</text>
+        </g>
+        <g>
+          <rect x="424" y="120" width="150" height="90" rx="12" fill="url(#gBlue)" stroke="#bfdbfe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="499" y="155" text-anchor="middle" font-size="22">🥉</text>
+          <text x="499" y="180" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Raw / Bronze</text>
+          <text x="499" y="196" text-anchor="middle" fill="#dbeafe" font-size="9.5">kept &amp; replayable</text>
+        </g>
+        <g>
+          <rect x="626" y="120" width="150" height="90" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" begin="1s" repeatCount="indefinite"/></rect>
+          <text x="701" y="155" text-anchor="middle" font-size="22">⚙️</text>
+          <text x="701" y="180" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Transform → Gold</text>
+          <text x="701" y="196" text-anchor="middle" fill="#ede9fe" font-size="9.5">SQL in-warehouse</text>
+        </g>
+        <g>
+          <rect x="828" y="120" width="150" height="90" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="903" y="155" text-anchor="middle" font-size="22">📊</text>
+          <text x="903" y="180" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">BI · ML · Apps</text>
+          <text x="903" y="196" text-anchor="middle" fill="#e0f2fe" font-size="9.5">business value</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.2s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.4s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.2s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.6s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.4s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">ELT: load raw first, transform in place — so the raw copy stays replayable.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Pattern</th><th>Snowflake</th><th>Databricks</th><th>BigQuery</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Load raw</td><td>Snowpipe / COPY INTO</td><td>Auto Loader</td><td>Storage Write API / load jobs</td><td>Data Factory pipelines / Dataflows Gen2</td></tr>
+          <tr><td>Transform (ELT)</td><td>dbt / SQL</td><td>dbt / Spark SQL / DLT</td><td>dbt / SQL</td><td>Notebooks / Dataflows Gen2 / SQL</td></tr>
+          <tr><td>Raw landing zone</td><td>Bronze schema / stage</td><td>Bronze (Delta)</td><td>Raw dataset</td><td>Lakehouse Bronze (OneLake)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map, and confirm specifics against current vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> ETL vs ELT isn't a tooling war — it's a decision about <em>where</em> the "T" runs. On any modern platform the default is ELT: land raw, transform in place with versioned SQL. Learn that pattern and every "which tool?" question gets simpler.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-storage-vs-compute.html">
+        <span class="nav-dir">&#8592; Part 2</span>
+        Storage vs Compute
+      </a>
+      <a href="pattern-batch-vs-streaming.html" class="next">
+        <span class="nav-dir">Part 4 &#8594;</span>
+        Batch vs Streaming
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

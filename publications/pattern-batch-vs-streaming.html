@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 4 — Batch vs Streaming | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; padding: 40px 32px; border-radius: 12px; margin: 24px 0 36px; text-align: center; }
+    .pub-hero .series-label { display: inline-block; background: rgba(37,99,235,0.35); color: #bfdbfe; border: 1px solid rgba(191,219,254,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 24px 28px; margin: 0 0 32px; box-shadow: 0 4px 16px rgba(15,23,42,.12); }
+    .sixty-sec .sixty-label { display: inline-block; background: #6d28d9; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 28px 0 8px; overflow-x: auto; text-align: center; }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section { border-left: 4px solid #2563eb; padding-left: 20px; margin: 28px 0; }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+    .vs-card { background: white; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; }
+    .vs-card h5 { margin: 0 0 8px; font-size: 0.9rem; color: #2563eb; }
+    .vs-card ul { margin: 0; padding-left: 18px; }
+    .vs-card li { font-size: 0.85rem; color: #475569; line-height: 1.65; }
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+    .series-nav a { display: block; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; text-decoration: none; color: #0f172a; transition: border-color 0.2s, transform 0.2s; font-size: 0.88rem; line-height: 1.5; }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) { .vs-grid { grid-template-columns: 1fr; } .series-nav { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="learn-the-pattern.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Learn the Pattern &middot; Part 4</div>
+      <h2>Batch vs Streaming: Choosing Your Latency</h2>
+      <p class="subtitle">Two ways to move data, and one honest question behind the choice: how fresh does this data actually need to be for the decision it feeds?</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Batch vs streaming is a question about exactly one thing: latency.</p>
+      <ol>
+        <li><strong>Batch</strong> — collect data over a window, then process the whole chunk (nightly, hourly, every 15 min).</li>
+        <li><strong>Streaming</strong> — process each event the moment it arrives (sub-second to seconds).</li>
+        <li><strong>Batch is simpler &amp; cheaper</strong> — and good enough for most reports, dashboards, and ML training.</li>
+        <li><strong>Streaming is for "now"</strong> — fraud blocks, live alerts, recommendations, IoT monitoring.</li>
+        <li><strong>The rule</strong> — pick latency by the DECISION it feeds, not by hype.</li>
+      </ol>
+    </div>
+
+    <h3>It's All About Latency</h3>
+    <p>
+      Every data pipeline answers a question, and that question has a tolerance for staleness. A monthly board report doesn't care if the data is twelve hours old. A fraud system blocking a transaction cares about the next 200 milliseconds. <strong>Batch</strong> and <strong>streaming</strong> are just the two ends of that latency spectrum.
+    </p>
+
+    <div class="vs-grid">
+      <div class="vs-card">
+        <h5>Batch — process in chunks</h5>
+        <ul>
+          <li>Scheduled: nightly, hourly, every 15 min</li>
+          <li>Simple to build, test, and reason about</li>
+          <li>Cost-effective at scale</li>
+          <li>Great for reporting, BI, ML training</li>
+          <li>Latency: minutes to hours</li>
+        </ul>
+      </div>
+      <div class="vs-card">
+        <h5>Streaming — process per event</h5>
+        <ul>
+          <li>Continuous: handle each event as it lands</li>
+          <li>More moving parts, harder to operate</li>
+          <li>Higher cost (always-on)</li>
+          <li>Needed for fraud, alerts, live personalization</li>
+          <li>Latency: milliseconds to seconds</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>What You Actually Need to Know</h3>
+
+    <div class="concept-section">
+      <h4>1. Most Questions Are Fine with Batch</h4>
+      <p>
+        The uncomfortable truth a lot of "real-time everything" content skips: the majority of business questions tolerate batch. Daily revenue, weekly cohorts, monthly churn — none of these need sub-second freshness. Reaching for streaming when batch would do adds cost and operational burden for no business gain.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>2. Streaming Is a Tool, Not a Trophy</h4>
+      <p>
+        Use streaming when latency directly changes an outcome: a fraudulent charge blocked before it clears, a sensor reading that triggers a shutdown, a recommendation that must reflect the click you just made. If no decision changes because the data is seconds-fresh instead of hours-fresh, you don't need a stream.
+      </p>
+    </div>
+
+    <div class="concept-section">
+      <h4>3. The Streaming Backbone Is a Log</h4>
+      <p>
+        Real-time architectures are built on an append-only event log: producers publish events, consumers read them at their own pace. Apache Kafka is the dominant open-source backbone; AWS Kinesis, Google Pub/Sub, and Microsoft Fabric's Eventstream are managed equivalents. The pattern — a durable log decoupling producers from consumers — is identical across all of them.
+      </p>
+    </div>
+
+    <h3>Two Paths, One Platform</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 320" role="img" aria-label="Batch and streaming paths converging into storage, with slow and fast particles">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="b1" d="M170,160 C 250,120 280,90 330,90"/>
+          <path id="b2" d="M530,90 C 600,95 640,130 660,150"/>
+          <path id="s1" d="M170,160 C 250,200 280,237 330,237"/>
+          <path id="s2" d="M530,237 C 600,232 640,185 660,170"/>
+          <path id="o1" d="M810,160 L850,160"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="320" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="32" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Two paths, one storage — batch is slow, streaming is fresh</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <path d="M170,160 C 250,120 280,90 330,90"/>
+          <path d="M530,90 C 600,95 640,130 660,150"/>
+          <path d="M170,160 C 250,200 280,237 330,237"/>
+          <path d="M530,237 C 600,232 640,185 660,170"/>
+          <path d="M810,160 L850,160"/>
+        </g>
+        <!-- source -->
+        <g>
+          <rect x="20" y="125" width="150" height="70" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="95" y="152" text-anchor="middle" font-size="20">📦</text>
+          <text x="95" y="172" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Sources</text>
+          <text x="95" y="186" text-anchor="middle" fill="#dbeafe" font-size="9">Apps · Sensors · Logs</text>
+        </g>
+        <!-- batch -->
+        <g>
+          <rect x="330" y="58" width="200" height="64" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="430" y="86" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">🐢 Batch path</text>
+          <text x="430" y="103" text-anchor="middle" fill="#e0f2fe" font-size="9.5">scheduled · hourly / nightly</text>
+        </g>
+        <!-- streaming -->
+        <g>
+          <rect x="330" y="205" width="200" height="64" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="430" y="233" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">⚡ Streaming path</text>
+          <text x="430" y="250" text-anchor="middle" fill="#ede9fe" font-size="9.5">event log + processor</text>
+        </g>
+        <!-- storage -->
+        <g>
+          <rect x="660" y="125" width="150" height="70" rx="12" fill="url(#gBlue)" stroke="#bfdbfe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="735" y="152" text-anchor="middle" font-size="20">🗄️</text>
+          <text x="735" y="172" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Storage</text>
+          <text x="735" y="186" text-anchor="middle" fill="#dbeafe" font-size="9">Lakehouse</text>
+        </g>
+        <!-- output -->
+        <g>
+          <rect x="850" y="125" width="140" height="70" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="920" y="152" text-anchor="middle" font-size="20">📊</text>
+          <text x="920" y="172" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Output</text>
+          <text x="920" y="186" text-anchor="middle" fill="#e0f2fe" font-size="9">Dash · Alerts · ML</text>
+        </g>
+        <!-- batch particles: SLOW -->
+        <g fill="#7dd3fc" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#b1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite"><mpath href="#b1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="2.6s" begin="0.5s" repeatCount="indefinite"><mpath href="#b2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="2.6s" begin="1.8s" repeatCount="indefinite"><mpath href="#b2"/></animateMotion></circle>
+        </g>
+        <!-- streaming particles: FAST -->
+        <g fill="#c4b5fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1s" repeatCount="indefinite"><mpath href="#s1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1s" begin="0.33s" repeatCount="indefinite"><mpath href="#s1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1s" begin="0.66s" repeatCount="indefinite"><mpath href="#s1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1s" begin="0.15s" repeatCount="indefinite"><mpath href="#s2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1s" begin="0.48s" repeatCount="indefinite"><mpath href="#s2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1s" begin="0.81s" repeatCount="indefinite"><mpath href="#s2"/></animateMotion></circle>
+        </g>
+        <!-- output particles -->
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#o1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.4s" begin="0.7s" repeatCount="indefinite"><mpath href="#o1"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Both paths land in the same storage — the difference is only how quickly the data gets there.</p>
+
+    <h3>Same Pattern, Every Platform</h3>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>The Pattern</th><th>Snowflake</th><th>Databricks</th><th>BigQuery</th><th>Microsoft Fabric</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Event log / ingest</td><td>Snowpipe Streaming</td><td>Structured Streaming + Auto Loader</td><td>Pub/Sub + Storage Write API</td><td>Eventstream</td></tr>
+          <tr><td>Stream processing</td><td>Streams &amp; Tasks / Dynamic Tables</td><td>Spark Structured Streaming / DLT</td><td>Dataflow (streaming)</td><td>Eventstream / Spark streaming</td></tr>
+          <tr><td>Batch processing</td><td>Scheduled tasks / dbt</td><td>Jobs / dbt</td><td>Scheduled queries / dbt</td><td>Data Factory pipelines / Notebooks</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map, and confirm specifics against current vendor docs.</p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The takeaway:</strong> don't pick batch or streaming by fashion — pick it by the freshness the decision requires. The underlying patterns (a scheduled job vs. an event log + processor) are the same on every platform; only the latency and the cost change.
+      </p>
+    </div>
+
+    <div class="series-nav">
+      <a href="pattern-etl-vs-elt.html">
+        <span class="nav-dir">&#8592; Part 3</span>
+        ETL vs ELT
+      </a>
+      <a href="pattern-data-modeling-101.html" class="next">
+        <span class="nav-dir">Part 5 &#8594;</span>
+        Data Modeling 101
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>
