@@ -7,20 +7,23 @@
   <link rel="stylesheet" href="/style.css" />
   <style>
     .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 28px;
+      column-width: 340px;
+      column-gap: 28px;
       margin-top: 1.5rem;
     }
     .testimonial-card {
       background: var(--surface);
       border-radius: 10px;
       padding: 28px 24px 20px;
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.12);
+      border: 1px solid var(--border);
       border-left: 4px solid var(--accent);
       display: flex;
       flex-direction: column;
       gap: 14px;
+      margin: 0 0 28px;
+      break-inside: avoid;
+      -webkit-column-break-inside: avoid;
       transition: transform 0.2s, box-shadow 0.2s;
     }
     .testimonial-card:hover {
@@ -32,7 +35,6 @@
       color: var(--text);
       line-height: 1.75;
       font-style: italic;
-      flex: 1;
     }
     .testimonial-quote::before {
       content: '\201C';
@@ -68,10 +70,57 @@
     <section id="testimonials">
       <h2>💬 Testimonials</h2>
       <p style="text-align:center; color: var(--text-muted); margin-bottom: 0.5rem;">
-        Recommendations from colleagues, managers, and partners — sourced from LinkedIn.
+        Recommendations from professors, colleagues, managers, and partners — sourced from LinkedIn.
       </p>
 
       <div class="testimonials-grid">
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            Mario was in my class and has shown a high level of commitment and was one of the best students in our Master of Data Analytics program. His level of engagement and collaboration with his classmates was excellent as well as his commitment in respecting due dates and high quality of deliverables.
+          </p>
+          <div class="testimonial-author">
+            <strong>Hany Osman, Ph.D., P.Eng.</strong>
+            <span>Professor, Master of Data Analytics — University of Niagara Falls Canada</span>
+            <p class="testimonial-date">June 2026 · Mario's professor &amp; mentor in the MDA program</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            I had the privilege of teaching Mario Zamudio in Data Analytics Case Study, Spring 2025, as part of the Master of Data Analytics programme at the University of Niagara Falls Canada.
+            <br><br>
+            Mario stood out consistently for the depth and precision he brought to every case analysis. He approached complex, real-world business scenarios with a structured mindset — moving efficiently from problem framing to data-driven conclusions — and regularly connected analytical frameworks to practical implementation in ways that enriched class discussion.
+            <br><br>
+            Beyond technical proficiency in data analysis and business intelligence, what distinguished Mario was his ability to communicate findings clearly and with professional confidence, a quality that is often harder to develop than the analytical skills themselves.
+            <br><br>
+            I recommend Mario without reservation to any organization looking for a data analytics professional who is rigorous in his methods and articulate in translating data into decisions.
+          </p>
+          <div class="testimonial-author">
+            <strong>Zeeshan Ahmad, Ph.D., SMIEEE</strong>
+            <span>Assistant Professor of Data Analytics — University of Niagara Falls Canada</span>
+            <p class="testimonial-date">June 2026 · Taught Mario — Data Analytics Case Study, Spring 2025</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-quote">
+            I'm pleased to recommend Mario Zamudio, who recently completed his Master of Data Analytics at the University of Niagara Falls Canada with outstanding distinction.
+            <br><br>
+            Throughout his graduate studies, Mario consistently demonstrated exceptional technical depth and a rare ability to bridge advanced analytics with enterprise-scale integration. He earned President's Honour Roll recognition in every single term, finishing with a cumulative GPA of 4.13 — a reflection of his discipline, curiosity, and mastery of the material.
+            <br><br>
+            What stood out most was how Mario translated academic concepts into production-ready solutions. His capstone project, Profit Erosion from E-commerce Returns, used Random Forest and K-Means clustering to achieve an AUC of 0.9798, deployed live via Streamlit — an excellent example of ML applied to real business value.
+            <br><br>
+            Mario is also a genuine hybrid: a Solution Architect with 15+ years of telecom experience (Bell, AT&amp;T, Claro, HPE) and a newly minted data analytics specialist. His grasp of Python, BigQuery, Spark, Kubernetes, and AI-assisted development (Claude Code, GitHub Copilot) is already delivering measurable impact at Corus Consulting.
+            <br><br>
+            If you're looking for someone who can design, build, and operationalize data &amp; AI solutions at scale — and do it with rigor and integrity — Mario is an outstanding choice. I highly recommend him for senior analytics, data engineering, or solution architecture roles.
+          </p>
+          <div class="testimonial-author">
+            <strong>Dr. Abbas Hamze</strong>
+            <span>Master Sessional Instructor — University of Niagara Falls Canada</span>
+            <p class="testimonial-date">June 2026 · Mario's professor in the MDA program</p>
+          </div>
+        </div>
 
         <div class="testimonial-card">
           <p class="testimonial-quote">
