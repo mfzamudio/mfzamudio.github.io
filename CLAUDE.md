@@ -19,7 +19,11 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 
 | Layer | File(s) | Purpose |
 |---|---|---|
-| Entry point | `index.html` | Single-page portfolio; all sections live here |
+| Entry point | `index.html` | Landing page — About bio, profile photo, and skill badges only |
+| Page: Resume | `resume.html` | Education, Work Authorization, Key Projects, Experience, Skills, Certifications, Continuous Learning, Earlier Career |
+| Page: Projects | `projects.html` | Full project grid (Featured + Other) |
+| Page: Testimonials | `testimonials.html` | Professor / colleague testimonials |
+| Page: Contact | `contact.html` | QR codes + direct contact links |
 | Styles | `style.css` | Global styles, design tokens, responsive layout |
 | Layout partials | `partials/header.html`, `partials/footer.html` | Injected dynamically into every page |
 | Layout loader | `scripts/include-layout.js` | Fetches partials on `DOMContentLoaded` via `fetch()` |
@@ -76,18 +80,21 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 
 ## Content Structure
 
-### index.html Sections (in order)
-1. **About** — bio, profile photo, background summary
-2. **Publications** — links to articles in `publications/`
-3. **Featured Projects** — 9 main projects in `.project-grid`
-4. **Other Interesting Projects** — 8 additional projects
-5. **Resume** — experience, skills, education, certifications
-6. **Contact** — QR codes + direct links
+### Site is multi-page (split, not single-page)
+The portfolio is split across standalone pages linked from the shared header. Each page
+includes `#header-placeholder` / `#footer-placeholder` and loads `scripts/include-layout.js`.
+
+- **`index.html`** — landing: About bio, profile photo, skill badges
+- **`projects.html`** — Featured Projects grid + Other Interesting Projects grid
+- **`resume.html`** — Education, Work Authorization, Key Projects, Experience, Skills, Languages, Certifications, Continuous Learning, Earlier Career
+- **`testimonials.html`** — professor / colleague testimonials
+- **`contact.html`** — QR codes + direct contact links
+- **`publications/`** — article pages and series landing pages
 
 ### Adding a New Project — Checklist
 - [ ] Create `projects/project-NAME.html` (use existing projects as template)
 - [ ] Add thumbnail image to `images/NAME-thumbnail.png`
-- [ ] Add card to the correct section in `index.html` (Featured or Other)
+- [ ] Add card to the correct grid in `projects.html` (Featured or Other)
 - [ ] Include: title, 2–3 sentence description, tools used, link to project page
 - [ ] If Jupyter notebook: export HTML and place in `projects/`
 - [ ] If SQL: include `.sql` source file in `projects/`
@@ -95,7 +102,6 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 ### Adding a New Publication — Checklist
 - [ ] Create `publications/SLUG.html` (use `publications/data-engineer.html` as template — it has the hero, Mermaid diagram wrapper, concept sections, and series-nav pattern)
 - [ ] Add link card to `publications/publications.html`
-- [ ] Add reference in the Publications section of `index.html`
 
 ### Mermaid Diagrams in Publications
 Publications can include architecture diagrams via Mermaid.js CDN. Load it at the bottom of `<body>`, before `include-layout.js`:
