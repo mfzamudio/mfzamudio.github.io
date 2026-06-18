@@ -125,7 +125,7 @@
 
 <main class="project-detail">
   <section>
-    <a href="modern-data-ecosystem.html" style="text-decoration:none;font-size:1rem;">⬅ Back to Series Overview</a>
+    <a href="modern-data-ecosystem.html" class="home-link">← Back to Series Overview</a>
 
     <div class="pub-hero">
       <div class="series-label">The Modern Data Ecosystem &mdash; Part 3</div>
@@ -154,21 +154,21 @@
         </thead>
         <tbody>
           <tr>
-            <td><span class="layer-bronze">🥉 Bronze</span></td>
+            <td><span class="layer-bronze">Bronze</span></td>
             <td>Raw / Landing</td>
             <td>Exact copy of source data, immutable. No transformations. Stores original JSON, CSV, or CDC events.</td>
             <td>Ingestion pipelines</td>
             <td>Processing jobs, auditors</td>
           </tr>
           <tr>
-            <td><span class="layer-silver">🥈 Silver</span></td>
+            <td><span class="layer-silver">Silver</span></td>
             <td>Conformed / Cleansed</td>
             <td>Validated, deduplicated, standardized schema. Business rules applied. Referential integrity enforced.</td>
             <td>dbt models, Spark jobs</td>
             <td>Data analysts, downstream pipelines</td>
           </tr>
           <tr>
-            <td><span class="layer-gold">🥇 Gold</span></td>
+            <td><span class="layer-gold">Gold</span></td>
             <td>Business / Curated</td>
             <td>Aggregated KPIs, semantic models, denormalized fact tables, feature store for ML.</td>
             <td>dbt models, semantic layer</td>
@@ -193,19 +193,19 @@ flowchart TD
         API["APIs &amp; Webhooks\nThird-Party Data"]
     end
 
-    subgraph BRONZE["🥉 Bronze Layer — Raw Zone"]
+    subgraph BRONZE["Bronze Layer — Raw Zone"]
         B_RAW[("Raw Parquet Files\nExact Copy · Immutable")]
         B_CDC["CDC Events\nDebezium · Change Streams"]
         B_META["Schema Registry\nMetadata &amp; Lineage Tags"]
     end
 
-    subgraph SILVER["🥈 Silver Layer — Conformed Zone"]
+    subgraph SILVER["Silver Layer — Conformed Zone"]
         S_VAL["Validated &amp; Deduplicated\nData Quality Checks Pass"]
         S_STD["Standardized Schema\nConsistent Types &amp; Formats"]
         S_BIZ["Business Rules Applied\nReferential Integrity Enforced"]
     end
 
-    subgraph GOLD["🥇 Gold Layer — Business Zone"]
+    subgraph GOLD["Gold Layer — Business Zone"]
         G_KPI["KPI Aggregations\nFact &amp; Dimension Tables"]
         G_SEM["Semantic Layer\ndbt Metrics &amp; Exposures"]
         G_FEAT["Feature Store\nML-Ready Datasets"]
@@ -364,7 +364,7 @@ flowchart TD
       </a>
     </div>
 
-    <a href="../../publications/publications.html" class="home-link">📖 Back to Publications</a>
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
   </section>
 </main>
 
