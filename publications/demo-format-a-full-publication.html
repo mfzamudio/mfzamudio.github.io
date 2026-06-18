@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DEMO A — LinkedIn post as a standard article | Mario Zamudio</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    /* Standard long-form article layout — dark, no series branding */
+    .article { max-width: 740px; margin: 0 auto; }
+    .article .kicker { font-family: var(--mono); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .article h1 { font-family: var(--disp); font-size: clamp(1.9rem, 4vw, 2.7rem); line-height: 1.12; color: #fff; margin: 0 0 14px; letter-spacing: -.02em; }
+    .article h1::after { display: none; }
+    .article .standfirst { font-size: 1.12rem; line-height: 1.6; color: var(--text-muted); margin: 0 0 22px; }
+    .article .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: var(--mono); font-size: .78rem; color: var(--text-faint); padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .article .meta .sep { opacity: .5; }
+    .article .meta a { color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .article .meta a svg { width: 14px; height: 14px; fill: currentColor; }
+    .article .body { margin-top: 26px; }
+    .article .body p { font-size: 1.04rem; line-height: 1.8; color: var(--text); margin: 0 0 20px; }
+    .article .body h2 { font-family: var(--disp); font-size: 1.4rem; color: #fff; text-align: left; margin: 36px 0 12px; padding: 0; }
+    .article .body h2::after { display: none; }
+    .article .body ul { margin: 0 0 20px; padding-left: 22px; }
+    .article .body li { font-size: 1.02rem; line-height: 1.8; color: var(--text); margin-bottom: 6px; }
+    .article .body blockquote { margin: 28px 0; padding: 4px 0 4px 22px; border-left: 3px solid var(--accent); font-family: var(--disp); font-size: 1.25rem; line-height: 1.5; color: #fff; font-weight: 500; }
+    .article .body a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(86,182,255,.3); }
+    .article .endnote { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--border); font-size: .9rem; color: var(--text-muted); }
+    .demo-banner { background: rgba(250,204,21,.12); border: 1px solid rgba(250,204,21,.4); color: #fde68a; padding: 10px 16px; border-radius: 8px; font-size: .85rem; margin: 0 0 22px; }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="project-detail">
+    <section>
+      <div class="article">
+        <p class="demo-banner"><strong>DEMO — Format A (standard article).</strong> A clean long-form layout for adapting a LinkedIn post into an on-site article. Body text is paraphrased; replace with the real wording before publishing. Delete this file when done.</p>
+
+        <p class="kicker">Data Engineering</p>
+        <h1>Storage vs Compute: the great divorce</h1>
+        <p class="standfirst">The single architectural decision that makes the modern data stack cheap to start, easy to scale, and billed by usage instead of hardware.</p>
+
+        <div class="meta">
+          <span>Mario Zamudio</span>
+          <span class="sep">·</span>
+          <span>June 2026</span>
+          <span class="sep">·</span>
+          <span>3 min read</span>
+          <span class="sep">·</span>
+          <a href="https://www.linkedin.com/feed/update/urn:li:activity:7473419276771614720/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.3a1.7 1.7 0 110-3.5 1.7 1.7 0 010 3.5zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6S12.6 13 12.6 14.2V19h-3v-9h2.9v1.2h.04A3.2 3.2 0 0115.5 9.7c3.2 0 3.5 2.1 3.5 4.7z"/></svg>
+            From LinkedIn
+          </a>
+        </div>
+
+        <div class="body">
+          <p>
+            Legacy on-prem systems combined storage and compute in a single box. To run bigger queries you bought
+            bigger hardware — and that hardware sat there, billing you, even when it was idle. Modern cloud platforms
+            split the two into independent services: data lives in affordable object storage, and compute engines
+            activate only when a query actually runs.
+          </p>
+
+          <blockquote>Idle = $0 compute. Scale up for five minutes, then scale back down.</blockquote>
+
+          <h2>You pay for use, not capacity</h2>
+          <p>
+            Spin an engine up to crunch a heavy job, then shut it down. Because you are billed for the seconds the
+            engine runs rather than for hardware you own, cost tracks usage instead of peak provisioning — a structural
+            change from the always-on model.
+          </p>
+
+          <h2>One copy, many consumers</h2>
+          <p>
+            With storage decoupled from compute, several teams and engines can read the same dataset at the same time
+            without duplicating it. No more copying data into each team's warehouse just so they can query it.
+          </p>
+
+          <h2>The same pattern, everywhere</h2>
+          <p>
+            This separation shows up in Snowflake, Databricks, BigQuery, and Microsoft Fabric. The product names and
+            buttons differ, but the underlying decision is identical. Learn the pattern, not the product — and read the
+            full deep-dive in <a href="/publications/pattern-storage-vs-compute.html">Learn the Pattern, Part 2</a>.
+          </p>
+
+          <p class="endnote">
+            Originally shared on LinkedIn.
+            <a href="https://www.linkedin.com/feed/update/urn:li:activity:7473419276771614720/" target="_blank" rel="noopener">View the original post and discussion →</a>
+          </p>
+        </div>
+
+        <p style="margin-top:32px;"><a href="/publications/publications.html" class="home-link">← Back to Publications</a></p>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="/scripts/include-layout.js"></script>
+</body>
+</html>

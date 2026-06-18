@@ -60,6 +60,9 @@ h1, h2, h3, h4 {
 }
 
 /* ─── Header (new dark nav) ──────────────────────────────── */
+/* Placeholder must not form a layout box, or sticky has no travel room */
+#header-placeholder { display: contents; }
+
 .site-header {
   position: sticky;
   top: 0;
