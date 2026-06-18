@@ -10,12 +10,13 @@
 <div id="header-placeholder"></div>
 <main class="project-detail">
   <section>
-    <h2>🎨 LR Presets Catalog</h2>
+    <a href="/projects.html" class="home-link">← Back to Projects</a>
+    <h2>LR Presets Catalog</h2>
     <p><em>Personal Project — Claude Code · Python · Vanilla JS · GitHub Pages &nbsp;|&nbsp; In Active Development (Phases 1 &amp; 2 Complete)</em></p>
 
     <div style="margin: 1.5rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
-      <a href="https://mfzamudio.github.io/lr-mz-presets" target="_blank" class="home-link">🔗 Live Site</a>
-      <a href="https://github.com/mfzamudio/lr-mz-presets" target="_blank" class="home-link">💻 GitHub Repository</a>
+      <a href="https://mfzamudio.github.io/lr-mz-presets" target="_blank" class="home-link">Live Site</a>
+      <a href="https://github.com/mfzamudio/lr-mz-presets" target="_blank" class="home-link">GitHub Repository</a>
     </div>
 
     <img src="/images/lr-presets-thumbnail.jpg" alt="LR Presets Catalog Preview" class="project-image" />
@@ -24,7 +25,7 @@
       A static web catalog for distributing original Adobe Lightroom presets — designed, engineered, and deployed end-to-end using Claude Code. The project demonstrates that production-quality engineering decisions (multilingual architecture, code-first data visualisation, Python image pipelines) apply equally to personal and professional projects.
     </p>
 
-    <h3>🔬 Engineering Highlights</h3>
+    <h3>Engineering Highlights</h3>
 
     <h4 style="margin: 1rem 0 0.4rem; font-size: 0.97rem;">Custom i18n System (ES / EN / FR)</h4>
     <p>
@@ -55,7 +56,7 @@
       <code>data/presets.json</code> is the single source of truth for all catalog data — XMP values, multilingual descriptions, suggested-use metadata, download counts, and gallery paths. All pages derive from it; no content is hardcoded. The <code>detail.js</code> module derives the active slug from <code>window.location.pathname</code>, allowing all detail pages to share one JS file.
     </p>
 
-    <h3>⚙️ Tools &amp; Stack</h3>
+    <h3>Tools &amp; Stack</h3>
     <ul>
       <li><strong>Development:</strong> Claude Code (primary engineering agent), GitHub Pages (hosting)</li>
       <li><strong>Frontend:</strong> Vanilla HTML5, CSS (Tailwind via CDN), Vanilla JS (no SPA framework)</li>
@@ -66,7 +67,7 @@
       <li><strong>CI/CD:</strong> GitHub Pages auto-deploy on push to <code>main</code></li>
     </ul>
 
-    <h3>📊 Current Status</h3>
+    <h3>Current Status</h3>
     <ul>
       <li><strong>Phase 1 (MVP — complete):</strong> Filterable catalog, i18n, landing page, 4 presets (1 per category), GitHub Pages deployment.</li>
       <li><strong>Phase 2 (Detail &amp; analytics — complete):</strong> Before/after slider, full technical analytics panel, related presets, collapsible install instructions in 3 languages.</li>
@@ -74,10 +75,10 @@
       <li><strong>Phase 4 (Analytics — pending):</strong> Download tracking (GoatCounter or Cloudflare Worker + KV), social sharing.</li>
     </ul>
 
-    <h3>🔗 Resources</h3>
+    <h3>Resources</h3>
     <ul>
-      <li><a href="https://mfzamudio.github.io/lr-mz-presets" target="_blank">🔗 Live Catalog — mfzamudio.github.io/lr-mz-presets</a></li>
-      <li><a href="https://github.com/mfzamudio/lr-mz-presets" target="_blank">💻 Full Source Code — GitHub</a></li>
+      <li><a href="https://mfzamudio.github.io/lr-mz-presets" target="_blank">Live Catalog — mfzamudio.github.io/lr-mz-presets</a></li>
+      <li><a href="https://github.com/mfzamudio/lr-mz-presets" target="_blank">Full Source Code — GitHub</a></li>
     </ul>
 
     <div style="margin-top: 2rem;">

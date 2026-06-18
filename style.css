@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 /* ─── Reset ─────────────────────────────────────────────── */
 * {
@@ -7,26 +7,34 @@
   box-sizing: border-box;
 }
 
-/* ─── Design tokens ──────────────────────────────────────── */
+/* ─── Design tokens (DARK) ───────────────────────────────── */
 :root {
-  --bg:           #f8fafc;
-  --surface:      #ffffff;
-  --text:         #0f172a;
-  --text-muted:   #475569;
-  --border:       #e2e8f0;
-  --accent:       #2563eb;
-  --accent-light: #eff6ff;
-  --accent-mid:   #bfdbfe;
-  --purple:       #6d28d9;
-  --purple-light: #f5f3ff;
-  --shadow-sm:    0 1px 4px rgba(15, 23, 42, 0.06);
-  --shadow-md:    0 4px 16px rgba(15, 23, 42, 0.08);
-  --shadow-blue:  0 8px 32px rgba(37, 99, 235, 0.14);
+  --bg:           #0a0e17;
+  --surface:      #0e1422;
+  --surface-2:    #111a2c;
+  --text:         #e7ecf6;
+  --text-muted:   #94a3bd;
+  --text-faint:   #5d6b86;
+  --border:       rgba(255, 255, 255, 0.08);
+  --border-2:     rgba(255, 255, 255, 0.14);
+  --accent:       #56b6ff;
+  --accent-light: rgba(86, 182, 255, 0.10);
+  --accent-mid:   rgba(86, 182, 255, 0.35);
+  --purple:       #a78bfa;
+  --purple-light: rgba(167, 139, 250, 0.12);
+  --mint:         #4fd6a8;
+  --shadow-sm:    0 1px 4px rgba(0, 0, 0, 0.40);
+  --shadow-md:    0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-blue:  0 10px 34px rgba(86, 182, 255, 0.18);
+
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --disp: 'Space Grotesk', 'Inter', sans-serif;
+  --body: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* ─── Base ───────────────────────────────────────────────── */
 body {
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--body);
   background-color: var(--bg);
   color: var(--text);
   line-height: 1.65;
@@ -46,92 +54,105 @@ a:hover {
   color: var(--purple);
 }
 
-/* ─── Header ─────────────────────────────────────────────── */
-header {
-  width: 100%;
-  height: 110px;
-  background-image: url('/images/header-background-resized.png');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
-  z-index: 1000;
+h1, h2, h3, h4 {
+  font-family: var(--disp);
+  letter-spacing: -0.01em;
 }
 
-.header-inner {
+/* ─── Header (new dark nav) ──────────────────────────────── */
+/* Placeholder must not form a layout box, or sticky has no travel room */
+#header-placeholder { display: contents; }
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 14, 23, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-bar {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 14px 28px;
   display: flex;
   align-items: center;
-  height: 100%;
-  padding: 0 2rem;
-  gap: 2rem;
+  gap: 16px;
 }
 
-/* Left column: logo */
-.header-left {
-  flex-shrink: 0;
+.brand {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  line-height: 1.1;
+  text-decoration: none;
 }
 
-.header-left a {
+.brand .name {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 1.12rem;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.brand .name b {
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--accent), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand .role {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+.main-nav {
+  margin-left: auto;
   display: flex;
-  align-items: center;
-}
-
-.header-left img {
-  height: 72px;
-  display: block;
-}
-
-/* Center column: subtitle */
-.header-subtitle {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.header-subtitle p {
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  color: #ffffff !important;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
-  margin: 0;
-  line-height: 1.2;
-  text-align: center;
-}
-
-/* Right column: nav */
-.header-nav ul {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 4px;
-  flex-wrap: wrap;
+  gap: 2px;
+  flex-wrap: nowrap;
   justify-content: flex-end;
 }
 
-.header-nav a {
-  display: block;
-  padding: 4px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  font-size: 0.88rem;
-  font-weight: 500;
-  letter-spacing: 0.2px;
+.main-nav a {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  padding: 7px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
   text-decoration: none;
-  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  position: relative;
+  transition: color 0.18s, background 0.18s;
 }
 
-.header-nav a:hover,
-.header-nav a:focus {
-  background: rgba(100, 130, 220, 0.22);
-  color: #a6c5ff;
-  border-color: rgba(166, 197, 255, 0.5);
+.main-nav a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.main-nav a.active {
+  color: #fff;
+}
+
+.main-nav a.active::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 2px;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--accent), var(--purple));
+  border-radius: 2px;
 }
 
 /* ─── Main sections ──────────────────────────────────────── */
@@ -151,8 +172,8 @@ main section + section {
 
 main section h2 {
   text-align: center;
-  color: var(--text);
-  font-size: 1.55rem;
+  color: #fff;
+  font-size: 1.7rem;
   font-weight: 700;
   margin-bottom: 2rem;
   position: relative;
@@ -165,17 +186,21 @@ main section h2::after {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 40px;
+  width: 44px;
   height: 3px;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--accent), var(--purple));
   border-radius: 2px;
 }
 
 main section h3 {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text);
-  margin: 1.5rem 0 0.5rem;
+  color: #fff;
+  margin: 1.6rem 0 0.5rem;
+}
+
+main section h4 {
+  color: #fff;
 }
 
 .text-muted {
@@ -187,7 +212,6 @@ main section h3 {
 .about-section {
   padding-top: 3rem;
   padding-bottom: 3rem;
-  padding-left: 0.5rem;
 }
 
 .about-container {
@@ -198,7 +222,6 @@ main section h3 {
   margin: 0 auto;
 }
 
-/* Photo with double-ring effect */
 .about-photo {
   flex-shrink: 0;
   display: flex;
@@ -211,12 +234,10 @@ main section h3 {
   object-fit: cover;
   object-position: center top;
   border-radius: 50%;
-  border: 4px solid var(--surface);
+  border: 4px solid var(--surface-2);
   outline: 3px solid var(--accent);
   box-shadow: var(--shadow-blue);
   display: block;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: high-quality;
 }
 
 .about-info {
@@ -224,19 +245,21 @@ main section h3 {
 }
 
 .about-name {
+  font-family: var(--disp);
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text);
+  color: #fff;
   line-height: 1.2;
   margin-bottom: 0.3rem;
 }
 
 .about-title {
-  font-size: 1rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
   font-weight: 500;
   color: var(--accent);
   margin-bottom: 1.25rem;
-  letter-spacing: 0.2px;
 }
 
 .about-info p {
@@ -254,14 +277,14 @@ main section h3 {
 }
 
 .skill-badge {
+  font-family: var(--mono);
   background: var(--accent-light);
   color: var(--accent);
   border: 1px solid var(--accent-mid);
-  border-radius: 20px;
-  padding: 4px 14px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.1px;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 0.76rem;
+  font-weight: 500;
 }
 
 /* ─── Project grid & cards ───────────────────────────────── */
@@ -274,8 +297,9 @@ main section h3 {
 
 .card {
   background-color: var(--surface);
-  border-radius: 10px;
-  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
   box-shadow: var(--shadow-sm);
   border-top: 3px solid transparent;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
@@ -286,21 +310,23 @@ main section h3 {
 
 .card:hover {
   transform: translateY(-5px);
+  border-color: var(--border-2);
   border-top-color: var(--accent);
-  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.13);
+  box-shadow: var(--shadow-blue);
 }
 
 .card img {
   width: 100%;
   height: 180px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .card h3 {
-  font-size: 0.95rem;
+  font-family: var(--disp);
+  font-size: 0.98rem;
   font-weight: 600;
-  color: var(--text);
+  color: #fff;
   line-height: 1.4;
 }
 
@@ -311,16 +337,40 @@ main section h3 {
   flex: 1;
 }
 
+.card p strong {
+  color: var(--text);
+}
+
 .card a:not([class]) {
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 500;
   color: var(--accent);
   text-decoration: none;
 }
 
 .card a:not([class]):hover {
   color: var(--purple);
-  text-decoration: underline;
+}
+
+/* Generic button */
+.btn {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #06101f;
+  background: linear-gradient(90deg, var(--accent), var(--purple));
+  border-radius: 9px;
+  padding: 9px 16px;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  color: #06101f;
+  box-shadow: var(--shadow-blue);
 }
 
 /* ─── Project detail images ──────────────────────────────── */
@@ -334,22 +384,14 @@ main section h3 {
   box-shadow: var(--shadow-md);
 }
 
-.project-image {
+.project-image,
+.feature-image {
   display: block;
   max-width: 90%;
   height: auto;
   margin: 2rem auto;
   box-shadow: var(--shadow-md);
   border-radius: 8px;
-}
-
-.feature-image {
-  display: block;
-  margin: 1rem auto;
-  max-width: 90%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: var(--shadow-md);
 }
 
 /* ─── Contact ─────────────────────────────────────────────── */
@@ -368,10 +410,11 @@ main section h3 {
 
 .qr-contact-item {
   background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 14px;
   box-shadow: var(--shadow-md);
   padding: 24px 16px 16px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -382,6 +425,7 @@ main section h3 {
 .qr-contact-item:hover {
   transform: translateY(-6px);
   border-top-color: var(--accent);
+  border-color: var(--border-2);
   box-shadow: var(--shadow-blue);
 }
 
@@ -390,35 +434,37 @@ main section h3 {
   height: 110px;
   margin-bottom: 12px;
   border-radius: 8px;
+  background: #fff;
+  padding: 4px;
 }
 
 .qr-contact-item a {
   display: block;
   margin-top: 6px;
-  font-size: 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.84rem;
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   word-break: break-all;
   transition: color 0.2s;
 }
 
 .qr-contact-item a[href^="mailto:"] {
-  font-size: 0.78rem;
-  letter-spacing: 0.1px;
+  font-size: 0.74rem;
 }
 
 .qr-contact-item a:hover {
   color: var(--purple);
-  text-decoration: underline;
 }
 
 /* ─── Home link ───────────────────────────────────────────── */
 .home-link {
-  font-size: 1rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
   color: var(--purple);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   gap: 0.3em;
@@ -427,47 +473,117 @@ main section h3 {
 
 .home-link:hover {
   color: var(--accent);
-  text-decoration: underline;
 }
 
-/* ─── Footer ──────────────────────────────────────────────── */
-footer {
-  background-color: #0b1120;
-  color: #cfdffb;
+/* ─── Footer (new dark, more contrast) ───────────────────── */
+.site-footer {
+  position: relative;
+  margin-top: 48px;
+  background: #070a12;
+  border-top: 1px solid var(--border);
   text-align: center;
-  padding: 1rem 1rem;
-  margin-top: 2rem;
-  font-size: 0.85rem;
+  padding: 34px 20px 26px;
 }
 
-footer a {
-  color: white;
-  text-decoration: none;
-  margin: 0 0.5rem;
-  font-weight: 600;
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--purple), transparent);
 }
 
-footer a:hover {
-  text-decoration: underline;
+.site-footer .follow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
-footer .social-icons {
+.site-footer .social {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin: 0.5rem 0;
+  gap: 18px;
+  margin: 16px 0 20px;
 }
 
-footer .social-icons img {
-  width: 22px;
-  height: 22px;
+.site-footer .social a {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+}
+
+.site-footer .social a:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  background: rgba(86, 182, 255, 0.07);
+}
+
+.site-footer .social img {
+  width: 18px;
+  height: 18px;
   filter: brightness(0) invert(1);
-  transition: transform 0.2s ease;
+  opacity: 0.82;
 }
 
-footer .social-icons a:hover img {
-  transform: scale(1.2);
+.site-footer .meta {
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  line-height: 1.7;
 }
+
+.site-footer .meta a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.site-footer .meta a:hover {
+  color: #fff;
+}
+
+/* ─── Publications — dark overrides ──────────────────────────
+   The publication pages carry their own scoped <style> blocks with
+   hard-coded light colours. These !important rules retheme those
+   shared components for dark without editing 15+ files. The pub-hero
+   and sixty-sec blocks are already dark and are left untouched. */
+.concept-section p { color: var(--text) !important; }
+.concept-section h4 { color: var(--accent) !important; }
+.highlight-box { background: var(--accent-light) !important; border-left-color: var(--accent) !important; }
+.highlight-box p { color: var(--text) !important; }
+.diagram-wrap { background: var(--surface) !important; border-color: var(--border) !important; }
+.diagram-caption { color: var(--text-muted) !important; }
+.table-note { color: var(--text-muted) !important; }
+.platform-table { border-color: var(--border) !important; }
+.platform-table th, .platform-table td { border-bottom-color: var(--border) !important; }
+.platform-table tbody td { color: var(--text) !important; }
+.platform-table tbody td:first-child { background: var(--purple-light) !important; color: var(--purple) !important; }
+.platform-table tbody tr:hover td { background: rgba(255, 255, 255, 0.04) !important; }
+.platform-table tbody tr:hover td:first-child { background: rgba(167, 139, 250, 0.18) !important; }
+.series-nav a { background: var(--surface) !important; color: var(--text) !important; border-color: var(--border) !important; }
+.series-nav a:hover { border-color: var(--accent) !important; color: #fff !important; }
+.series-nav a .nav-dir { color: var(--accent) !important; }
+
+/* Modern Data Ecosystem series — bespoke components */
+.skill-cols li { color: var(--text) !important; }
+.role-card, .part-link, .pillar-card, .era-card { background: var(--surface) !important; border-color: var(--border) !important; }
+.role-card h3, .part-link h4, .pillar-card h3 { color: #fff !important; }
+.role-card p, .part-link p, .pillar-card p, .era-card p, .role-tools { color: var(--text-muted) !important; }
+.role-tools { border-top-color: var(--border) !important; }
+.arch-table td, .cloud-table td { color: var(--text) !important; border-bottom-color: var(--border) !important; }
+.arch-table tr:nth-child(even) td, .cloud-table tr:nth-child(even) td { background: rgba(255, 255, 255, 0.03) !important; }
+.cloud-table .cat { color: var(--text-muted) !important; }
+.arch-table .layer-bronze { color: #fbbf24 !important; }
+.arch-table .layer-silver { color: #cbd5e1 !important; }
+.arch-table .layer-gold { color: #fcd34d !important; }
 
 /* ─── Responsive ──────────────────────────────────────────── */
 @media (max-width: 800px) {
@@ -497,30 +613,19 @@ footer .social-icons a:hover img {
     max-width: 300px;
   }
 
-  header {
-    height: auto;
-    padding: 0.75rem 0;
-  }
-
-  .header-inner {
+  .header-bar {
     flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0 1rem;
+    align-items: flex-start;
+    gap: 12px;
   }
 
-  .header-subtitle {
-    width: 100%;
-    justify-content: center;
+  .brand .role {
+    white-space: normal;
   }
 
-  .header-subtitle p {
-    font-size: 1rem;
-    text-align: center;
-  }
-
-  .header-nav ul {
-    justify-content: center;
-    gap: 4px;
+  .main-nav {
+    margin-left: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 }

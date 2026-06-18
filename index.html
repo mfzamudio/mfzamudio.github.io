@@ -3,49 +3,234 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mario Zamudio – Data Analytics Portfolio</title>
+  <title>Mario Zamudio — Solution Architect · Integration · Data · Cloud · ML · AI</title>
   <link rel="stylesheet" href="/style.css" />
+  <style>
+    /* ── Home-only components (hero · deltas · columns) ── */
+    .wrap{ max-width:1060px; margin:0 auto; padding:0 28px; }
+    .eyebrow{ font-family:var(--mono); font-size:.74rem; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--text-faint); display:flex; align-items:center; gap:10px; }
+    .eyebrow::before{ content:""; width:26px; height:1px; background:linear-gradient(90deg,var(--accent),var(--purple)); }
+
+    .dark-home{ position:relative; overflow:hidden; }
+    .dark-home section{ max-width:none; margin:0; padding:0; border:0; }
+    .dark-home::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+      background:
+        radial-gradient(620px 380px at 82% -4%, rgba(86,182,255,.10), transparent 70%),
+        radial-gradient(560px 420px at 6% 8%, rgba(167,139,250,.10), transparent 70%),
+        linear-gradient(transparent 95%, rgba(255,255,255,.025) 95%) 0 0/100% 34px,
+        linear-gradient(90deg, transparent 95%, rgba(255,255,255,.025) 95%) 0 0/34px 100%; }
+    .dark-home > *{ position:relative; z-index:1; }
+
+    .hero{ padding:72px 0 30px; }
+    .hero-grid{ display:grid; grid-template-columns:1fr 290px; gap:54px; align-items:center; }
+    .hero h1{ font-family:var(--disp); font-weight:700; font-size:clamp(2.1rem,4.8vw,3.3rem); line-height:1.04;
+      letter-spacing:-.02em; margin:18px 0 0; color:#fff; }
+    .hero .thesis{ font-family:var(--disp); font-weight:500; font-size:clamp(1.1rem,2.2vw,1.45rem);
+      line-height:1.42; margin:20px 0 0; color:var(--text); max-width:34ch; }
+    .hero .thesis em{ font-style:normal; background:linear-gradient(90deg,var(--accent),var(--purple));
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+    .hero .lede{ color:var(--text-muted); font-size:.99rem; line-height:1.75; margin:18px 0 0; max-width:56ch; }
+    .hero .lede a{ border-bottom:1px solid rgba(86,182,255,.3); text-decoration:none; }
+    .hero .lede a:hover{ color:#fff; }
+
+    .portrait{ position:relative; }
+    .portrait .frame{ border-radius:18px; padding:6px;
+      background:linear-gradient(150deg,rgba(86,182,255,.5),rgba(167,139,250,.4),transparent 70%); }
+    .portrait img{ width:100%; aspect-ratio:1/1.05; object-fit:cover; object-position:center top;
+      border-radius:13px; display:block; background:var(--surface-2); }
+    .portrait .loc{ position:absolute; left:10px; bottom:10px; font-family:var(--mono); font-size:.66rem;
+      letter-spacing:.08em; color:var(--text); background:rgba(10,14,23,.72); backdrop-filter:blur(6px);
+      border:1px solid var(--border-2); border-radius:7px; padding:5px 9px; }
+    .loc .dot{ display:inline-block; width:6px; height:6px; border-radius:50%;
+      background:linear-gradient(90deg,var(--accent),var(--purple)); margin-right:6px; vertical-align:middle; }
+
+    .cta-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+    .btn-ghost{ color:var(--text); background:transparent; border:1px solid var(--border-2); }
+    .btn-ghost:hover{ border-color:var(--accent); color:#fff; box-shadow:none; }
+
+    .deltas{ padding:46px 0 8px; }
+    .delta-head{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+    .delta-head p{ color:var(--text-faint); font-size:.82rem; font-family:var(--mono); }
+    .delta-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .delta{ background:linear-gradient(180deg,var(--surface),rgba(14,20,34,.4));
+      border:1px solid var(--border); border-radius:16px; padding:24px 22px; transition:border-color .25s, transform .25s; }
+    .delta:hover{ border-color:var(--border-2); transform:translateY(-4px); }
+    .delta .what{ font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); }
+    .delta .nums{ display:flex; align-items:center; gap:12px; margin:16px 0 12px; }
+    .delta .from{ font-family:var(--disp); font-weight:500; font-size:1.25rem; color:var(--text-muted);
+      text-decoration:line-through; text-decoration-color:rgba(148,163,189,.4); white-space:nowrap; }
+    .delta .to{ font-family:var(--disp); font-weight:700; font-size:1.95rem; line-height:1; white-space:nowrap;
+      background:linear-gradient(90deg,var(--accent),var(--mint)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+    .delta .flow{ flex:1; min-width:26px; height:14px; }
+    .delta .stack{ font-size:.82rem; color:var(--text-muted); line-height:1.55; }
+    .delta .stack b{ color:var(--text); font-weight:600; }
+    .delta .src{ font-family:var(--mono); font-size:.64rem; color:var(--text-faint); margin-top:8px; letter-spacing:.04em; }
+
+    .cols{ padding:54px 0 56px; }
+    .col-grid{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--border); }
+    .col{ padding:28px 26px 10px; border-right:1px solid var(--border); }
+    .col:last-child{ border-right:0; }
+    .col .idx{ font-family:var(--mono); font-size:.72rem; color:var(--text-faint); letter-spacing:.12em; }
+    .col h3{ font-family:var(--disp); font-size:1.1rem; font-weight:600; color:#fff; margin:14px 0 12px; }
+    .col p{ color:var(--text-muted); font-size:.91rem; line-height:1.7; margin:0 0 10px; }
+    .col p a{ border-bottom:1px solid rgba(86,182,255,.3); text-decoration:none; }
+    .col p a:hover{ color:#fff; }
+    .col b{ color:var(--text); font-weight:600; }
+    .col em{ color:var(--text); font-style:normal; }
+
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:34px; }
+    .chip{ font-family:var(--mono); font-size:.74rem; color:var(--text-muted);
+      border:1px solid var(--border); border-radius:8px; padding:5px 11px; background:rgba(255,255,255,.015); transition:border-color .2s,color .2s; }
+    .chip:hover{ border-color:var(--accent); color:#fff; }
+
+    @media (max-width:860px){
+      .hero-grid{ grid-template-columns:1fr; gap:34px; }
+      .portrait{ max-width:250px; }
+      .delta-grid{ grid-template-columns:1fr; }
+      .col-grid{ grid-template-columns:1fr; }
+      .col{ border-right:0; border-bottom:1px solid var(--border); }
+    }
+    @media (prefers-reduced-motion:reduce){ *{ animation:none !important; } }
+  </style>
 </head>
 <body>
   <div id="header-placeholder"></div>
-  <main>
 
-    <section id="about" class="about-section">
-      <div class="about-container">
-        <div class="about-photo">
-          <img src="/images/Profile_Github.png" alt="Mario Zamudio">
-        </div>
-        <div class="about-info">
-          <p class="about-name">Mario Zamudio</p>
-          <p class="about-title">Solution Architect &amp; ML/Data Engineer &nbsp;·&nbsp; Cloud-Native &amp; AI Systems</p>
+  <main class="dark-home" id="about">
 
-          <p>Solution Architect and Data Engineer based in Niagara Falls, ON, Canada. Currently architecting enterprise integration and AI systems at <strong>Corus Consulting</strong> — deploying IBM webMethods on Kubernetes (Helm), building LLM-powered diagnostic agents, and delivering CI/CD pipelines for insurance and financial services clients across Latin America. Completed a <strong>Master of Data Analytics at the University of Niagara Falls</strong> (GPA 4.13, President's Distinction List, 2024–2026) — Capstone: Random Forest classifier (AUC 0.98) and K-Means segmentation on Google BigQuery data, live at <a href="https://profiterosion.streamlit.app" target="_blank">profiterosion.streamlit.app</a>.</p>
-
-          <p>15 years of hands-on delivery for Bell Canada, AT&amp;T, and Claro: Hadoop/Spark/Hive ETL pipelines (48+ hours → 2 hours), OpenShift/OpenStack cloud provisioning (3 months → 2 days), Jenkins/Ansible CI/CD (10 days → 1 day), and carrier-grade observability stacks (Prometheus, Grafana, Elasticsearch) — in production, at scale, on RHEL.</p>
-
-          <p>AI-native engineering in practice: <a href="https://mfzamudio.github.io/warzone-armory/frontend/" target="_blank"><strong>Warzone Armory</strong></a> (Python scraper + daily GitHub Actions cron + analytics dashboard), <a href="https://mfzamudio.github.io/lr-mz-presets" target="_blank"><strong>LR Presets</strong></a> (Python image pipeline + custom trilingual i18n + Chart.js analytics), and <strong>GymRoutines</strong> (React 19 + TypeScript + Vercel serverless + Neon PostgreSQL, multi-user with JWT-isolated data) — all built end-to-end with Claude Code.</p>
-
-          <div class="skill-badges">
-            <span class="skill-badge">Python</span>
-            <span class="skill-badge">SQL</span>
-            <span class="skill-badge">BigQuery</span>
-            <span class="skill-badge">scikit-learn</span>
-            <span class="skill-badge">Streamlit</span>
-            <span class="skill-badge">Docker</span>
-            <span class="skill-badge">Kubernetes</span>
-            <span class="skill-badge">GitHub Actions</span>
-            <span class="skill-badge">Machine Learning</span>
-            <span class="skill-badge">ETL / Data Pipelines</span>
-            <span class="skill-badge">Power BI</span>
-            <span class="skill-badge">Tableau</span>
-            <span class="skill-badge">Claude Code</span>
-            <span class="skill-badge">Prompt Engineering</span>
+    <!-- ════ HERO ════ -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">Solution Architect — Integration · Data Engineering · Cloud · ML · AI</div>
+          <h1>Mario Zamudio</h1>
+          <p class="thesis">Enterprise integration, cloud &amp; AI systems — <em>architected and built hands-on</em>.</p>
+          <p class="lede">
+            Based in Niagara Falls, Ontario. Fifteen years designing and delivering BSS/OSS, big-data,
+            and DevOps systems for carriers including <strong>Bell Canada, AT&amp;T and Claro</strong> — horizontally
+            scaling real-time platforms, automating cloud provisioning across OpenStack and OpenShift, and wiring
+            carrier-grade observability with Prometheus, Grafana and Elasticsearch. Led cross-functional teams of
+            10+ engineers across the Americas.
+          </p>
+          <p class="lede">
+            Now focused on enterprise integration (IBM&nbsp;webMethods, Kubernetes) and AI-assisted development.
+            SAFe&nbsp;6 Product Owner / Scrum Master, bilingual (EN&nbsp;/&nbsp;ES). Recently completed a Master of
+            Data Analytics (GPA&nbsp;4.13, President's Distinction List); capstone live at
+            <a href="https://profiterosion.streamlit.app" target="_blank" rel="noopener">profiterosion.streamlit.app</a>.
+          </p>
+          <div class="cta-row">
+            <a class="btn" href="/projects.html">View projects →</a>
+            <a class="btn btn-ghost" href="/resume.html">Résumé</a>
+            <a class="btn btn-ghost" href="/publications/publications.html">Writing</a>
+            <a class="btn btn-ghost" href="/contact.html">Contact</a>
           </div>
+        </div>
+        <div class="portrait">
+          <div class="frame"><img src="/images/Profile_Github.png" alt="Mario Zamudio"></div>
+          <span class="loc"><span class="dot"></span>Niagara Falls, ON · Canada</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ DELTAS (signature) ════ -->
+    <section class="deltas">
+      <div class="wrap">
+        <div class="delta-head">
+          <div class="eyebrow">Measured results · in production</div>
+          <p>// carrier-grade delivery, 15 yrs</p>
+        </div>
+        <div class="delta-grid">
+
+          <div class="delta">
+            <div class="what">Data availability latency</div>
+            <div class="nums">
+              <span class="from">48 h</span>
+              <svg class="flow" viewBox="0 0 90 14" preserveAspectRatio="none" aria-hidden="true">
+                <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#56b6ff"/><stop offset="1" stop-color="#4fd6a8"/></linearGradient>
+                  <path id="p1" d="M2 7 H78"/></defs>
+                <line x1="2" y1="7" x2="80" y2="7" stroke="url(#g1)" stroke-width="1.4"/>
+                <path d="M76 3 L84 7 L76 11" fill="none" stroke="#4fd6a8" stroke-width="1.4"/>
+                <circle r="2.4" fill="#bae6fd"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion></circle>
+              </svg>
+              <span class="to">2 h</span>
+            </div>
+            <p class="stack">Re-engineered big-data ETL on <b>Hadoop · Spark · Hive · Vertica</b>.</p>
+            <p class="src">HPE · carrier big-data platform</p>
+          </div>
+
+          <div class="delta">
+            <div class="what">Environment provisioning</div>
+            <div class="nums">
+              <span class="from">3 mo</span>
+              <svg class="flow" viewBox="0 0 90 14" preserveAspectRatio="none" aria-hidden="true">
+                <defs><path id="p2" d="M2 7 H78"/></defs>
+                <line x1="2" y1="7" x2="80" y2="7" stroke="url(#g1)" stroke-width="1.4"/>
+                <path d="M76 3 L84 7 L76 11" fill="none" stroke="#4fd6a8" stroke-width="1.4"/>
+                <circle r="2.4" fill="#bae6fd"><animateMotion dur="1.8s" begin=".4s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion></circle>
+              </svg>
+              <span class="to">2 d</span>
+            </div>
+            <p class="stack">Private-cloud automation with <b>OpenStack · OpenShift</b>.</p>
+            <p class="src">HPE · 5G / WiFi provisioning</p>
+          </div>
+
+          <div class="delta">
+            <div class="what">Real-time charging throughput</div>
+            <div class="nums">
+              <span class="from">10 TPS</span>
+              <svg class="flow" viewBox="0 0 90 14" preserveAspectRatio="none" aria-hidden="true">
+                <defs><path id="p3" d="M2 7 H78"/></defs>
+                <line x1="2" y1="7" x2="80" y2="7" stroke="url(#g1)" stroke-width="1.4"/>
+                <path d="M76 3 L84 7 L76 11" fill="none" stroke="#4fd6a8" stroke-width="1.4"/>
+                <circle r="2.4" fill="#bae6fd"><animateMotion dur="1.8s" begin=".8s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion></circle>
+              </svg>
+              <span class="to">40k TPS</span>
+            </div>
+            <p class="stack">Horizontal scaling of a Java charging platform — a <b>4,000× increase</b>.</p>
+            <p class="src">HPE · Claro prepaid charging</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ THREE COLUMNS ════ -->
+    <section class="cols">
+      <div class="wrap">
+        <div class="col-grid">
+          <div class="col">
+            <span class="idx">01 / NOW</span>
+            <h3>Integration &amp; AI-assisted delivery</h3>
+            <p>Designing enterprise integration on <b>IBM webMethods</b> — API gateways, SOAP/REST flows — and containerising platforms on <b>Kubernetes</b> with Helm (high availability, load balancing) for financial-services and insurance clients.</p>
+            <p>Building reusable AI-assisted development frameworks and intelligent agents that standardise and speed up enterprise delivery.</p>
+          </div>
+          <div class="col">
+            <span class="idx">02 / FOUNDATION</span>
+            <h3>Master of Data Analytics</h3>
+            <p>University of Niagara Falls Canada — <b>GPA 4.13</b>, President's Distinction List across all five terms.</p>
+            <p>Capstone — <em>Profit Erosion</em>: Random Forest (AUC&nbsp;0.98) and K-Means segmentation on Google BigQuery, live at <a href="https://profiterosion.streamlit.app" target="_blank" rel="noopener">profiterosion.streamlit.app</a>.</p>
+          </div>
+          <div class="col">
+            <span class="idx">03 / AI-NATIVE</span>
+            <h3>Full-stack builds, AI-assisted</h3>
+            <p>Self-directed projects built end-to-end with AI-assisted tooling: <a href="https://mfzamudio.github.io/warzone-armory/frontend/" target="_blank" rel="noopener">Warzone Armory</a> (Python scraper + daily GitHub Actions + Chart.js).</p>
+            <p><a href="https://mfzamudio.github.io/lr-mz-presets" target="_blank" rel="noopener">LR Presets</a> (Python image pipeline + trilingual i18n) and <b>GymRoutines</b> (React 19 + TypeScript + Vercel serverless + Neon PostgreSQL).</p>
+          </div>
+        </div>
+
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">SQL</span><span class="chip">BigQuery</span>
+          <span class="chip">scikit-learn</span><span class="chip">IBM webMethods</span><span class="chip">Kubernetes</span>
+          <span class="chip">Docker</span><span class="chip">OpenShift</span><span class="chip">GitHub Actions</span>
+          <span class="chip">Machine Learning</span><span class="chip">ETL / Data Pipelines</span><span class="chip">Power BI</span>
+          <span class="chip">Tableau</span><span class="chip">Agentic CLI · AI Agents</span>
         </div>
       </div>
     </section>
 
   </main>
+
   <div id="footer-placeholder"></div>
   <script src="/scripts/include-layout.js"></script>
 </body>

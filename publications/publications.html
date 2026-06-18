@@ -3,50 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Publications | Mario Zamudio</title>
+  <title>Writing | Mario Zamudio</title>
   <link rel="stylesheet" href="/style.css" />
+  <style>
+    .blog-head { max-width: 760px; margin: 0 auto 36px; }
+    .blog-kicker { font-family: var(--mono); font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .blog-title { font-family: var(--disp); font-size: clamp(2rem, 4.5vw, 2.8rem); line-height: 1.12; color: #fff; margin: 0 0 14px; letter-spacing: -.02em; }
+    .blog-title::after { display: none; }
+    .blog-sub { font-size: 1.08rem; line-height: 1.65; color: var(--text-muted); }
+
+    .blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 24px; }
+
+    .post-card { display: flex; flex-direction: column; gap: 12px; background: var(--surface);
+      border: 1px solid var(--border); border-top: 3px solid transparent; border-radius: 16px;
+      padding: 26px 26px 24px; text-decoration: none; transition: transform .22s, border-color .22s, box-shadow .22s; }
+    .post-card:hover { transform: translateY(-5px); border-color: var(--border-2); border-top-color: var(--accent); box-shadow: var(--shadow-blue); }
+    .post-card .cat { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+    .post-card h2, .post-card h3 { font-family: var(--disp); color: #fff; margin: 0; padding: 0; text-align: left; line-height: 1.25; }
+    .post-card h2::after, .post-card h3::after { display: none; }
+    .post-card h2 { font-size: 1.7rem; }
+    .post-card h3 { font-size: 1.2rem; }
+    .post-card p { color: var(--text-muted); font-size: .94rem; line-height: 1.7; margin: 0; flex: 1; }
+    .post-card .meta { font-family: var(--mono); font-size: .72rem; color: var(--text-faint); letter-spacing: .04em; }
+    .post-card .read { font-family: var(--mono); font-size: .82rem; color: var(--accent); margin-top: 2px; }
+    .post-card:hover .read { color: #fff; }
+
+    .post-card.featured { grid-column: 1 / -1; background: linear-gradient(135deg, #0f172a 0%, #14122e 100%); }
+    .post-card.featured h2 { background: linear-gradient(90deg, #fff, #bfdbfe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .post-card.featured p { color: #cbd5e1; max-width: 70ch; }
+
+    @media (max-width: 720px) { .blog-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 <div id="header-placeholder"></div>
 
 <main class="project-detail">
   <section>
-    <h2>📝 Publications</h2>
-    <p>
-      In this section I share articles about techniques, tools, and processes I've learned in my Master's program in Data Analytics.
-      Later, I will also include posts based on real-world datasets and professional projects.
-    </p>
+    <div class="blog-head">
+      <p class="blog-kicker">Writing</p>
+      <h1 class="blog-title">Notes on data engineering, cloud &amp; AI</h1>
+      <p class="blog-sub">Long-form series and practical articles on building data platforms that transfer across tools — written from hands-on delivery, not vendor marketing.</p>
+    </div>
 
-    <h3>Latest Posts</h3>
-    <ul>
-      <li>
-        <h4><a href="/publications/learn-the-pattern.html">🧭 Learn the Pattern, Not the Product — 6-Week Series</a></h4>
-        <p>Platform-agnostic data engineering fundamentals that transfer across Snowflake, Databricks, BigQuery, and Microsoft Fabric. Twelve core concepts, each explained "in 60 seconds" and then mapped — in a "same pattern, every platform" table — so the knowledge moves with you instead of expiring with a vendor's UI.</p>
-        <p>
-          <strong>Start here:</strong>
-          <a href="/publications/learn-the-pattern.html">Series Overview</a> &middot;
-          <a href="/publications/pattern-data-platform-layers.html">Part 1. Anatomy of a Data Platform</a>
-        </p>
-        <p><em>Published: June 2026 (new parts every Monday &amp; Wednesday)</em></p>
-      </li>
-      <li>
-        <h4><a href="/publications/modern-data-ecosystem.html">🗺️ The Modern Data Ecosystem — 4-Part Series</a></h4>
-        <p>A practitioner's guide to the three specialized engineering roles shaping data organizations in 2025: Data Engineer, Data Architect, and ML/AI Engineer. Includes Mermaid architecture diagrams, tool-stack breakdowns, and comparative concept tables for each role.</p>
-        <p>
-          <strong>Parts:</strong>
-          <a href="/publications/data-evolution.html">1. Evolution of Data Architecture</a> &middot;
-          <a href="/publications/data-engineer.html">2. Data Engineer: The Builder</a> &middot;
-          <a href="/publications/data-architect.html">3. Data Architect: The Strategist</a> &middot;
-          <a href="/publications/ml-ai-engineer.html">4. ML/AI Engineer: The Deployer</a>
-        </p>
-        <p><em>Published: June 2026</em></p>
-      </li>
-      <li>
-        <h4><a href="/publications/descriptive-analytics.html">📝 Data Analytics: Tackling the Data – Steps for Descriptive Analytics</a></h4>
-        <p>An in-depth walkthrough of the key steps in Descriptive Analytics: from data collection and cleaning, to visualization, insights, and sharing results. Includes diagrams and an animated process flow for better understanding.</p>
-        <p><em>Published: July 2025</em></p>
-      </li>
-    </ul>
+    <div class="blog-grid">
+
+      <a class="post-card featured" href="/publications/learn-the-pattern.html">
+        <span class="cat">Series · 12 parts · Newest</span>
+        <h2>Learn the Pattern, Not the Product</h2>
+        <p>Platform-agnostic data engineering fundamentals that transfer across Snowflake, Databricks, BigQuery and Microsoft Fabric. Twelve core concepts, each explained "in 60 seconds" and then mapped — in a "same pattern, every platform" table — so the knowledge moves with you instead of expiring with a vendor's UI.</p>
+        <span class="meta">June 2026 · 12 parts</span>
+        <span class="read">Start the series →</span>
+      </a>
+
+      <a class="post-card" href="/publications/modern-data-ecosystem.html">
+        <span class="cat">Series · 4 parts</span>
+        <h3>The Modern Data Ecosystem</h3>
+        <p>A practitioner's guide to the three specialized engineering roles shaping data teams: Data Engineer, Data Architect, and ML/AI Engineer. Architecture diagrams, tool-stack breakdowns, and comparative tables for each role.</p>
+        <span class="meta">June 2026 · 4 parts</span>
+        <span class="read">Read the series →</span>
+      </a>
+
+      <a class="post-card" href="/publications/descriptive-analytics.html">
+        <span class="cat">Guide</span>
+        <h3>Tackling the Data: Descriptive Analytics</h3>
+        <p>A walkthrough of the key steps in descriptive analytics — from data collection and cleaning to transformation, visualization, and sharing results — with diagrams and an animated process flow.</p>
+        <span class="meta">July 2025</span>
+        <span class="read">Read the guide →</span>
+      </a>
+
+    </div>
   </section>
 </main>
 
