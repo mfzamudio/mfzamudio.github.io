@@ -14,6 +14,17 @@ Completed a **Master of Data Analytics** at the University of Niagara Falls Cana
 
 ---
 
+## Design
+
+Dark, sober "tech" theme — vanilla HTML/CSS/JS, no frameworks, no build step.
+
+- **Palette:** near-black navy (`--bg #0a0e17`) with a single cyan→violet accent.
+- **Type:** Space Grotesk (display) · Inter (body) · JetBrains Mono (labels/metrics).
+- **Structure:** sticky header + dynamically-injected `partials/`; a home hero with animated particle-flow "delivery delta" metric cards; a blog-style **Writing** index.
+- Fully token-driven in `style.css`, responsive (800px breakpoint), and respects `prefers-reduced-motion`.
+
+---
+
 ## Featured Projects
 
 | Project | Tools | Links |
@@ -118,8 +129,8 @@ A practitioner's guide to the three specialized engineering roles shaping data o
 | GitHub | [github.com/mfzamudio](https://github.com/mfzamudio) |
 | Portfolio | [www.mzamudio.com](https://www.mzamudio.com) |
 
-📄 **CV:** [`CV - MARIO ZAMUDIO.pdf`](./CV%20-%20MARIO%20ZAMUDIO.pdf)
+**CV:** [`CV - MARIO ZAMUDIO.pdf`](./CV%20-%20MARIO%20ZAMUDIO.pdf)
 
 ---
 
-*Static site — HTML/CSS/JS, published via GitHub Pages. Last updated: June 2026.*
+*Static site — HTML/CSS/JS, dark theme, published via GitHub Pages. Last updated: June 2026.*

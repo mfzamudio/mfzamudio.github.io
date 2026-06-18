@@ -19,7 +19,7 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 
 | Layer | File(s) | Purpose |
 |---|---|---|
-| Entry point | `index.html` | Landing page — About bio, profile photo, and skill badges only |
+| Entry point | `index.html` | Dark landing — hero (bio + portrait), "delivery deltas" metric cards, three numbered columns, skill chips |
 | Page: Resume | `resume.html` | Education, Work Authorization, Key Projects, Experience, Skills, Certifications, Continuous Learning, Earlier Career |
 | Page: Projects | `projects.html` | Full project grid (Featured + Other) |
 | Page: Testimonials | `testimonials.html` | Professor / colleague testimonials |
@@ -39,29 +39,44 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 
 ## Design System
 
+> **The site uses a DARK theme** (migrated June 2026). Everything is driven by CSS
+> custom properties in `style.css` — pages and scoped `<style>` blocks must use the
+> tokens, never hard-coded light colours. Legacy publication scoped styles are
+> rethemed via `!important` overrides at the end of `style.css`.
+
 ### Colors (CSS custom properties in `style.css`)
 | Token | Value | Usage |
 |---|---|---|
-| `--bg` | `#f8fafc` | Page background |
-| `--surface` | `#ffffff` | Card / panel background |
-| `--text` | `#0f172a` | Body text |
-| `--text-muted` | `#475569` | Secondary text |
-| `--border` | `#e2e8f0` | Dividers, card borders |
-| `--accent` | `#2563eb` | Links, CTAs, primary highlights |
-| `--accent-light` | `#eff6ff` | Accent backgrounds |
-| `--accent-mid` | `#bfdbfe` | Accent borders |
-| `--purple` | `#6d28d9` | Secondary accent, home-link |
-| `--purple-light` | `#f5f3ff` | Purple backgrounds |
+| `--bg` | `#0a0e17` | Page background (near-black navy) |
+| `--surface` | `#0e1422` | Card / panel background |
+| `--surface-2` | `#111a2c` | Elevated panel |
+| `--text` | `#e7ecf6` | Body text |
+| `--text-muted` | `#94a3bd` | Secondary text |
+| `--text-faint` | `#5d6b86` | Eyebrows, meta, captions |
+| `--border` | `rgba(255,255,255,.08)` | Dividers, card borders |
+| `--border-2` | `rgba(255,255,255,.14)` | Hover borders |
+| `--accent` | `#56b6ff` | Links, CTAs, primary highlights |
+| `--accent-light` | `rgba(86,182,255,.10)` | Accent backgrounds |
+| `--accent-mid` | `rgba(86,182,255,.35)` | Accent borders |
+| `--purple` | `#a78bfa` | Secondary accent |
+| `--purple-light` | `rgba(167,139,250,.12)` | Purple backgrounds |
+| `--mint` | `#4fd6a8` | Positive metric deltas |
 
-### Typography
-- Font: `Inter` (Google Fonts), fallback `Segoe UI`, sans-serif
-- Line height: `1.65–1.75` body, `1.2` headings
+A single cyan→violet gradient (`--accent` → `--purple`) is the signature accent — use sparingly.
+
+### Typography (3 roles, all `@import`-ed at the top of `style.css`)
+- **Display / headings:** `Space Grotesk` (`var(--disp)`)
+- **Body:** `Inter` (`var(--body)`), fallback Segoe UI
+- **Labels / eyebrows / metrics / nav / chips:** `JetBrains Mono` (`var(--mono)`)
 
 ### Layout Patterns
-- **Project grid**: `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))`
-- **Cards**: `.card` — white, box-shadow, hover lift (`transform: translateY(-4px)`)
-- **Responsive breakpoint**: `800px` (flex switches to column)
-- **About section**: `.about-container` — flexbox, photo left + text right
+- **Header** `.site-header` — **sticky** (always visible), dark blur bar; brand (`.brand`: name + mono role line) + mono nav (`.main-nav`). The injected `#header-placeholder { display:contents }` so the sticky header has travel room.
+- **Footer** `.site-footer` — darker band (`#070a12`) with a cyan→violet accent hairline on top; social icons in bordered tiles (LinkedIn uses the local `/images/icons/linkedin.png` — Simple Icons dropped LinkedIn).
+- **Project grid**: `repeat(auto-fit, minmax(280px, 1fr))`; **Cards** `.card` — dark surface, hover lift + accent top border.
+- **Home (`index.html`)**: scoped components — `.hero` (eyebrow + h1 + thesis + 2-paragraph lede + framed portrait), `.deltas` (delivery-delta cards with animated particle-flow SVG arrows), `.cols` (3 numbered columns) + `.chips`.
+- **Publications index (`publications.html`)**: blog-style — `.post-card` grid with one full-width `.featured` card.
+- **Back-links**: every project/publication detail page uses `class="home-link"` with text `← Back to …` (mono + accent, left-aligned). Project pages link to `/projects.html` ("← Back to Projects"), top + bottom; pattern pages link top → series overview, bottom → publications.
+- **Responsive breakpoint**: `800px` (header/nav stack, grids collapse).
 
 ### Card Anatomy (for new projects)
 ```html
@@ -84,7 +99,7 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 The portfolio is split across standalone pages linked from the shared header. Each page
 includes `#header-placeholder` / `#footer-placeholder` and loads `scripts/include-layout.js`.
 
-- **`index.html`** — landing: About bio, profile photo, skill badges
+- **`index.html`** — dark landing: hero (bio + portrait), delivery-delta metric cards, three numbered columns, skill chips
 - **`projects.html`** — Featured Projects grid + Other Interesting Projects grid
 - **`resume.html`** — Education, Work Authorization, Key Projects, Experience, Skills, Languages, Certifications, Continuous Learning, Earlier Career
 - **`testimonials.html`** — professor / colleague testimonials
@@ -100,8 +115,10 @@ includes `#header-placeholder` / `#footer-placeholder` and loads `scripts/includ
 - [ ] If SQL: include `.sql` source file in `projects/`
 
 ### Adding a New Publication — Checklist
-- [ ] Create `publications/SLUG.html` (use `publications/data-engineer.html` as template — it has the hero, Mermaid diagram wrapper, concept sections, and series-nav pattern)
-- [ ] Add link card to `publications/publications.html`
+- [ ] Create `publications/SLUG.html` (for the particle-SVG series use `pattern-data-platform-layers.html` as template; for the Mermaid series use `data-engineer.html`)
+- [ ] Keep scoped styles **dark** — use tokens, not light hex; the shared `.concept-section`/`.platform-table`/`.series-nav`/`.highlight-box`/`.diagram-wrap` are already rethemed dark via overrides in `style.css`
+- [ ] Add a `← Back to …` link (`class="home-link"`) at top and bottom
+- [ ] Add a `.post-card` to the blog-style grid in `publications/publications.html`
 
 ### Mermaid Diagrams in Publications
 Publications can include architecture diagrams via Mermaid.js CDN. Load it at the bottom of `<body>`, before `include-layout.js`:
@@ -209,6 +226,10 @@ Platform-agnostic data engineering fundamentals. The through-line is **transfera
 ## Constraints & Conventions
 
 - **No frameworks or build tools** — pure HTML/CSS/JS
+- **Dark theme via tokens** — never hard-code light colours; use the `style.css` custom properties (see Design System)
+- **No decorative emojis** in page content (headings, links, cards). They read as "AI-generated." Typographic arrows (`←` `→`) and functional glyphs inside SVG diagrams are fine.
+- **Do not name the current employer ("Corus Consulting") on public-facing site pages** — it is a job-search portfolio. Describe current work generically (enterprise integration, AI-assisted development). Past employers (HPE) and verifiable metrics are fine. (Quotes in `testimonials.html` that mention it are left verbatim.)
+- **Back-link convention** — `class="home-link"` + `← Back to …` (see Layout Patterns).
 - **No inline styles** — use `style.css` or scoped `<style>` blocks in individual pages if truly isolated
 - **Partial injection pattern** — every new HTML page must include `#header-placeholder` and `#footer-placeholder` divs and load `scripts/include-layout.js`
 - **Image format** — use PNG for screenshots; keep thumbnails consistent in size with existing ones (~800×500px)
@@ -216,3 +237,22 @@ Platform-agnostic data engineering fundamentals. The through-line is **transfera
 - **Relative paths** — all asset links must use relative paths (no absolute URLs for local assets)
 - **Accessibility** — always include descriptive `alt` text on images
 - **Do not modify** `CNAME`, the PDF CVs, or `.tex` resume files unless explicitly asked
+
+---
+
+## Session History / Changelog
+
+### June 2026 — Dark redesign (merged to `main`)
+A full visual migration of the site from the original light theme to a **dark, sober, "tech" aesthetic** (built with the `frontend-design` guidance, anchored in Mario's own world — his measurable "delivery deltas" and particle-flow diagram language).
+
+- **`style.css`** rewritten with dark tokens + Space Grotesk / JetBrains Mono / Inter; added publication dark-overrides so all series pages retheme without per-file edits.
+- **New partials**: sticky `.site-header` (brand + mono nav) and higher-contrast `.site-footer` (accent hairline, local LinkedIn icon).
+- **`index.html`** migrated to the dark home — hero, **delivery-delta** cards (48h→2h, 3mo→2d, 10 TPS→40k TPS, all `[medido]`), three numbered columns, skill chips. Hook: *"Solution Architect — Integration · Data Engineering · Cloud · ML · AI."*
+- **`publications/publications.html`** redesigned as a **blog index** (featured card + `.post-card` grid).
+- **Removed all decorative emojis** from content pages (SVG diagram glyphs preserved).
+- **Unified all back-links** to `← Back to …` (`home-link`, left-aligned); project pages → `/projects.html`, top + bottom.
+- **`demo-format-a-full-publication.html`** — a standard long-form article template for adapting LinkedIn posts into on-site articles (the LinkedIn-integration thread is still open: need real post text + traction numbers).
+- Content decisions confirmed with Mario: keep the existing colour direction; do not name Corus on public pages; no language toggle (site stays English for the Canadian market).
+- Cross-checked against the Master Profile at `C:\github\mid-resume\profile\Master_Profile-20260614.md` (single source of truth for facts/metrics).
+
+**Still open:** align `resume.html` content (still names Corus / says "available for roles"); real LinkedIn post integration.
