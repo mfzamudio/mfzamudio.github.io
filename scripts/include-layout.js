@@ -90,14 +90,15 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   // Make each first-level group with sub-items collapsible. Wrap its header in
-  // a row + a chevron toggle button (always collapses/expands in place,
-  // flipping .active-group which drives the <ul> display; aria-expanded synced).
-  // The HEADER text behaves per sidebar:
-  //   • Writing (default): the header keeps navigating to the series landing —
-  //     so it does BOTH (chevron collapses, header text opens the landing).
-  //   • Projects (headerToggles=true): the header has no per-group landing, so
-  //     its text toggles the group in place too.
-  const wireCollapsibles = (aside, headerToggles) => {
+  // a row + a chevron toggle button, and make the whole header toggle the group
+  // (flipping .active-group, which drives the <ul> display; aria-expanded
+  // synced). A header click ALWAYS toggles; `headerNavigates` then decides
+  // whether it ALSO follows the link:
+  //   • Writing (headerNavigates=true): one click does BOTH — toggles the group
+  //     and navigates to the series landing (which then shows it expanded).
+  //   • Projects (default): toggles in place only (preventDefault) — projects
+  //     headers point at the grid, not a per-group landing.
+  const wireCollapsibles = (aside, headerNavigates) => {
     aside.querySelectorAll(".pub-nav-group").forEach(group => {
       const ul = group.querySelector(":scope > ul");
       const series = group.querySelector(":scope > .pub-nav-series");
@@ -116,9 +117,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const toggle = () => { group.classList.toggle("active-group"); sync(); };
       sync();
       btn.addEventListener("click", toggle);
-      if (headerToggles) {
-        series.addEventListener("click", e => { e.preventDefault(); toggle(); });
-      }
+      series.addEventListener("click", e => {
+        if (!headerNavigates) e.preventDefault();   // projects: stay in place
+        toggle();                                    // writing: toggle, then navigate
+      });
     });
   };
 
@@ -128,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // so the header can highlight on its own landing page.
     injectSidebar("/partials/publications-nav.html", aside => {
       markActiveByFilename(aside, "publications.html");
-      wireCollapsibles(aside);
+      wireCollapsibles(aside, true);   // header click toggles AND opens the landing
     });
   } else if (page === "projects.html" || path.includes("/projects/")) {
     // Projects: the same nav on the grid page AND every project detail page,
@@ -140,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
     injectSidebar("/partials/projects-nav.html", aside => {
       markActiveByFilename(aside, "projects.html",
         aside.querySelectorAll(".pub-nav-home, .pub-nav-group li a"));
-      wireCollapsibles(aside, true);   // no per-group landing → header toggles in place
+      wireCollapsibles(aside);   // no per-group landing → header toggles in place only
     });
   } else if (page === "resume.html") {
     // Resume: single page — in-page scroll-spy TOC.
