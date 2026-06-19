@@ -20,7 +20,7 @@ Dark, sober "tech" theme — vanilla HTML/CSS/JS, no frameworks, no build step.
 
 - **Palette:** near-black navy (`--bg #0a0e17`) with a single cyan→violet accent.
 - **Type:** Space Grotesk (display) · Inter (body) · JetBrains Mono (labels/metrics).
-- **Structure:** sticky header + dynamically-injected `partials/`; a home hero with animated particle-flow "delivery delta" metric cards; a blog-style **Writing** index.
+- **Structure:** sticky header + dynamically-injected `partials/`; a home hero with animated particle-flow "delivery delta" metric cards; a blog-style **Writing** index. A sticky left **table-of-contents sidebar** is injected on `publications/`, `projects.html`, and `resume.html` (series nav for publications; in-page scroll-spy TOC for Projects and Resume).
 - Fully token-driven in `style.css`, responsive (800px breakpoint), and respects `prefers-reduced-motion`.
 
 ---
@@ -97,6 +97,23 @@ A 10-step walk-through of descriptive analytics: collecting, cleaning, transform
 |---------|-------|
 | Landing | [Data Analytics: Tackling the Data](publications/descriptive-analytics.html) |
 | Notebook | [Descriptive Analytics — End-to-End Pipeline](projects/descriptive-analytics-pipeline.ipynb) |
+
+**Types of Analytics** — *completing the lifecycle* (June 2026)
+Four **mini-series** that extend the descriptive series across the analytics lifecycle. Each has a landing page plus four detailed chapters, with **charts rendered by the example Python itself** (matplotlib/seaborn/scikit-learn on the shared synthetic retail dataset) and every statistic computed, not invented. Each cross-links the matching Data Analytics Library module. Figures are reproducible via `tools/charts/` (dev-only; regenerates all PNGs in `publications/images/analytics/`).
+
+| Series (landing) | Chapters |
+|---------|-------|
+| [Visualization Analytics](publications/visualization-analytics.html) | chart selection · perceptual encoding · advanced charts · dashboard design |
+| [Diagnostic Analytics](publications/diagnostic-analytics.html) | correlation · hypothesis testing (t-test, χ²) · drill-down · correlation ≠ causation |
+| [Predictive Analytics](publications/predictive-analytics.html) | framing · train/test split & overfitting · regression · classification |
+| [Prescriptive Analytics](publications/prescriptive-analytics.html) | scenarios · business rules · optimization (linprog) · feasible-not-just-optimal |
+
+**Capstone** — *From Notebook to Platform Pipeline* (June 2026)
+The bridge from an exploratory notebook (or the Data Analytics Library) to a scheduled production pipeline on Microsoft Fabric / Snowflake / Databricks / BigQuery — without rewriting the logic. Modularize, parameterize, package, orchestrate, plus a "same pattern, every platform" mapping table; ties the library to the Learn the Pattern series.
+
+| | |
+|---------|-------|
+| Capstone | [From Notebook to Platform Pipeline](publications/from-notebook-to-platform-pipeline.html) |
 
 ---
 

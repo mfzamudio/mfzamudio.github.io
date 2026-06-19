@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Correlating Drivers with the Target | Diagnostic Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/diagnostic-analytics.html" class="home-link">← Back to Diagnostic Analytics</a>
+    <h2>Correlating Drivers with the Target</h2>
+    <h3>Chapter 1 — The Fast First Pass</h3>
+
+    <p>
+      When a metric moves and you need to know why, the quickest first step is to ask which variables
+      <strong>move together</strong> with it. A correlation coefficient between −1 and +1 measures the strength and
+      direction of a <em>linear</em> relationship. Rank the candidate drivers by their correlation with the target
+      and you have a short list of where to look — before spending time on any single hypothesis.
+    </p>
+
+    <h3>The Correlation Matrix — See Everything at Once</h3>
+    <p>
+      A correlation matrix computes the pairwise correlation among every numeric variable, so the whole web of
+      relationships is visible in one view. On the retail data, profit is strongly <em>negatively</em> correlated
+      with discount and perfectly tied to margin (because margin is, by construction, 0.30 − discount), while sales
+      tracks quantity. That single picture already nominates discount as the prime suspect for low profit.
+    </p>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>cols = ["discount", "quantity", "sales", "profit", "margin"]
+c = orders[cols].corr()                     # pairwise linear correlation
+# render c with imshow + annotated cells (see chart)</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/diag-corr-matrix.png" alt="Correlation matrix heatmap of discount, quantity, sales, profit and margin, showing discount strongly negative with profit and margin" />
+    </div>
+    <p class="diagram-caption">Discount is strongly negatively correlated with profit and margin; sales tracks quantity. The driver to investigate is discount.</p>
+
+    <h3>Rank Drivers Against the Target</h3>
+    <p>
+      For a single target — profit — pull just its column and sort. This turns the matrix into a priority list: the
+      most negative (or most positive) driver is the first one worth a formal test. Here discount leads with a clear
+      negative correlation, well ahead of quantity and sales.
+    </p>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>drivers = ["discount", "quantity", "sales"]
+corr = orders[drivers + ["profit"]].corr()["profit"].drop("profit")
+print(corr.sort_values())          # most negative = first suspect</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/diag-corr-target.png" alt="Horizontal bar chart of each driver's correlation with profit; discount is clearly negative, quantity and sales positive" />
+    </div>
+    <p class="diagram-caption">A ranked correlation-to-target chart: discount is the strongest (negative) driver of profit at roughly −0.43.</p>
+
+    <h3>Two Cautions Before You Trust a Correlation</h3>
+    <ul>
+      <li><strong>Correlation only sees linear relationships.</strong> A U-shaped effect can show a correlation near zero while still mattering — always look at the scatter, not just the number.</li>
+      <li><strong>A correlation is a clue, not a verdict.</strong> It tells you where to test, not what is true. The next chapter puts the leading suspect through a formal test.</li>
+    </ul>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="diag-hypothesis-testing.html">Hypothesis Testing — Signal or Noise? →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/diagnostic-analytics.html" class="home-link">← Back to Diagnostic Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

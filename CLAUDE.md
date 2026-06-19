@@ -25,8 +25,8 @@ This is a **static GitHub Pages portfolio** (deployed at mzamudio.com) that posi
 | Page: Testimonials | `testimonials.html` | Professor / colleague testimonials |
 | Page: Contact | `contact.html` | QR codes + direct contact links |
 | Styles | `style.css` | Global styles, design tokens, responsive layout |
-| Layout partials | `partials/header.html`, `partials/footer.html` | Injected dynamically into every page |
-| Layout loader | `scripts/include-layout.js` | Fetches partials on `DOMContentLoaded` via `fetch()` |
+| Layout partials | `partials/header.html`, `partials/footer.html`, `partials/publications-nav.html`, `partials/projects-nav.html`, `partials/resume-nav.html` | Injected dynamically; the three `*-nav` partials are the left sidebar / table-of-contents (cross-page series nav for publications; in-page anchor TOC for Projects and Resume) |
+| Layout loader | `scripts/include-layout.js` | Fetches partials on `DOMContentLoaded` via `fetch()`; on `/publications/`, `projects.html`, and `resume.html` it wraps `<main>` in `.pub-layout` and injects the sticky `.pub-sidebar` TOC. Publications mark the current page `.active` by **filename**; Projects/Resume use an **IntersectionObserver scroll-spy** that highlights the section in view (observing leaf links only, so a wide wrapping section never steals the highlight) |
 | Projects | `projects/project-*.html` | Individual project detail pages |
 | Notebooks | `projects/*.ipynb` | Jupyter notebooks (source) |
 | SQL scripts | `projects/*.sql` | SQL analysis source files |
@@ -178,6 +178,23 @@ A 10-step walk-through of descriptive analytics, all sub-pages linked from `desc
 
 **Companion notebook:** `projects/descriptive-analytics-pipeline.ipynb` runs all 10 steps end-to-end on the synthetic dataset (seeded, reproducible, no external files; verified to execute clean). Linked for download from a "Putting It All Together" section on the landing page. These sub-pages are linked **only** from `descriptive-analytics.html` (not added to `publications.html`). The chapter pages now back-link to `descriptive-analytics.html` ("← Back to Descriptive Analytics"); the landing page itself still back-links to `publications.html`.
 
+### Types of Analytics (4 mini-series) — June 2026
+Four **mini-series** that extend the descriptive series across the full analytics lifecycle (ROADMAP Program B, W3–W6). **Each is a landing page + 4 detailed chapter pages** (20 pages total), modelled on `descriptive-analytics.html` (landing → sub-chapters). Landings carry the particle-flow SVG + a numbered chapter list and back-link to `publications.html`; chapter pages back-link to their landing (top + bottom) and chain via "Next →" links. Each series cross-links its **DataAnalyticsLibrary** module and the neighbouring lifecycle series. Each landing has a `.post-card` in `publications.html`.
+
+**Key difference from the rest of the site:** chapters embed **real generated charts** — PNGs rendered by the example Python itself (matplotlib/seaborn/scikit-learn/scipy) on the shared synthetic retail dataset, served from `publications/images/analytics/`. Every statistic quoted (t = −55.6, χ², R² ≈ 0.96, AUC ≈ 0.70, linprog optimum) is **computed, not invented**; where the synthetic data lacks a real outcome (churn) the label is constructed and that is stated on the page. Images sit in `.diagram-wrap` and are constrained by `.diagram-wrap img { max-width:100% }` in `style.css` (added so PNGs don't overflow).
+
+**Chart tooling** (`tools/charts/`, **dev-only, not served**): `_common.py` reproduces the seeded dataset (identical to the descriptive notebook) + a dark matplotlib style matching the site palette + brand colormap + `save()`; one script per series (`visualization.py`, `diagnostic.py`, `predictive.py`, `prescriptive.py`) regenerates that series' PNGs. Run from repo root, e.g. `python3 tools/charts/visualization.py`. ~27 PNGs total.
+
+| Landing · module | Chapters (`publications/…`) |
+|---|---|
+| `visualization-analytics.html` · `datavisualization` | `viz-chart-selection` · `viz-perceptual-encoding` · `viz-advanced-charts` · `viz-dashboard-design`. (`visualization-trending.html`, descriptive step 6, cross-links here.) |
+| `diagnostic-analytics.html` · `diagnosticanalysis` | `diag-correlation` · `diag-hypothesis-testing` · `diag-drilldown` · `diag-correlation-causation` |
+| `predictive-analytics.html` · `predictiveanalysis` + `machinelearning` | `pred-framing` · `pred-train-test-split` · `pred-regression` · `pred-classification` |
+| `prescriptive-analytics.html` · `prescriptiveanalysis` | `presc-scenarios` · `presc-business-rules` · `presc-optimization` · `presc-decision-constraints` |
+
+### Capstone — From Notebook to Platform Pipeline — June 2026
+`from-notebook-to-platform-pipeline.html` (ROADMAP Program D, W7). Hybrid page: descriptive-series anatomy (particle-flow SVG + code blocks) **plus** a Program-A-style **"same pattern, every platform"** `platform-table`. Thesis: take an exploratory notebook or the DataAnalyticsLibrary to a production pipeline on Fabric/Snowflake/Databricks/BigQuery **without rewriting the logic** — modularize → parameterize → package → orchestrate. Cross-links the DataAnalyticsLibrary project page and the Learn-the-Pattern series (the piece that ties Programs A + the library together). Carries a small scoped `<style>` for the table's base structure (dark tokens only — the global `.platform-table` overrides supply colours but not the box model).
+
 ### Learn the Pattern, Not the Product (12-Part Series) — June 2026
 Platform-agnostic data engineering fundamentals. The through-line is **transferability** — each concept applies across Snowflake, Databricks, BigQuery, and Microsoft Fabric without vendor lock-in. Every concept page follows a fixed anatomy: an "In 60 seconds" box, "How it actually works" concept sections, an **animated particle-flow inline SVG diagram**, and a **"Same pattern, every platform"** mapping table.
 
@@ -257,6 +274,45 @@ Platform-agnostic data engineering fundamentals. The through-line is **transfera
 ---
 
 ## Session History / Changelog
+
+### June 19, 2026 — Side TOC extended to Projects & Resume + ROADMAP/content audit
+Reused the publications left-sidebar pattern as an **in-page table of contents** on `projects.html` and `resume.html` (the user asked for "the same lateral content bar"), and audited the ROADMAP against the live pages.
+
+- **`partials/projects-nav.html`** — two groups (Featured ×12 · Other ×9) whose sub-items anchor to per-card ids (`#proj-*`, added to each card `<div class="card" id="…">`). **`partials/resume-nav.html`** — nine childless groups, each a `.pub-nav-series` anchoring to a section heading id (`#resume-*`, added to each `<h3>`).
+- **`scripts/include-layout.js`** — refactored: extracted `injectSidebar()` (shared `.pub-layout`/`.pub-sidebar` wrapping) and added `initScrollSpy()`. Publications still match active by **filename**; Projects/Resume use an **IntersectionObserver** (`rootMargin: -120px 0 -65% 0`) that highlights the section in view. It observes **leaf** links only — a group's sub-items if present, else the section link — so the wide wrapping `#projects`/`#other-projects` sections don't steal the highlight from individual cards.
+- **`style.css`** — one rule added: `.pub-layout > main [id] { scroll-margin-top: 100px }` so anchor jumps clear the sticky header. (Projects' grids now sit inside the shared `max-width:880px` main, same as publications — narrower than before, consistent.)
+- **ROADMAP audit (step 3):** all 26 referenced publication pages (12 pattern + descriptive + 4 landings + 16 analytics chapters + capstone) exist with sensible `<title>`s; the B4 launch URLs resolve to the live **landing** pages; the 5 landing `.post-card`s are present in `publications.html`. No corrections needed — ROADMAP matches the live content.
+- **Validation:** `node --check` passes; all 24 projects-nav + 10 resume-nav anchors resolve to real ids. **Not visually verified** (no headless browser in env) — needs a browser hard-refresh pass.
+
+### June 19, 2026 — Publications left sidebar (table of contents)
+Added a persistent **left sidebar / location map** to every `/publications/` page (and the `publications.html` index), so readers can see where they are and jump to any page.
+
+- **`partials/publications-nav.html`** — single-source nav tree: 8 `.pub-nav-group` blocks (Learn the Pattern · Modern Data Ecosystem · Descriptive · Visualization · Diagnostic · Predictive · Prescriptive · Capstone). First level is a plain `<a class="pub-nav-series">` straight to the **series landing** (no separate "overview" item); the `<ul>` of numbered chapters is the second level.
+- **`scripts/include-layout.js`** — on `/publications/` paths only, fetches the nav, wraps the existing `<main>` in a `.pub-layout` flex container, injects `.pub-sidebar`, then marks the current page `.active` (matched by filename) and adds `.active-group` to its group.
+- **`style.css`** — `.pub-layout` is **left-aligned** (`margin:0`, not centered) so the bar hugs the page's left. `.pub-sidebar` is sticky (`top:92px`, **320px** wide so chapter titles fit on one line). Children are hidden by default and only shown for `.active-group` (the series you're in) — so other series collapse to just their name; the active series auto-expands. Active link = accent + left border + `--accent-light`. Mobile (`≤800px`): sidebar stacks on top.
+- **Header enlarged** the same session: `.header-bar` padding 14→20px, `.brand .name` 1.12→1.5rem, `.brand .role` 0.6→0.66rem, `.main-nav a` 0.74→0.8rem (sidebar sticky `top` bumped to clear the taller header).
+- Card grids earlier in the day: also note `style.css` now has global `.series-parts`/`.part-link` base styles so any landing uses the learn-the-pattern card format (Part for the older series, Chapter for the analytics mini-series, Step for descriptive).
+- **Cannot screenshot locally** (no headless browser in env); validated structurally — JS `node --check` passes, all 51 nav links resolve, active-state selector matches exactly one link per page. **Needs a visual pass in the browser** (hard-refresh for cached CSS/JS).
+
+### June 19, 2026 — Rebuilt "Types of Analytics" as mini-series with generated charts
+The four flat type-pages from earlier the same day were judged too basic. Rebuilt each into a **landing + 4 chapters** (20 pages total), modelled on the descriptive series, and — the key change — every chapter embeds a **real chart generated by its own example code** (no stock infographics).
+
+- **Chart tooling** added at `tools/charts/` (dev-only): `_common.py` (seeded dataset identical to the descriptive notebook + dark matplotlib theme matching `style.css` tokens + brand colormap) and one script per series. ~27 PNGs in `publications/images/analytics/`.
+- **All numbers are computed, not invented:** t = −55.6 (p<0.001) and ~$188 profit gap, χ² association, regression R² ≈ 0.96 / MAE ≈ $1,550, churn AUC ≈ 0.70 / precision 0.63 / recall 0.64, linprog optimum West $50K + Paid $50K → $257.5K. Honesty notes added where a label is constructed (churn) or an input is illustrative (channel returns, demand). Confounder chart (ice-cream vs drownings) explicitly labelled illustrative.
+- **`style.css`**: added `.diagram-wrap img { max-width:100%; height:auto }` — the only CSS change — so generated PNGs scale to the card instead of overflowing (the prior rule only constrained `svg`). Reported by Mario as horizontal-scroll; fixed.
+- The 4 landing `.post-card`s in `publications.html` updated to "· 4 parts / Start the series". Docs synced (README, this file).
+- **Still open:** schedule the LinkedIn posts (Programs A & C copy ready in ROADMAP; B/D launch posts can go out now). The B4 LinkedIn copy in ROADMAP still references the single-page URLs — those URLs are now the series landings, so the copy still resolves, but could be refreshed to mention the chapters.
+
+### June 19, 2026 — "Types of Analytics" pages + capstone (ROADMAP Programs B & D)
+Built the 5 remaining buildable items on the roadmap (W3–W7). Programs A & C are LinkedIn-posting tasks (manual), so this covered all the page-build work.
+
+- **4 "Types of Analytics" pages** (Program B): `visualization-analytics.html`, `diagnostic-analytics.html`, `predictive-analytics.html`, `prescriptive-analytics.html` — descriptive-series anatomy (particle-flow SVG + Python/pandas + SQL on the shared synthetic retail dataset), each cross-linking its DataAnalyticsLibrary module and neighbouring lifecycle pages.
+- **1 capstone page** (Program D): `from-notebook-to-platform-pipeline.html` — descriptive anatomy **+** a Program-A-style `platform-table` (with a small scoped dark-token `<style>` for the table box model). Ties the library to the Learn-the-Pattern series.
+- **`publications/publications.html`**: 5 new `.post-card`s (cats: "Types of Analytics" ×4, "Capstone" ×1).
+- **`visualization-trending.html`** (descriptive step 6): added a cross-link to the new broad `visualization-analytics.html`.
+- Stat accuracy held to the global rules: Cleveland & McGill (1984) referenced as a real source for the perceptual-encoding ranking; t-test/chi-square/p-value/R²/MAE/precision/recall described precisely; platform tables kept capability-level with a "verify vs docs" note; no fabricated metrics.
+- Docs updated: `README.md`, this file. **ROADMAP.md** W3–W7 flipped to done.
+- **Still pending (manual, Mario):** schedule the LinkedIn posts (Programs A & C copy is ready in ROADMAP; B/D launch posts can now go out since the pages are live).
 
 ### June 19, 2026 — Added "Data Analytics Library" project
 Added Mario's GitHub repo [`DataAnalyticsLibrary`](https://github.com/mfzamudio/DataAnalyticsLibrary) (local at `/home/devuser/Projects/DataAnalyticsLibrary`) as a portfolio project — a full analytics-lifecycle Python library (10 modules, **81 pytest tests** verified, CI on 3.10–3.12), positioned as the code companion to the Descriptive Analytics series.

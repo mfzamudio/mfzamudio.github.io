@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Charts | Visualization Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/visualization-analytics.html" class="home-link">← Back to Visualization Analytics</a>
+    <h2>Beyond the Basics — Advanced Charts</h2>
+    <h3>Chapter 3 — Patterns for Richer Questions</h3>
+
+    <p>
+      Once a question gets richer than a single comparison, a handful of chart patterns carry most of the weight.
+      Each one below answers a question the basic four can't, and each is shown with the code that produced it.
+    </p>
+
+    <h3>Small Multiples — Compare Many Series Without the Tangle</h3>
+    <p>
+      Plotting four regions as four overlapping lines on one axis produces a tangle. <strong>Small multiples</strong>
+      repeat the same chart once per category on a shared scale, so the eye compares panels instead of untangling
+      lines. The shared axes are what make the comparison fair.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>regions = sorted(orders["region"].unique())
+fig, axes = plt.subplots(2, 2, figsize=(9, 5), sharex=True, sharey=True)
+for ax, reg in zip(axes.ravel(), regions):
+    m = orders[orders["region"] == reg].groupby("month")["sales"].sum() / 1e6
+    ax.plot(m.index, m.values)
+    ax.fill_between(m.index, m.values, alpha=0.12)
+    ax.set_title(reg)
+fig.suptitle("Small multiples — monthly sales per region ($M)")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-small-multiples.png" alt="Four small line charts, one per region, all on the same scale, showing similar seasonal patterns" />
+    </div>
+    <p class="diagram-caption">One panel per region on a shared scale — the Q4 lift is clearly common to all four markets.</p>
+
+    <h3>Box Plots — Show the Whole Distribution, Not Just the Average</h3>
+    <p>
+      An average hides spread. A <strong>box plot</strong> shows the median, the middle 50% (the box), and the
+      range, so you see how values are distributed and where they overlap. Here, Technology not only has the highest
+      typical profit but also the widest spread — a fact a bar of averages would erase.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>cats = ["Office", "Furniture", "Technology"]
+data = [orders.loc[orders["category"] == c, "profit"] for c in cats]
+fig, ax = plt.subplots(figsize=(7, 3.8))
+ax.boxplot(data, tick_labels=cats, showfliers=False)
+ax.set_title("Box plot — profit distribution by category")
+ax.set_ylabel("profit ($)")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-box-profit-category.png" alt="Box plot of profit by category showing Technology with the highest median and widest spread" />
+    </div>
+    <p class="diagram-caption">Technology carries both the highest median profit and the widest spread — the variability matters.</p>
+
+    <h3>Annotated Time Series — Put the Story on the Chart</h3>
+    <p>
+      A raw monthly line bounces around. Overlaying a <strong>rolling average</strong> exposes the trend, and a
+      direct <strong>annotation</strong> ties a visible feature to its cause, so the reader doesn't have to guess
+      what they're looking at. Showing the raw series and the smoothed trend together is honest — it reveals exactly
+      what the smoothing removed.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>m = orders.groupby("month")["sales"].sum() / 1e6
+trend = m.rolling(3, min_periods=1).mean()
+fig, ax = plt.subplots(figsize=(8, 3.8))
+ax.plot(m.index, m.values, alpha=0.55, label="Monthly sales")
+ax.plot(trend.index, trend.values, linewidth=2.4, label="3-month trend")
+peak = m.idxmax()
+ax.annotate("Q4 seasonal lift", xy=(peak, m.max()),
+            xytext=(peak, m.max() * 1.18),
+            arrowprops=dict(arrowstyle="->"))
+ax.legend()</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-annotated-trend.png" alt="Monthly sales line with a smoothed 3-month trend line and an annotation pointing to the Q4 seasonal lift" />
+    </div>
+    <p class="diagram-caption">Raw series plus a smoothed trend, with the Q4 peak labelled directly on the chart.</p>
+
+    <h3>The Takeaway</h3>
+    <ul>
+      <li>Reach for <strong>small multiples</strong> before stacking many series on one axis.</li>
+      <li>Use a <strong>box (or violin) plot</strong> when the spread, not just the average, is part of the answer.</li>
+      <li><strong>Annotate</strong> the feature that matters so the chart explains itself.</li>
+    </ul>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="viz-dashboard-design.html">Designing a Dashboard →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/visualization-analytics.html" class="home-link">← Back to Visualization Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

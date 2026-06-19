@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prescriptive Analytics | Types of Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+    <h2>Prescriptive Analytics</h2>
+    <h3>What Should We Do?</h3>
+
+    <p>
+      Predictive analytics says what <em>will</em> happen. <strong>Prescriptive analytics</strong> says what you
+      should <em>do</em> about it. It is where analytics finally meets the decision: a forecast becomes a recommended
+      action by weighing scenarios against the business's rules and constraints, then choosing the option that
+      delivers the best expected outcome. A prediction nobody acts on changes nothing — prescriptive analytics closes
+      that gap.
+    </p>
+    <p>
+      This is a four-chapter mini-series built around one concrete decision: how to split a fixed marketing budget
+      across channels. Each chapter shows the <strong>Python</strong> and the <strong>rendered result</strong>, and
+      the optimization is real <code>scipy.optimize.linprog</code> — only the expected-return inputs are
+      illustrative (the kind a predictive model would supply).
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 300" role="img" aria-label="A prediction plus scenarios and constraints feed an optimizer that returns a recommended action">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="a1" d="M200,150 L420,150"/>
+          <path id="a2" d="M520,74 L520,110"/>
+          <path id="a3" d="M520,226 L520,190"/>
+          <path id="a4" d="M620,150 L800,150"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="34" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Prediction + scenarios + constraints → best action</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <line x1="200" y1="150" x2="420" y2="150"/>
+          <line x1="520" y1="74" x2="520" y2="110"/>
+          <line x1="520" y1="226" x2="520" y2="190"/>
+          <line x1="620" y1="150" x2="800" y2="150"/>
+        </g>
+        <g>
+          <rect x="40" y="120" width="160" height="60" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="120" y="146" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Prediction</text>
+          <text x="120" y="166" text-anchor="middle" fill="#dbeafe" font-size="10">expected return</text>
+        </g>
+        <g>
+          <rect x="420" y="30" width="200" height="44" rx="10" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="520" y="50" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Scenarios</text>
+          <text x="520" y="66" text-anchor="middle" fill="#ede9fe" font-size="9">what-if levers</text>
+        </g>
+        <g>
+          <rect x="420" y="110" width="200" height="80" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="520" y="146" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Optimize</text>
+          <text x="520" y="166" text-anchor="middle" fill="#ede9fe" font-size="9.5">maximize under limits</text>
+        </g>
+        <g>
+          <rect x="420" y="226" width="200" height="44" rx="10" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="520" y="246" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Constraints &amp; rules</text>
+          <text x="520" y="262" text-anchor="middle" fill="#ede9fe" font-size="9">budget · policy</text>
+        </g>
+        <g>
+          <rect x="800" y="120" width="160" height="60" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="880" y="146" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Recommended</text>
+          <text x="880" y="166" text-anchor="middle" fill="#e0f2fe" font-size="10">action</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="3.8"><animateMotion dur="1.7s" repeatCount="indefinite"><mpath href="#a1"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.7s" begin="0.85s" repeatCount="indefinite"><mpath href="#a1"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.3s" repeatCount="indefinite"><mpath href="#a2"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.6s" repeatCount="indefinite"><mpath href="#a3"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.6s" begin="0.5s" repeatCount="indefinite"><mpath href="#a4"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.6s" begin="1.3s" repeatCount="indefinite"><mpath href="#a4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">A predicted outcome is only an input; prescriptive analytics adds scenarios and constraints, then optimizes to a single recommended action.</p>
+
+    <h3>The Four Chapters</h3>
+    <div class="series-parts">
+      <a href="presc-scenarios.html" class="part-link">
+        <div class="part-number">Chapter 1 &rarr;</div>
+        <h4>Scenarios — Model the Levers</h4>
+        <p>What-if analysis: compare candidate allocations and see how much intuition leaves on the table versus a deliberate plan.</p>
+      </a>
+      <a href="presc-business-rules.html" class="part-link">
+        <div class="part-number">Chapter 2 &rarr;</div>
+        <h4>Business Rules &amp; Constraints</h4>
+        <p>Encode the limits — budgets, minimums, policy — so a recommendation is not just profitable but allowed.</p>
+      </a>
+      <a href="presc-optimization.html" class="part-link">
+        <div class="part-number">Chapter 3 &rarr;</div>
+        <h4>Optimization — Allocate for the Best Outcome</h4>
+        <p>Turn the decision into an objective, variables, and constraints, and let a linear-programming solver find the optimum.</p>
+      </a>
+      <a href="presc-decision-constraints.html" class="part-link">
+        <div class="part-number">Chapter 4 &rarr;</div>
+        <h4>Feasible, Not Just Optimal</h4>
+        <p>Sensitivity analysis and the discipline that keeps a recommendation honest — including when more budget stops helping.</p>
+      </a>
+    </div>
+
+    <h3>Reference Code</h3>
+    <p>
+      The scenario-modeling and constrained-allocation helpers are packaged in the
+      <a href="../../projects/project-data-analytics-library.html">Data Analytics Library</a>'s
+      <code>prescriptiveanalysis</code> module. Prescriptive analytics is the final stage of the lifecycle: it
+      consumes <a href="predictive-analytics.html">Predictive</a> outputs and closes the loop that began with
+      <a href="../../publications/descriptive-analytics.html">Descriptive</a> ("what happened").
+    </p>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

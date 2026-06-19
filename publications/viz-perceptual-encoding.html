@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perceptual Encoding | Visualization Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/visualization-analytics.html" class="home-link">← Back to Visualization Analytics</a>
+    <h2>Perceptual Encoding</h2>
+    <h3>Chapter 2 — Why Position Beats Colour</h3>
+
+    <p>
+      A chart maps data onto visual channels — <strong>position, length, angle, area, and colour</strong> — and the
+      eye reads some of those channels far more accurately than others. Decades of graphical-perception research
+      (notably Cleveland &amp; McGill's 1984 study) found a consistent ranking: people judge <strong>position</strong>
+      along a common scale most accurately, then <strong>length</strong>, then angle and area, with <strong>colour
+      hue</strong> and <strong>area</strong> read least precisely.
+    </p>
+    <p>
+      Two practical rules fall out of that ranking, and both are easy to see once you put the right and wrong
+      encoding side by side.
+    </p>
+
+    <h3>Rule 1 — Encode the Key Comparison as Length, Not Angle</h3>
+    <p>
+      A pie chart asks the eye to compare <em>angles</em> and <em>areas</em> — exactly the channels we read worst. A
+      bar chart asks it to compare <em>lengths</em> from a shared baseline — one of the channels we read best. Same
+      data, same four regions: the bar chart makes the ranking obvious; the pie makes you squint and read the
+      percentage labels (which means the chart isn't doing its job).
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>s = orders.groupby("region")["sales"].sum().sort_values(ascending=False) / 1e6
+
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(9, 3.8))
+a1.bar(s.index, s.values)                              # lengths — easy
+a1.set_title("Bar — lengths are easy to compare")
+a2.pie(s.values, labels=s.index, autopct="%1.0f%%")   # angles — hard
+a2.set_title("Pie — angles are hard to compare")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-bar-vs-pie.png" alt="Side-by-side bar chart and pie chart of sales by region; the bar chart makes the ranking clearer than the pie" />
+    </div>
+    <p class="diagram-caption">Same four numbers. The bar's lengths rank instantly; the pie's near-equal slices force you to read labels.</p>
+
+    <h3>Rule 2 — Start Value Axes at Zero</h3>
+    <p>
+      Because the eye compares <em>length</em>, the length must be proportional to the value. Truncating a bar
+      chart's axis cuts off the bottom of every bar, so a small real difference looks enormous. The two panels below
+      plot the <strong>identical</strong> region sales — only the y-axis range differs. The left panel screams
+      "huge gap!"; the right panel tells the truth: the regions are close.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>fig, (a1, a2) = plt.subplots(1, 2, figsize=(9, 3.8))
+a1.bar(s.index, s.values)
+a1.set_ylim(s.min() * 0.97, s.max() * 1.01)   # truncated — misleading
+a1.set_title("Truncated axis — exaggerates gaps")
+a2.bar(s.index, s.values)
+a2.set_ylim(0, s.max() * 1.05)                # zero baseline — honest
+a2.set_title("Zero baseline — honest comparison")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-axis-zero.png" alt="Two bar charts of identical data; the truncated-axis version exaggerates differences while the zero-baseline version shows them as small" />
+    </div>
+    <p class="diagram-caption">Identical data, two axes. Truncating the baseline manufactures a dramatic gap that isn't there.</p>
+
+    <h3>Colour Is for Categories, Not Magnitude</h3>
+    <p>
+      Since colour hue is read least precisely, never ask a reader to judge a quantity by hue on a categorical
+      palette. Use colour to <em>label</em> groups, or use a single sequential scale (light-to-dark) when colour
+      must carry magnitude, as in a heatmap. And design for colour-blind readers: don't rely on red-versus-green
+      alone — pair colour with shape, order, or direct labels.
+    </p>
+
+    <h3>The Takeaway</h3>
+    <ul>
+      <li>Encode the comparison you most want made as <strong>position or length</strong>.</li>
+      <li>Keep bar baselines at <strong>zero</strong>; a truncated axis is a (usually unintentional) lie.</li>
+      <li>Reserve <strong>colour</strong> for categories or a single sequential magnitude scale.</li>
+    </ul>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="viz-advanced-charts.html">Beyond the Basics — Advanced Charts →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/visualization-analytics.html" class="home-link">← Back to Visualization Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

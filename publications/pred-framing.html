@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Framing the Problem | Predictive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/predictive-analytics.html" class="home-link">← Back to Predictive Analytics</a>
+    <h2>Framing the Problem</h2>
+    <h3>Chapter 1 — Regression, Classification, or Clustering?</h3>
+
+    <p>
+      Before any algorithm, the most consequential choice is what kind of question you're asking. Get the framing
+      wrong and no amount of tuning will save you. Three framings cover most cases.
+    </p>
+
+    <h3>The Three Framings</h3>
+    <ul>
+      <li><strong>Regression</strong> — predict a <em>number</em>: next month's revenue, a customer's lifetime sales, days to delivery. The output is continuous, and you measure error in the target's own units.</li>
+      <li><strong>Classification</strong> — predict a <em>label</em>: will this customer churn (yes/no), which tier, fraud or not. The output is a category, usually with a probability attached.</li>
+      <li><strong>Clustering</strong> — find <em>groups</em> with no labels at all. This is <strong>unsupervised</strong>: there is no known answer to predict; the algorithm discovers structure in the data itself.</li>
+    </ul>
+
+    <h3>Clustering in Action — Segmenting the Customer Base</h3>
+    <p>
+      Clustering is the framing that surprises people, because there is no target column. K-Means groups customers
+      by similarity across chosen features — here, lifetime sales, order count, and average discount — and the
+      groups emerge from the data. The scatter below colours each customer by its assigned cluster: a high-value
+      frequent group separates cleanly from occasional, low-value buyers.
+    </p>
+    <p class="code-label">Python · scikit-learn</p>
+    <pre class="code-block"><code>from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+feats = cust[["total_sales", "orders", "avg_discount"]]
+X = StandardScaler().fit_transform(feats)          # scale first — K-Means uses distance
+cust["cluster"] = KMeans(n_clusters=3, n_init=10, random_state=42).fit_predict(X)</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/pred-clusters.png" alt="Scatter of customers by order count and lifetime sales, coloured into three K-Means clusters that separate high-value frequent buyers from occasional ones" />
+    </div>
+    <p class="diagram-caption">K-Means finds three natural customer segments with no labels — separating frequent high-value buyers from occasional, low-value ones.</p>
+
+    <h3>Picking the Framing</h3>
+    <p>
+      Ask what the answer looks like. A dollar amount → regression. A yes/no or category → classification. "Are
+      there natural groups here?" with no predefined answer → clustering. The same dataset can support all three:
+      predict a customer's spend (regression), flag who will churn (classification), or discover segments
+      (clustering). Each of the next chapters takes one of these and runs it end to end.
+    </p>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="pred-train-test-split.html">The Train/Test Split &amp; Overfitting →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/predictive-analytics.html" class="home-link">← Back to Predictive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

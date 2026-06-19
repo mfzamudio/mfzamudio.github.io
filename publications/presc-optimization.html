@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Optimization — Allocate for the Best Outcome | Prescriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/prescriptive-analytics.html" class="home-link">← Back to Prescriptive Analytics</a>
+    <h2>Optimization — Allocate for the Best Outcome</h2>
+    <h3>Chapter 3 — Let a Solver Find the Optimum</h3>
+
+    <p>
+      When you must split a limited resource across competing options, that's an <strong>optimization</strong>
+      problem. Instead of guessing, you state three things and let a solver search every feasible plan for the best
+      one. Linear programming is the classic workhorse, and <code>scipy.optimize.linprog</code> solves it in a few
+      lines.
+    </p>
+
+    <h3>The Three Ingredients</h3>
+    <ul>
+      <li><strong>Objective</strong> — maximize total expected return.</li>
+      <li><strong>Decision variables</strong> — dollars to each channel (West, Email, Paid search).</li>
+      <li><strong>Constraints</strong> — the budget and the per-channel ranges from the previous chapter.</li>
+    </ul>
+    <p class="code-label">Python · scipy.optimize</p>
+    <pre class="code-block"><code>from scipy.optimize import linprog
+
+returns = [2.10, 1.40, 3.05]            # West, Email, Paid search
+c = [-r for r in returns]               # linprog minimizes -> negate to maximize
+
+result = linprog(
+    c,
+    A_ub=[[1, 1, 1]], b_ub=[100_000],   # total spend <= budget
+    bounds=[(10_000, 60_000),           # West
+            (0,      40_000),           # Email
+            (5_000,  50_000)],          # Paid search
+    method="highs")
+
+print(result.x)        # [50000, 0, 50000]
+print(-result.fun)     # 257500</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/presc-optimization.png" alt="Bar chart of the optimal budget allocation: 50K to West, 0 to Email, 50K to Paid search, for an expected return of 257.5K" />
+    </div>
+    <p class="diagram-caption">The optimum: max out Paid search (highest return), fill the rest into West, skip Email entirely — an expected $257.5K return on the $100K budget.</p>
+
+    <h3>Reading the Result</h3>
+    <p>
+      The solver pours money into the highest-return channel (Paid search) up to its $50K ceiling, sends the
+      remaining $50K to the next-best (West), and gives Email nothing — its 1.40× return doesn't earn a place once
+      the better channels can absorb the budget. The result respects every constraint and beats both intuitive
+      scenarios from Chapter 1 by roughly $40K.
+    </p>
+    <p>
+      For a pure linear problem like this, sorting channels by return-per-dollar happens to reach the same answer —
+      but the moment constraints interact (shared inventory, minimum-spend bundles, integer "all-or-nothing"
+      choices), hand-sorting breaks and the solver keeps working. That is why you express the decision to an
+      optimizer rather than solving it by hand.
+    </p>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="presc-decision-constraints.html">Feasible, Not Just Optimal →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/prescriptive-analytics.html" class="home-link">← Back to Prescriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

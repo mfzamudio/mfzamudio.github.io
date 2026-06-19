@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choosing the Right Chart | Visualization Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/visualization-analytics.html" class="home-link">← Back to Visualization Analytics</a>
+    <h2>Choosing the Right Chart</h2>
+    <h3>Chapter 1 — Pick the Chart From the Question, Not the Gallery</h3>
+
+    <p>
+      The most common visualization mistake is starting from "what chart looks nice?" instead of "what question am I
+      answering?" Almost every analytical question is one of five shapes, and each shape has a chart that the eye
+      reads quickly. Below is each shape, the chart it wants, and the <strong>actual rendered output</strong> of the
+      Python that produces it — all on the shared synthetic retail dataset.
+    </p>
+
+    <h3>Comparison → Bar Chart</h3>
+    <p>
+      "Which category is biggest?" is a comparison. A bar chart encodes each value as a length from a common
+      baseline, and lengths are easy to compare. Use a horizontal bar when labels are long, and sort the bars so
+      the ranking is obvious.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>s = orders.groupby("category")["sales"].sum().sort_values()
+fig, ax = plt.subplots(figsize=(7, 3.6))
+ax.barh(s.index, s.values / 1e6)          # horizontal, sorted
+ax.set_title("Comparison — sales by category")
+ax.set_xlabel("sales ($M)")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-bar-category.png" alt="Horizontal bar chart of total sales by category: Technology highest, then Furniture, then Office" />
+    </div>
+    <p class="diagram-caption">Sorted horizontal bars make the ranking instant — Technology dominates total sales.</p>
+
+    <h3>Change Over Time → Line Chart</h3>
+    <p>
+      "Is it growing?" is a time question. A line chart connects values in time order so the eye follows the slope.
+      It is the default for any trend, and the foundation of the trending work covered in the descriptive series.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>m = orders.groupby("month")["sales"].sum() / 1e6
+fig, ax = plt.subplots(figsize=(7, 3.6))
+ax.plot(m.index, m.values, linewidth=2)
+ax.fill_between(m.index, m.values, alpha=0.12)
+ax.set_title("Change over time — monthly sales")
+ax.set_ylabel("sales ($M)")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-line-monthly.png" alt="Line chart of monthly sales over two years, with clear Q4 peaks" />
+    </div>
+    <p class="diagram-caption">The line exposes seasonality — sharp Q4 lifts and quieter starts to each year.</p>
+
+    <h3>Relationship → Scatter Plot</h3>
+    <p>
+      "Does X move with Y?" is a relationship question. A scatter plot puts one variable on each axis and plots a
+      point per record, so any pattern in how they relate becomes visible. Here, profit clearly falls as discount
+      rises — at a 30% discount, profit collapses to roughly zero.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>sample = orders.sample(2500, random_state=7)
+fig, ax = plt.subplots(figsize=(7, 3.8))
+ax.scatter(sample["discount"], sample["profit"], s=10, alpha=0.30)
+ax.axhline(0, linestyle="--")             # break-even reference
+ax.set_title("Relationship — discount vs profit")
+ax.set_xlabel("discount"); ax.set_ylabel("profit ($)")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-scatter-discount-profit.png" alt="Scatter plot of discount versus profit showing profit decreasing as discount increases, reaching zero at 30 percent" />
+    </div>
+    <p class="diagram-caption">The relationship is unmistakable: deeper discounts erode profit, hitting break-even at 30%.</p>
+
+    <h3>Distribution → Histogram</h3>
+    <p>
+      "How spread out is it?" is a distribution question. A histogram buckets a single numeric variable into bins
+      and shows how many records fall in each, revealing the shape — skew, peaks, and the long tail that an average
+      alone would hide.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>fig, ax = plt.subplots(figsize=(7, 3.6))
+ax.hist(orders["sales"], bins=40)
+ax.set_title("Distribution — order sales")
+ax.set_xlabel("sales ($)"); ax.set_ylabel("orders")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-hist-sales.png" alt="Histogram of order sales showing a right-skewed distribution with most orders at lower values" />
+    </div>
+    <p class="diagram-caption">Order sales are right-skewed — most orders are small, with a tail of larger ones.</p>
+
+    <h3>Density Across Two Dimensions → Heatmap</h3>
+    <p>
+      "Where is it concentrated?" across two categorical axes is a density question. A heatmap places one axis on
+      each side and encodes the measure as colour intensity, so hotspots jump out — here, the year-end sales spike
+      across regions.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>piv = (orders.assign(m=orders["order_date"].dt.month)
+              .pivot_table(index="region", columns="m",
+                           values="sales", aggfunc="sum") / 1e6)
+fig, ax = plt.subplots(figsize=(8, 3.2))
+im = ax.imshow(piv.values, aspect="auto")
+fig.colorbar(im, ax=ax, label="sales ($M)")
+ax.set_title("Density — sales by region x month")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-heatmap-region-month.png" alt="Heatmap of sales by region and month, brightest in November and December across all regions" />
+    </div>
+    <p class="diagram-caption">The bright right-hand columns show the Q4 lift is broad — every region peaks at year end.</p>
+
+    <h3>The Decision in One Line</h3>
+    <ul>
+      <li><strong>Comparison</strong> → bar &nbsp;·&nbsp; <strong>Time</strong> → line &nbsp;·&nbsp; <strong>Relationship</strong> → scatter</li>
+      <li><strong>Distribution</strong> → histogram / box &nbsp;·&nbsp; <strong>Density (2 dims)</strong> → heatmap &nbsp;·&nbsp; <strong>Part-to-whole</strong> → stacked bar</li>
+    </ul>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="viz-perceptual-encoding.html">Perceptual Encoding — Why Position Beats Colour →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/visualization-analytics.html" class="home-link">← Back to Visualization Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

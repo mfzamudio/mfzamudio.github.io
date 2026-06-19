@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Rules &amp; Constraints | Prescriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/prescriptive-analytics.html" class="home-link">← Back to Prescriptive Analytics</a>
+    <h2>Business Rules &amp; Constraints</h2>
+    <h3>Chapter 2 — Encode the Limits</h3>
+
+    <p>
+      Real decisions live inside rules: minimum commitments, contractual caps, channel saturation, policy floors.
+      Prescriptive analytics encodes these as explicit <strong>constraints</strong> so the recommendation is not just
+      profitable but <em>allowed</em>. A plan that maximizes return by pouring the entire budget into one channel is
+      worthless if a contract caps that channel at $50K.
+    </p>
+
+    <h3>The Rules for This Decision</h3>
+    <ul>
+      <li><strong>Total budget:</strong> spend at most $100K.</li>
+      <li><strong>West:</strong> between $10K (minimum commitment) and $60K.</li>
+      <li><strong>Email:</strong> up to $40K (audience saturates beyond that).</li>
+      <li><strong>Paid search:</strong> between $5K and $50K (contracted ceiling).</li>
+    </ul>
+    <p class="code-label">Python · constraints as data</p>
+    <pre class="code-block"><code># Each channel gets a (min, max) feasible range
+bounds = [(10_000, 60_000),   # West
+          (0,      40_000),   # Email
+          (5_000,  50_000)]   # Paid search
+budget = 100_000              # sum(spend) <= budget</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/presc-rules.png" alt="A range plot showing the feasible min-to-max spend for each channel, with the optimal allocation marked as a point within each range" />
+    </div>
+    <p class="diagram-caption">Each channel's feasible range (the bar) and the chosen allocation (the point) — every recommendation must land inside these limits.</p>
+
+    <h3>Rules Without Optimization</h3>
+    <p>
+      Not every decision needs a solver. Many prescriptive recommendations are simple, deterministic
+      <strong>rules</strong> — and SQL expresses them directly. A <code>CASE</code> statement encodes the policy and
+      produces a recommended action per row, no model required.
+    </p>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>SELECT
+  region,
+  AVG(profit / sales) AS avg_margin,
+  CASE
+    WHEN AVG(profit / sales) < 0.10 THEN 'Cut discounts'
+    WHEN AVG(discount)       > 0.20 THEN 'Review pricing'
+    ELSE                                 'Hold'
+  END AS recommended_action
+FROM orders
+GROUP BY region;</code></pre>
+
+    <h3>Why Constraints Come First</h3>
+    <p>
+      Defining the feasible region <em>before</em> optimizing is what separates a usable recommendation from a
+      fantasy. The constraints shrink the space of possible plans down to the ones the business can actually execute
+      — and only then does it make sense to search that space for the best one. That search is the next chapter.
+    </p>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="presc-optimization.html">Optimization — Allocate for the Best Outcome →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/prescriptive-analytics.html" class="home-link">← Back to Prescriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

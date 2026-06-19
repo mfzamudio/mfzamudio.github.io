@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scenarios — Model the Levers | Prescriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/prescriptive-analytics.html" class="home-link">← Back to Prescriptive Analytics</a>
+    <h2>Scenarios — Model the Levers</h2>
+    <h3>Chapter 1 — What-If Analysis</h3>
+
+    <p>
+      The first prescriptive move is <strong>what-if analysis</strong>: take the levers you actually control — here,
+      how a fixed marketing budget is split across three channels — and project the outcome under different choices.
+      Each scenario reuses the expected return per channel (the kind of estimate a predictive model supplies), so you
+      compare concrete futures instead of arguing from gut feel.
+    </p>
+
+    <h3>The Decision</h3>
+    <p>
+      A $100K budget, three channels with different expected returns per dollar: West (2.10×), Email (1.40×), and
+      Paid search (3.05×). How should it be split? Three candidate strategies make the stakes visible.
+    </p>
+    <p class="code-label">Python · scenario math</p>
+    <pre class="code-block"><code>returns = {"West": 2.10, "Email": 1.40, "Paid search": 3.05}
+
+scenarios = {
+    "Even split":            [33_333, 33_333, 33_333],
+    "Favor familiar (West)": [60_000, 20_000, 20_000],
+    "Optimized (LP)":        optimize(),     # see Chapter 3
+}
+for name, alloc in scenarios.items():
+    expected = sum(a * r for a, r in zip(alloc, returns.values()))
+    print(f"{name}: ${expected:,.0f}")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/presc-scenarios.png" alt="Bar chart comparing expected return for three allocation strategies, with the optimized plan clearly highest" />
+    </div>
+    <p class="diagram-caption">Both intuitive plans — splitting evenly, or over-funding the familiar channel — leave roughly $40K on the table versus a deliberate optimization.</p>
+
+    <h3>What the Comparison Teaches</h3>
+    <ul>
+      <li><strong>Intuition underperforms.</strong> The "favor the familiar channel" plan actually does slightly worse than a naive even split — over-funding a mid-return channel costs money.</li>
+      <li><strong>Scenarios quantify the gap.</strong> "Optimize" is abstract until you can say it is worth ~$40K over the obvious alternatives. That number is what gets a decision approved.</li>
+      <li><strong>Scenarios are the setup, not the answer.</strong> Comparing a handful of hand-picked plans is useful, but the best plan usually isn't one you'd think to try — which is what the optimizer is for.</li>
+    </ul>
+
+    <p>
+      Before optimizing, though, the plan has to respect the rules of the business — the subject of the next chapter.
+    </p>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="presc-business-rules.html">Business Rules &amp; Constraints →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/prescriptive-analytics.html" class="home-link">← Back to Prescriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>From Notebook to Platform Pipeline | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    /* Base structure for the platform table; colours come from the
+       dark overrides in style.css. Tokens only — no light hex. */
+    .platform-table { margin: 24px 0; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 660px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); line-height: 1.5; }
+    .platform-table thead th { background: var(--surface-2); color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #14122e; }
+    .platform-table tbody td:first-child { font-weight: 700; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+    <h2>From Notebook to Platform Pipeline</h2>
+    <h3>Taking Exploratory Code to Production — Without Rewriting the Logic</h3>
+
+    <p>
+      A notebook proves an idea. A platform runs it every night, on schedule, for the business. The gap between
+      "works on my laptop" and "runs on Microsoft Fabric / Snowflake / Databricks / BigQuery" is where a lot of good
+      analytics work quietly dies. The encouraging part: closing that gap is a <strong>pattern, not a product</strong>.
+      The same five moves take an exploratory notebook — or a Python library like the
+      <a href="../../projects/project-data-analytics-library.html">Data Analytics Library</a> — into a production
+      pipeline, and only the final runner changes from platform to platform. This is the piece that ties the
+      <a href="learn-the-pattern.html">Learn the Pattern</a> series to real, shippable code.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 240" role="img" aria-label="A notebook modularized, parameterized, packaged, and orchestrated into a scheduled pipeline">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="e1" d="M190,120 L210,120"/>
+          <path id="e2" d="M380,120 L400,120"/>
+          <path id="e3" d="M570,120 L590,120"/>
+          <path id="e4" d="M760,120 L780,120"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="240" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="38" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Same logic, productionized — only the runner changes</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <line x1="190" y1="120" x2="210" y2="120"/>
+          <line x1="380" y1="120" x2="400" y2="120"/>
+          <line x1="570" y1="120" x2="590" y2="120"/>
+          <line x1="760" y1="120" x2="780" y2="120"/>
+        </g>
+        <g>
+          <rect x="20" y="90" width="170" height="60" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="105" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Notebook</text>
+          <text x="105" y="136" text-anchor="middle" fill="#dbeafe" font-size="10">exploratory cells</text>
+        </g>
+        <g>
+          <rect x="210" y="90" width="170" height="60" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="295" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Modularize</text>
+          <text x="295" y="136" text-anchor="middle" fill="#dbeafe" font-size="10">cells → functions</text>
+        </g>
+        <g>
+          <rect x="400" y="90" width="170" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="485" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Parameterize</text>
+          <text x="485" y="136" text-anchor="middle" fill="#ede9fe" font-size="10">no hard-coded paths</text>
+        </g>
+        <g>
+          <rect x="590" y="90" width="170" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="675" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Package</text>
+          <text x="675" y="136" text-anchor="middle" fill="#ede9fe" font-size="10">pin deps · importable</text>
+        </g>
+        <g>
+          <rect x="780" y="90" width="170" height="60" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="865" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Orchestrate</text>
+          <text x="865" y="136" text-anchor="middle" fill="#e0f2fe" font-size="10">platform scheduler</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="3.8"><animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#e1"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.4s" begin="0.35s" repeatCount="indefinite"><mpath href="#e2"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.4s" begin="0.7s" repeatCount="indefinite"><mpath href="#e3"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.4s" begin="1.05s" repeatCount="indefinite"><mpath href="#e4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Five moves carry the same logic from a notebook to a scheduled platform pipeline; the runner on the right is the only platform-specific part.</p>
+
+    <h3>1. Modularize — Cells Become Functions</h3>
+    <p>
+      A notebook is a script with hidden state: cell 12 depends on cell 4 having been run, and re-running out of
+      order breaks it. The first move is to lift the logic into <strong>functions and modules</strong> — each one
+      taking inputs and returning outputs, with no reliance on global notebook state. This is exactly the shape the
+      Data Analytics Library is built around: every stage is <code>DataFrame</code>-in, <code>DataFrame</code>-out,
+      so stages chain into a pipeline and each is independently testable.
+    </p>
+    <p class="code-label">Python · before (notebook cell) → after (module function)</p>
+    <pre class="code-block"><code># BEFORE — a notebook cell that mutates a global and hard-codes a path
+df = pd.read_csv("/Users/mario/Downloads/orders_2026.csv")
+df = df.dropna()
+df["sales"] = df["quantity"] * df["unit_price"]
+
+# AFTER — a pure function in a module (pipeline/transform.py)
+def add_sales(orders: pd.DataFrame) -> pd.DataFrame:
+    """Derive the sales column. Non-mutating: returns a new frame."""
+    out = orders.copy()
+    out["sales"] = out["quantity"] * out["unit_price"]
+    return out</code></pre>
+
+    <h3>2. Parameterize — Nothing Hard-Coded</h3>
+    <p>
+      Production code can't carry <code>/Users/mario/Downloads</code>, a fixed date, or a password in plain text.
+      Lift every environment-specific value into <strong>parameters</strong> — read paths and dates from arguments
+      or config, and pull secrets from the platform's secret store, never the source. The same function then runs
+      against a laptop CSV or a cloud table by changing inputs, not code.
+    </p>
+    <p class="code-label">Python · parameterized entry point</p>
+    <pre class="code-block"><code>import os, argparse
+
+def run(source_uri: str, run_date: str) -> None:
+    secret = os.environ["WAREHOUSE_TOKEN"]   # from the platform's secret store
+    orders = load(source_uri)                # path/URI is an argument, not a constant
+    result = build_pipeline(orders, as_of=run_date)
+    write(result, destination=os.environ["OUTPUT_TABLE"])
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    p.add_argument("--source", required=True)
+    p.add_argument("--run-date", required=True)
+    args = p.parse_args()
+    run(args.source, args.run_date)</code></pre>
+
+    <h3>3. Package — Pin Dependencies, Make It Importable</h3>
+    <p>
+      "It worked yesterday" usually means a dependency moved. Turn the modules into an installable package with
+      <strong>pinned versions</strong> so the same code resolves to the same libraries everywhere. A
+      <code>pyproject.toml</code> with version constraints, an importable package, and a test suite (the library
+      ships 81 pytest tests on CI) is what lets a platform install and run your code unattended.
+    </p>
+    <p class="code-label">Python · pinned, importable</p>
+    <pre class="code-block"><code># pyproject.toml (excerpt) — pin the ranges you tested against
+# dependencies = ["pandas>=2.0,<3.0", "scikit-learn>=1.3,<2.0"]
+
+# On the platform, install and import — no copy-paste of cells
+# pip install data-analytics-library==1.0.0
+from analytics import predictiveanalysis as pa
+model = pa.train(features, target)</code></pre>
+
+    <h3>4. Orchestrate — Wrap It in the Platform's Scheduler</h3>
+    <p>
+      The last move hands the packaged code to a <strong>scheduler</strong> that runs the steps in order, on a
+      cadence, with retries and alerting. Model the work as a DAG (a flow of dependent tasks), point the scheduler
+      at your parameterized entry point, and the pipeline becomes hands-off. This is the <em>only</em> step that is
+      genuinely platform-specific — and even here the concept (a scheduled DAG of tasks) is identical everywhere.
+    </p>
+
+    <h3>5. Same Logic, Every Platform</h3>
+    <p>
+      The Python you wrote in steps 1–3 does not change between platforms. Only the storage it reads, the engine it
+      runs on, and the scheduler that triggers it differ — and each maps cleanly:
+    </p>
+
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr>
+            <th>The Piece</th>
+            <th>Snowflake</th>
+            <th>Databricks</th>
+            <th>BigQuery</th>
+            <th>Microsoft Fabric</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Storage</td>
+            <td>Tables &middot; stages</td>
+            <td>Delta on cloud storage</td>
+            <td>BigQuery tables &middot; GCS</td>
+            <td>OneLake</td>
+          </tr>
+          <tr>
+            <td>Run the Python</td>
+            <td>Snowpark &middot; Python worksheets</td>
+            <td>Notebooks / jobs on clusters</td>
+            <td>BigQuery DataFrames &middot; Dataproc / Cloud Run</td>
+            <td>Spark / Python notebooks</td>
+          </tr>
+          <tr>
+            <td>Orchestrate</td>
+            <td>Tasks &amp; Streams</td>
+            <td>Jobs / Workflows</td>
+            <td>Cloud Composer (Airflow) &middot; scheduled queries</td>
+            <td>Data Factory pipelines</td>
+          </tr>
+          <tr>
+            <td>Secrets &amp; params</td>
+            <td>Secret objects &middot; parameters</td>
+            <td>Secret scopes &middot; widgets</td>
+            <td>Secret Manager</td>
+            <td>Key Vault &middot; pipeline parameters</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Feature names evolve — treat this as a capability map and confirm specifics against current vendor docs before relying on them.</p>
+
+    <h3>Tools Commonly Used</h3>
+    <ul>
+      <li><strong>Packaging:</strong> <code>pyproject.toml</code>, pip/uv, pinned dependency ranges, pytest + CI.</li>
+      <li><strong>Orchestration:</strong> Airflow, Dagster, Prefect, and each platform's native scheduler.</li>
+      <li><strong>Config &amp; secrets:</strong> environment variables, argparse/CLI, and the platform's secret store.</li>
+      <li><strong>Reference code:</strong> the <a href="../../projects/project-data-analytics-library.html">Data Analytics Library</a> is already structured this way — modular, non-mutating, tested — so it drops into any of the runners above.</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Refactor cells into <strong>pure functions</strong> with no hidden notebook state before anything else.</li>
+      <li>Parameterize every path, date, and credential; keep secrets in the platform's store, not the code.</li>
+      <li>Pin dependencies and ship tests so a fresh environment reproduces your results.</li>
+      <li>Keep the business logic <strong>platform-agnostic</strong>; isolate the platform-specific read/write/schedule at the edges.</li>
+      <li>Make runs idempotent and parameterized by date so backfills and retries are safe.</li>
+    </ul>
+
+    <h3>Example: The Descriptive Pipeline, Productionized</h3>
+    <p>
+      The companion notebook from the
+      <a href="../../publications/descriptive-analytics.html">Descriptive Analytics</a> series runs ten steps end
+      to end. Productionizing it is exactly this pattern: lift each step into a library function (collect → clean →
+      transform → … → share), parameterize the source and run-date, pin the dependencies, and schedule the entry
+      point on whichever platform owns the data. The notebook that proved the idea and the pipeline that runs it
+      nightly share the same logic — which is the whole point of learning the pattern, not the product.
+    </p>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

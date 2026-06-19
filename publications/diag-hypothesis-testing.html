@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hypothesis Testing | Diagnostic Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/diagnostic-analytics.html" class="home-link">← Back to Diagnostic Analytics</a>
+    <h2>Hypothesis Testing</h2>
+    <h3>Chapter 2 — Signal or Noise?</h3>
+
+    <p>
+      A correlation points to a suspect; a statistical test decides whether the difference it produces is real or
+      just sampling noise. Two workhorse tests cover most business questions: the <strong>t-test</strong> for the
+      means of two groups, and the <strong>chi-square test</strong> for association between two categories. Both run
+      below on the retail data, and both return numbers computed from that data.
+    </p>
+
+    <h3>The t-test — Comparing Two Group Means</h3>
+    <p>
+      Discounted orders look less profitable — but is the gap real? A Welch t-test compares the <em>mean profit</em>
+      of discounted versus full-price orders. On this data it returns <strong>t = −55.6</strong> with a
+      <strong>p-value below 0.001</strong>, and a mean profit gap of about <strong>$188</strong> per order. The
+      distributions below make the result tangible: the discounted orders (red) pile up at low profit, and their
+      mean line sits well left of the full-price mean.
+    </p>
+    <p class="code-label">Python · scipy</p>
+    <pre class="code-block"><code>from scipy import stats
+
+disc = orders.loc[orders["discount"] > 0, "profit"]
+full = orders.loc[orders["discount"] == 0, "profit"]
+t, p = stats.ttest_ind(disc, full, equal_var=False)   # Welch
+print(f"t = {t:.1f}, p = {p:.2e}, gap = {disc.mean() - full.mean():.1f}")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/diag-ttest.png" alt="Overlaid histograms of profit for full-price versus discounted orders, with mean lines showing discounted orders are markedly less profitable" />
+    </div>
+    <p class="diagram-caption">Discounted orders (red) cluster at low profit; the gap between the two mean lines is the effect size — about $188 per order.</p>
+
+    <h3>The Chi-square Test — Association Between Categories</h3>
+    <p>
+      For two <em>categorical</em> variables, the chi-square test asks whether they are independent. Are high-value
+      orders evenly spread across product categories, or does category matter? Here the test returns a huge
+      <strong>chi-square with p &lt; 0.001</strong> — categories are <em>not</em> independent of order value.
+      Technology orders, with their high unit price, are far more likely to be high-value, exactly as the chart
+      shows.
+    </p>
+    <p class="code-label">Python · scipy</p>
+    <pre class="code-block"><code>orders["high_value"] = orders["sales"] > orders["sales"].median()
+table = pd.crosstab(orders["category"], orders["high_value"])
+chi2, p, dof, _ = stats.chi2_contingency(table)
+print(f"chi2 = {chi2:.0f}, p = {p:.2e}")</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/diag-chisquare.png" alt="Bar chart of the share of high-value orders by category, with Technology far higher than Office and Furniture" />
+    </div>
+    <p class="diagram-caption">The share of above-median orders is wildly uneven by category — Technology dominates, which the chi-square test confirms is no accident.</p>
+
+    <h3>Read the p-value Correctly</h3>
+    <p>
+      Both tests return a <strong>p-value</strong>: the probability of seeing a difference this large if there were
+      truly no effect. A small p-value (commonly &lt; 0.05) says the difference is unlikely to be noise — but it
+      does <em>not</em> measure how big or how important the effect is. Always pair a significant result with an
+      <strong>effect size</strong>: the actual $188 profit gap, or the percentage-point difference in high-value
+      share. Significance answers "is it real?"; effect size answers "does it matter?"
+    </p>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="diag-drilldown.html">Drilling Down to Localize the Cause →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/diagnostic-analytics.html" class="home-link">← Back to Diagnostic Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

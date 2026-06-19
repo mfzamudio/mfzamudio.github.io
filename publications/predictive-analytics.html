@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Predictive Analytics | Types of Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+    <h2>Predictive Analytics</h2>
+    <h3>What Will Happen?</h3>
+
+    <p>
+      Predictive analytics, stated honestly, is this: <strong>use the past to estimate the future, then measure how
+      wrong you are.</strong> It builds on diagnostic work — once you understand which factors drive an outcome, you
+      can train a model to project that outcome onto new, unseen cases. The headline lesson is that the
+      <em>workflow</em> matters more than the algorithm. A simple model evaluated honestly beats a sophisticated one
+      you can't trust.
+    </p>
+    <p>
+      This is a four-chapter mini-series. Every model is trained in <strong>scikit-learn</strong> on the shared
+      synthetic retail dataset, and every metric quoted — R², MAE, AUC, precision, recall — is computed on a
+      held-out test set and rendered in the charts. Where the synthetic data has no real outcome to predict (churn),
+      that is stated plainly and a constructed label is used to illustrate the workflow.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 240" role="img" aria-label="Labeled history split into train and test, used to fit a model, evaluate it, then predict the future">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="e1" d="M180,120 L220,120"/>
+          <path id="e2" d="M380,120 L420,120"/>
+          <path id="e3" d="M580,120 L620,120"/>
+          <path id="e4" d="M780,120 L820,120"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="240" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="38" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Fit on the past, score on held-out data, then project</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <line x1="180" y1="120" x2="220" y2="120"/>
+          <line x1="380" y1="120" x2="420" y2="120"/>
+          <line x1="580" y1="120" x2="620" y2="120"/>
+          <line x1="780" y1="120" x2="820" y2="120"/>
+        </g>
+        <g>
+          <rect x="20" y="90" width="160" height="60" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="100" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Labeled history</text>
+          <text x="100" y="136" text-anchor="middle" fill="#dbeafe" font-size="10">features + outcome</text>
+        </g>
+        <g>
+          <rect x="220" y="90" width="160" height="60" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="300" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Train / test split</text>
+          <text x="300" y="136" text-anchor="middle" fill="#dbeafe" font-size="10">hold data back</text>
+        </g>
+        <g>
+          <rect x="420" y="90" width="160" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="500" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Fit model</text>
+          <text x="500" y="136" text-anchor="middle" fill="#ede9fe" font-size="10">learn the pattern</text>
+        </g>
+        <g>
+          <rect x="620" y="90" width="160" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="700" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Evaluate</text>
+          <text x="700" y="136" text-anchor="middle" fill="#ede9fe" font-size="10">on unseen test set</text>
+        </g>
+        <g>
+          <rect x="820" y="90" width="160" height="60" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="900" y="116" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Predict</text>
+          <text x="900" y="136" text-anchor="middle" fill="#e0f2fe" font-size="10">new cases</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="3.8"><animateMotion dur="1.5s" repeatCount="indefinite"><mpath href="#e1"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.5s" begin="0.4s" repeatCount="indefinite"><mpath href="#e2"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.5s" begin="0.8s" repeatCount="indefinite"><mpath href="#e3"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.5s" begin="1.2s" repeatCount="indefinite"><mpath href="#e4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">The predictive workflow: split the labeled history, fit on the training part, score on the held-out part, and only then project onto new cases.</p>
+
+    <h3>The Four Chapters</h3>
+    <div class="series-parts">
+      <a href="pred-framing.html" class="part-link">
+        <div class="part-number">Chapter 1 &rarr;</div>
+        <h4>Framing the Problem</h4>
+        <p>Regression (a number), classification (a label), or clustering (groups with no labels) — with a rendered K-Means segmentation.</p>
+      </a>
+      <a href="pred-train-test-split.html" class="part-link">
+        <div class="part-number">Chapter 2 &rarr;</div>
+        <h4>The Train/Test Split &amp; Overfitting</h4>
+        <p>Why you must score on data the model never saw, shown with a training-vs-test error curve that makes overfitting visible.</p>
+      </a>
+      <a href="pred-regression.html" class="part-link">
+        <div class="part-number">Chapter 3 &rarr;</div>
+        <h4>Regression — Predicting a Number</h4>
+        <p>A scikit-learn pipeline predicting lifetime sales, with predicted-vs-actual and feature-importance charts and an honest baseline.</p>
+      </a>
+      <a href="pred-classification.html" class="part-link">
+        <div class="part-number">Chapter 4 &rarr;</div>
+        <h4>Classification — Predicting a Label</h4>
+        <p>A churn classifier judged the right way — confusion matrix, ROC/AUC, precision and recall — not by accuracy alone.</p>
+      </a>
+    </div>
+
+    <h3>Reference Code</h3>
+    <p>
+      The split → fit → evaluate → persist flow shown here is packaged in the
+      <a href="../../projects/project-data-analytics-library.html">Data Analytics Library</a>'s
+      <code>predictiveanalysis</code> and <code>machinelearning</code> modules. Predictive analytics builds on
+      <a href="diagnostic-analytics.html">Diagnostic</a> ("why") and feeds
+      <a href="prescriptive-analytics.html">Prescriptive</a> ("what should we do").
+    </p>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

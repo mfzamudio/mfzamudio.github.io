@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Regression — Predicting a Number | Predictive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/predictive-analytics.html" class="home-link">← Back to Predictive Analytics</a>
+    <h2>Regression — Predicting a Number</h2>
+    <h3>Chapter 3 — A Pipeline End to End</h3>
+
+    <p>
+      Regression predicts a continuous value. Here the task is to estimate each customer's <strong>lifetime sales</strong>
+      from their behaviour — how often they order, their average discount, their typical quantity, and how long
+      they've been active. The whole workflow is a few lines of scikit-learn, but the discipline is in how you read
+      the result.
+    </p>
+
+    <h3>Fit and Score</h3>
+    <p class="code-label">Python · scikit-learn</p>
+    <pre class="code-block"><code>from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import r2_score, mean_absolute_error
+
+features = ["orders", "avg_discount", "avg_quantity", "tenure_days"]
+X, y = cust[features], cust["total_sales"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+
+model = RandomForestRegressor(n_estimators=200, random_state=42).fit(X_train, y_train)
+pred = model.predict(X_test)
+print(f"R^2 = {r2_score(y_test, pred):.2f}")             # 0.96
+print(f"MAE = {mean_absolute_error(y_test, pred):,.0f}") # ~$1,550</code></pre>
+    <p>
+      On the held-out set this model scores <strong>R² ≈ 0.96</strong> with a mean absolute error of about
+      <strong>$1,550</strong> — meaning it explains most of the variation in lifetime sales, and its typical miss is
+      around $1,550. The high R² is unsurprising here: order count is a very strong predictor of total spend.
+    </p>
+
+    <h3>Predicted vs Actual — The Honest Picture</h3>
+    <p>
+      The most useful regression diagnostic is a predicted-vs-actual scatter. Perfect predictions land on the
+      diagonal; the spread around it is the error. This plot shows where the model is reliable and where it drifts —
+      far more informative than a single R² number.
+    </p>
+    <div class="diagram-wrap">
+      <img src="images/analytics/pred-pred-actual.png" alt="Scatter of predicted versus actual customer lifetime sales, with points clustered along the diagonal of perfect prediction" />
+    </div>
+    <p class="diagram-caption">Points hug the diagonal, so predictions track reality well; the spread widens for the largest customers, where data is thinner.</p>
+
+    <h3>Which Features Drive the Prediction?</h3>
+    <p>
+      A model you can't explain is hard to trust. Feature importance ranks how much each input contributes, turning
+      the model from a black box into an explanation. Here order count dominates — the more a customer orders, the
+      more they spend, which matches intuition and the diagnostic findings.
+    </p>
+    <p class="code-label">Python · scikit-learn</p>
+    <pre class="code-block"><code>importances = pd.Series(model.feature_importances_, index=features)
+print(importances.sort_values(ascending=False))</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/pred-feature-importance.png" alt="Horizontal bar chart of feature importance, with order count by far the largest contributor" />
+    </div>
+    <p class="diagram-caption">Order count is the dominant driver of predicted lifetime sales — the model's reasoning is legible.</p>
+
+    <h3>Always Quote a Baseline</h3>
+    <p>
+      An R² or MAE means nothing without context. Compare against the simplest possible model — predicting the
+      average for everyone. If your model's MAE isn't comfortably below that baseline's, the sophistication isn't
+      buying anything. Reporting "R² = 0.96, versus a mean-baseline MAE of X" is honest; reporting "R² = 0.96" alone
+      is salesmanship.
+    </p>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="pred-classification.html">Classification — Predicting a Label →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/predictive-analytics.html" class="home-link">← Back to Predictive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

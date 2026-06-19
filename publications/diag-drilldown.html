@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drilling Down to Localize the Cause | Diagnostic Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/diagnostic-analytics.html" class="home-link">← Back to Diagnostic Analytics</a>
+    <h2>Drilling Down to Localize the Cause</h2>
+    <h3>Chapter 3 — Where Did It Actually Happen?</h3>
+
+    <p>
+      Aggregates hide their own explanation. "Margin is down" averages over every discount level, category, and
+      region at once. <strong>Drill-down</strong> slices the metric by one dimension at a time until the change
+      concentrates in a specific cell. That localization is usually 80% of the diagnosis: once you know
+      <em>where</em> it happens, <em>why</em> is much easier to see.
+    </p>
+
+    <h3>Slice the Metric by the Suspect Dimension</h3>
+    <p>
+      The correlation and the t-test both pointed at discount. Drilling margin down by discount level makes the
+      mechanism unmistakable: margin falls in a clean staircase from full price to the deepest discount, where it
+      reaches zero. This isn't a vague "discounts hurt" — it's a precise, quantified relationship you can act on.
+    </p>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code># Average margin at each discount level
+g = orders.groupby("discount")["margin"].mean() * 100
+print(g)                       # 30% -> ~30% margin ... 0% margin at 30% discount</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/diag-drilldown.png" alt="Bar chart of average margin by discount level, declining in a clean staircase from 30 percent down to zero" />
+    </div>
+    <p class="diagram-caption">Margin falls in a clean staircase with each discount tier — at a 30% discount, margin is fully erased.</p>
+
+    <h3>Drill-down in SQL — Slice and Subtotal</h3>
+    <p>
+      The same move in the warehouse uses <code>GROUP BY</code> with <code>ROLLUP</code> to get both the sliced
+      detail and the subtotals in one pass, sorted so the worst-performing cells surface at the top.
+    </p>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>SELECT
+  category,
+  discount,
+  COUNT(*)                 AS orders,
+  AVG(profit / sales)      AS avg_margin,
+  AVG(profit)              AS avg_profit
+FROM orders
+GROUP BY ROLLUP (category, discount)
+ORDER BY avg_margin;       -- worst cells first</code></pre>
+
+    <h3>Stop When It Localizes</h3>
+    <p>
+      Drill down one dimension at a time and stop as soon as the change concentrates. If margin had been flat across
+      discount but cratered in one region, the region would be the story. Here it localizes cleanly to discount
+      level — so the recommendation writes itself: control the deep-discount tiers. Crucially, region came back as a
+      <em>negative control</em> (no association), which strengthens the case that discount, not geography, is the
+      lever.
+    </p>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="diag-correlation-causation.html">Correlation Is Not Causation →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/diagnostic-analytics.html" class="home-link">← Back to Diagnostic Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

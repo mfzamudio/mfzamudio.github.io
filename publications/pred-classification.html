@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classification — Predicting a Label | Predictive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/predictive-analytics.html" class="home-link">← Back to Predictive Analytics</a>
+    <h2>Classification — Predicting a Label</h2>
+    <h3>Chapter 4 — Judge It the Right Way</h3>
+
+    <p>
+      Classification predicts a category — here, whether a customer will <strong>churn</strong>. The modelling is
+      easy; the discipline is in evaluation, because the obvious metric (accuracy) is also the most misleading.
+    </p>
+    <div class="highlight-box">
+      <p>
+        <strong>Honesty note:</strong> the synthetic retail dataset has no real churn outcome. For this chapter we
+        construct a churn label from a latent propensity (customers with high discounts and low engagement are more
+        likely to churn) plus noise, purely to illustrate the classification workflow. The metrics below are real —
+        computed on a held-out test set — but the label is synthetic by design.
+      </p>
+    </div>
+
+    <h3>Fit the Classifier</h3>
+    <p class="code-label">Python · scikit-learn</p>
+    <pre class="code-block"><code>from sklearn.ensemble import RandomForestClassifier
+
+X, y = cust[features], cust["churn"]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42, stratify=y)
+
+clf = RandomForestClassifier(n_estimators=250, random_state=42).fit(X_train, y_train)
+proba = clf.predict_proba(X_test)[:, 1]      # churn probability per customer</code></pre>
+
+    <h3>Why Accuracy Lies</h3>
+    <p>
+      If only 3% of customers churn, a model that predicts "nobody churns" is 97% accurate and completely useless.
+      Accuracy rewards predicting the majority class. The fix is to look at the <strong>confusion matrix</strong> —
+      the full breakdown of right and wrong on both classes.
+    </p>
+    <div class="diagram-wrap">
+      <img src="images/analytics/pred-confusion.png" alt="Confusion matrix showing true negatives, false positives, false negatives and true positives for the churn classifier" />
+    </div>
+    <p class="diagram-caption">The confusion matrix shows performance on both classes at once — the diagonal is correct, the off-diagonal is the errors that accuracy alone would hide.</p>
+
+    <h3>Precision, Recall, and the Trade-off</h3>
+    <p>
+      From the confusion matrix come the two metrics that actually matter:
+    </p>
+    <ul>
+      <li><strong>Precision</strong> = of the customers we flagged as churners, how many really were. Here ≈ <strong>0.63</strong>.</li>
+      <li><strong>Recall</strong> = of the customers who actually churned, how many we caught. Here ≈ <strong>0.64</strong>.</li>
+    </ul>
+    <p>
+      Which one matters more depends on the cost of each error. A cheap retention email rewards <em>recall</em> (catch
+      everyone at risk); an expensive intervention rewards <em>precision</em> (don't waste it on false alarms). You
+      tune the trade-off by moving the probability threshold.
+    </p>
+
+    <h3>ROC and AUC — Performance Across All Thresholds</h3>
+    <p>
+      The ROC curve plots true-positive rate against false-positive rate as the threshold sweeps from 0 to 1, and
+      the area under it (AUC) summarizes the model in one number: 0.5 is random, 1.0 is perfect. This model scores
+      <strong>AUC ≈ 0.70</strong> — a modest but genuine lift over guessing, which is an honest result for a
+      behavioural churn model.
+    </p>
+    <div class="diagram-wrap">
+      <img src="images/analytics/pred-roc.png" alt="ROC curve sitting above the random diagonal with an area under the curve of about 0.70" />
+    </div>
+    <p class="diagram-caption">The curve bows above the random diagonal (AUC ≈ 0.70) — the model ranks churners ahead of non-churners better than chance, but it is no oracle.</p>
+
+    <h3>Don't Ship a Metric You Can't Explain</h3>
+    <p>
+      A model is a decision tool, not a trophy. If you can't say in one sentence what it predicts, how good it is in
+      business terms, and where it fails, it isn't ready. An AUC of 0.70 with recall of 0.64 is shippable for
+      prioritizing retention spend — as long as everyone knows it will miss about a third of churners and raise some
+      false alarms. That honesty is the bridge into <a href="prescriptive-analytics.html">prescriptive analytics</a>,
+      where a prediction becomes a recommended action.
+    </p>
+
+    <p style="margin-top: 28px;">
+      That completes the Predictive Analytics mini-series. Continue with
+      <a href="prescriptive-analytics.html">Prescriptive Analytics — What Should We Do? →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/predictive-analytics.html" class="home-link">← Back to Predictive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

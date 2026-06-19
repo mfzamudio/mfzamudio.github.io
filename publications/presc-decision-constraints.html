@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feasible, Not Just Optimal | Prescriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/prescriptive-analytics.html" class="home-link">← Back to Prescriptive Analytics</a>
+    <h2>Feasible, Not Just Optimal</h2>
+    <h3>Chapter 4 — The Discipline of a Trustworthy Recommendation</h3>
+
+    <p>
+      A mathematically optimal answer that violates a real constraint — or that rests on a prediction the business
+      can't trust — is worthless. This final chapter is about the judgement that turns a solver's output into a
+      recommendation a leader can actually act on.
+    </p>
+
+    <h3>Sensitivity — How Sturdy Is the Answer?</h3>
+    <p>
+      The single most useful follow-up to any optimization is: <em>how much does the answer change if an assumption
+      changes?</em> Re-solving as the budget varies reveals where extra money keeps earning and where it stops. Here,
+      every additional dollar earns until total spend hits $150K — the sum of the channel ceilings. Beyond that, the
+      caps bind: there is nowhere left to put money, and additional budget is simply wasted.
+    </p>
+    <p class="code-label">Python · scipy.optimize</p>
+    <pre class="code-block"><code>for budget in range(40_000, 200_001, 5_000):
+    _, expected = optimize(budget=budget)     # re-solve at each budget
+    print(budget, expected)
+# return rises with budget... until the channel caps (sum = $150K) bind</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/presc-sensitivity.png" alt="Line chart of maximum expected return as the budget increases, rising then flattening once channel caps bind at 150K" />
+    </div>
+    <p class="diagram-caption">Return climbs with budget until the channel caps bind at $150K, then flattens — past that point, more budget buys nothing.</p>
+
+    <h3>What Sensitivity Tells You</h3>
+    <p>
+      That flat section is a decision in itself: there is no point requesting more than $150K for this channel mix —
+      the money would sit idle. The slope before the kink is the <strong>marginal value</strong> of budget (in LP
+      terms, the shadow price); when it drops to zero, the constraint has taken over. Reading this curve stops two
+      common mistakes: over-funding a plan that can't absorb the money, and under-funding one that still has room to
+      earn.
+    </p>
+
+    <h3>The Honest Caveats</h3>
+    <p>
+      Prescriptive analytics is only as trustworthy as what feeds it. Three things must hold:
+    </p>
+    <ul>
+      <li><strong>The prediction is sound.</strong> The recommendation inherits every error in the expected-return estimates — carry that uncertainty through, don't treat an estimate as a certainty.</li>
+      <li><strong>The constraints are real.</strong> They must reflect actual limits, not a convenient approximation; a missing constraint produces a confidently infeasible plan.</li>
+      <li><strong>A human decides.</strong> The output is a recommendation to accept, override, and audit — with its assumptions stated — not an autopilot.</li>
+    </ul>
+
+    <h3>Closing the Loop</h3>
+    <p>
+      That is the full analytics lifecycle: <a href="../../publications/descriptive-analytics.html">Descriptive</a>
+      established what happened, <a href="diagnostic-analytics.html">Diagnostic</a> found why,
+      <a href="predictive-analytics.html">Predictive</a> estimated what comes next, and Prescriptive turned that
+      estimate into a defensible decision — feasible, sensitivity-checked, and owned by a person, not a black box.
+    </p>
+
+    <p style="margin-top: 28px;">
+      That completes the Prescriptive Analytics mini-series — and the Types of Analytics set. See how to take these
+      notebooks to production in
+      <a href="from-notebook-to-platform-pipeline.html">From Notebook to Platform Pipeline →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/prescriptive-analytics.html" class="home-link">← Back to Prescriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

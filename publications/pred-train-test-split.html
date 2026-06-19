@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Train/Test Split &amp; Overfitting | Predictive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/predictive-analytics.html" class="home-link">← Back to Predictive Analytics</a>
+    <h2>The Train/Test Split &amp; Overfitting</h2>
+    <h3>Chapter 2 — Score on What the Model Never Saw</h3>
+
+    <p>
+      A model that memorizes its training data can look perfect and still be useless. The single most important
+      habit in predictive analytics is to <strong>hold back data</strong>: train on one part, and measure
+      performance only on a part the model never saw. If it does well on unseen data, the pattern is real. If it
+      aces training but fails on the held-out set, it has <strong>overfit</strong> — memorized noise instead of
+      learning signal.
+    </p>
+
+    <h3>The Split, in One Call</h3>
+    <p class="code-label">Python · scikit-learn</p>
+    <pre class="code-block"><code>from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42)
+# Fit on X_train only; report metrics on X_test only.</code></pre>
+    <p>
+      For time-based problems, don't split randomly — split by <em>time</em> (train on the past, test on the most
+      recent period) so the evaluation mirrors how the model will actually be used.
+    </p>
+
+    <h3>Seeing Overfitting Happen</h3>
+    <p>
+      The clearest way to understand overfitting is to watch training and test error as a model grows more complex.
+      The chart below fits polynomials of increasing degree to a noisy signal. <strong>Training error keeps falling</strong>
+      — a complex enough curve can thread every training point. But <strong>test error bottoms out and then climbs</strong>:
+      past a certain complexity the model is fitting the noise, and its performance on new data gets worse. The gap
+      between the two lines is the overfitting.
+    </p>
+    <p class="code-label">Python · numpy</p>
+    <pre class="code-block"><code>for degree in range(1, 16):
+    coef = np.polyfit(x_train, y_train, degree)          # fit on train
+    train_rmse = rmse(np.polyval(coef, x_train), y_train)
+    test_rmse  = rmse(np.polyval(coef, x_test),  y_test) # judge on test
+# train error always drops; test error turns back up where overfitting begins</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/pred-overfit.png" alt="Line chart of training error steadily falling while test error bottoms out and then rises as polynomial degree increases" />
+    </div>
+    <p class="diagram-caption">Training error always improves with complexity; test error turns back up where the model starts memorizing noise. The sweet spot is the test-error minimum.</p>
+
+    <h3>The Lessons</h3>
+    <ul>
+      <li>Report performance <strong>only</strong> on the held-out test set — never the training score.</li>
+      <li>The best model is the one that minimizes <em>test</em> error, not training error.</li>
+      <li>Guard against <strong>data leakage</strong>: no feature may carry information unavailable at prediction time, and the test set must never influence training.</li>
+      <li>When data is scarce, cross-validation (repeating the split several ways) gives a more stable estimate than a single split.</li>
+    </ul>
+
+    <p style="margin-top: 28px;">
+      Next: <a href="pred-regression.html">Regression — Predicting a Number →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/predictive-analytics.html" class="home-link">← Back to Predictive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

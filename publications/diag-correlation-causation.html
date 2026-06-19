@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Correlation Is Not Causation | Diagnostic Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/diagnostic-analytics.html" class="home-link">← Back to Diagnostic Analytics</a>
+    <h2>Correlation Is Not Causation</h2>
+    <h3>Chapter 4 — The Discipline That Keeps Diagnosis Honest</h3>
+
+    <p>
+      The defining risk of diagnostic analytics is mistaking co-movement for cause. Two things can move together for
+      three different reasons: one causes the other, both share a common cause, or it's pure coincidence in a small
+      sample. The job of this final chapter is to resist the leap from "these correlate" to "this causes that."
+    </p>
+
+    <h3>The Classic Trap — A Lurking Common Cause</h3>
+    <p>
+      Ice-cream sales and drownings rise and fall together across the year. The correlation is real and strong — but
+      neither causes the other. A third variable, <strong>summer temperature</strong>, drives both. The chart below
+      (an illustrative example, not from the retail data) shows the two series tracking each other almost perfectly;
+      acting on the correlation — "ban ice cream to prevent drownings" — would be absurd.
+    </p>
+    <p class="code-label">Python · illustrative confounder</p>
+    <pre class="code-block"><code># temperature is the hidden common cause of BOTH series
+temp       = 12 + 12 * np.sin((months - 3) / 12 * 2 * np.pi)
+ice_cream  = 20 + 4.0 * temp + noise      # driven by temp
+drownings  = 1  + 0.25 * temp + noise     # also driven by temp
+# ice_cream and drownings correlate strongly, yet neither causes the other</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/diag-confounder.png" alt="Two time series, ice-cream sales and drownings, rising and falling together across the year on twin axes" />
+    </div>
+    <p class="diagram-caption">Two strongly correlated series with no causal link between them — a hidden third variable (temperature) drives both.</p>
+
+    <h3>How to Stay Honest</h3>
+    <p>
+      Diagnostic analytics earns its keep by treating every finding as a hypothesis and stress-testing it before
+      acting:
+    </p>
+    <ul>
+      <li><strong>Look for a mechanism.</strong> Is there a plausible reason X would cause Y? "Discount reduces margin" has a direct mechanism; "ice cream causes drownings" does not.</li>
+      <li><strong>Hunt for a confounder.</strong> Ask what third variable could drive both. If you can name one, the correlation is suspect.</li>
+      <li><strong>Check within subgroups.</strong> A relationship that reverses inside each segment (Simpson's paradox) was never causal at the aggregate level.</li>
+      <li><strong>Validate where stakes are high.</strong> The gold standard is a controlled comparison or experiment — change the lever and measure the effect, rather than inferring it.</li>
+    </ul>
+
+    <h3>Back to the Retail Case</h3>
+    <p>
+      The discount → margin finding survives all four checks: it has a direct mechanism (margin is literally
+      reduced by the discount), no plausible confounder explains it away, it holds within every category, and it
+      could be confirmed with a simple pricing experiment. That is the difference between a correlation worth acting
+      on and one worth ignoring — and it's the bridge into
+      <a href="predictive-analytics.html">predictive analytics</a>, where validated drivers become model features.
+    </p>
+
+    <p style="margin-top: 28px;">
+      That completes the Diagnostic Analytics mini-series. Continue with
+      <a href="predictive-analytics.html">Predictive Analytics — What Will Happen? →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/diagnostic-analytics.html" class="home-link">← Back to Diagnostic Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

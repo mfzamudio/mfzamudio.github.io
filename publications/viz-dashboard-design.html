@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Designing a Dashboard | Visualization Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/visualization-analytics.html" class="home-link">← Back to Visualization Analytics</a>
+    <h2>Designing a Dashboard</h2>
+    <h3>Chapter 4 — Composing Charts Into One Argument</h3>
+
+    <p>
+      A dashboard is not a wall of every chart you made — it is a deliberately ordered argument. The previous
+      chapters built the individual views; this one assembles them so a reader answers several business questions in
+      one glance, without getting lost. The same principles apply whether you build it in matplotlib, Power BI, or
+      Tableau.
+    </p>
+
+    <h3>The Principles</h3>
+    <ul>
+      <li><strong>One idea per chart.</strong> If a visual needs a paragraph to explain, split it into two.</li>
+      <li><strong>Lead with the headline.</strong> The most important view goes top-left, where the eye lands first.</li>
+      <li><strong>Establish a visual hierarchy.</strong> Size and position signal importance; supporting detail sits lower.</li>
+      <li><strong>Be consistent.</strong> One colour means one thing across every panel; the same metric uses the same scale and units.</li>
+      <li><strong>Remove non-data ink.</strong> Drop heavy gridlines, 3-D effects, and borders that compete with the data.</li>
+    </ul>
+
+    <h3>One Screen, Four Questions</h3>
+    <p>
+      The dashboard below answers four different question shapes at once — a trend (how are sales moving?), a
+      comparison (which category leads?), a density map (where and when is sales concentrated?), and a relationship
+      (how does discounting affect profit?). Each panel is one of the charts built earlier in this series, composed
+      onto a single figure with a shared visual language.
+    </p>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>fig, axes = plt.subplots(2, 2, figsize=(11, 7))
+
+# Top-left (headline): the trend
+m = orders.groupby("month")["sales"].sum() / 1e6
+axes[0, 0].plot(m.index, m.values, linewidth=2)
+axes[0, 0].set_title("Monthly sales ($M)")
+
+# Top-right: the comparison
+s = orders.groupby("category")["sales"].sum().sort_values() / 1e6
+axes[0, 1].barh(s.index, s.values)
+axes[0, 1].set_title("Sales by category ($M)")
+
+# Bottom-left: the density map
+piv = (orders.assign(mm=orders["order_date"].dt.month)
+              .pivot_table(index="region", columns="mm",
+                           values="sales", aggfunc="sum") / 1e6)
+axes[1, 0].imshow(piv.values, aspect="auto")
+axes[1, 0].set_title("Sales: region x month")
+
+# Bottom-right: the relationship
+sample = orders.sample(1800, random_state=7)
+axes[1, 1].scatter(sample["discount"], sample["profit"], s=8, alpha=0.25)
+axes[1, 1].set_title("Discount vs profit")
+
+fig.suptitle("Retail performance dashboard — one screen, four questions")
+fig.tight_layout()</code></pre>
+    <div class="diagram-wrap">
+      <img src="images/analytics/viz-dashboard.png" alt="A four-panel retail dashboard: monthly sales line, sales-by-category bar, region-by-month heatmap, and discount-vs-profit scatter" />
+    </div>
+    <p class="diagram-caption">Four question shapes, one screen — the trend leads (top-left), with comparison, density, and relationship supporting it.</p>
+
+    <h3>Reading the Dashboard</h3>
+    <p>
+      Notice how the panels reinforce one story: sales climb into Q4 (trend), Technology leads the mix (comparison),
+      the year-end lift is broad across regions (density), and deep discounts are where profit leaks (relationship).
+      A good dashboard is composed so those four observations land in seconds — and so the obvious next question
+      ("why does discounting hurt profit so much?") points straight into
+      <a href="diagnostic-analytics.html">diagnostic analytics</a>.
+    </p>
+
+    <h3>The Takeaway</h3>
+    <ul>
+      <li>A dashboard is an <strong>argument</strong>, not an inventory — order the panels by importance.</li>
+      <li>Keep the visual language <strong>consistent</strong> so the reader learns it once.</li>
+      <li>Every panel should answer one question and point toward the next.</li>
+    </ul>
+
+    <p style="margin-top: 28px;">
+      That completes the Visualization Analytics mini-series. Continue the lifecycle with
+      <a href="diagnostic-analytics.html">Diagnostic Analytics — Why Did It Happen? →</a>
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a href="../../publications/visualization-analytics.html" class="home-link">← Back to Visualization Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

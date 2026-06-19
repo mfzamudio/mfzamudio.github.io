@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diagnostic Analytics | Types of Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+    <h2>Diagnostic Analytics</h2>
+    <h3>Why Did It Happen?</h3>
+
+    <p>
+      Descriptive analytics tells you <em>what</em> happened — profit fell. Diagnostic analytics is the next, harder
+      question: <strong>why</strong>. It is the step most dashboards skip and the one executives actually ask about.
+      The work is to move from one observed change to a small set of candidate causes, then use evidence —
+      correlation, statistical tests, and disciplined drill-down — to keep the explanations that survive scrutiny
+      and discard the ones that don't.
+    </p>
+    <p>
+      This is a four-chapter mini-series. Each chapter shows the <strong>Python that runs the analysis</strong> and
+      embeds the <strong>actual rendered output</strong>, on the same synthetic retail dataset used across the
+      <a href="../../publications/descriptive-analytics.html">Descriptive</a> and
+      <a href="visualization-analytics.html">Visualization</a> series. Every statistic quoted on these pages — the
+      t-statistics, the chi-square values, the correlations — is computed from that data, not invented.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 300" role="img" aria-label="An observed change split into candidate drivers, each tested, converging on the confirmed driver">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M200,150 C300,150 300,82 400,82"/>
+          <path id="c2" d="M200,150 L400,150"/>
+          <path id="c3" d="M200,150 C300,150 300,218 400,218"/>
+          <path id="d1" d="M600,82 C700,82 700,150 780,150"/>
+          <path id="d2" d="M600,150 L780,150"/>
+          <path id="d3" d="M600,218 C700,218 700,150 780,150"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="300" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="34" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">From a symptom, to tested hypotheses, to a cause</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <path d="M200,150 C300,150 300,82 400,82"/>
+          <path d="M200,150 L400,150"/>
+          <path d="M200,150 C300,150 300,218 400,218"/>
+          <path d="M600,82 C700,82 700,150 780,150"/>
+          <path d="M600,150 L780,150"/>
+          <path d="M600,218 C700,218 700,150 780,150"/>
+        </g>
+        <g>
+          <rect x="40" y="120" width="160" height="60" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="120" y="146" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Observed change</text>
+          <text x="120" y="166" text-anchor="middle" fill="#dbeafe" font-size="10">profit down</text>
+        </g>
+        <g>
+          <rect x="400" y="60" width="200" height="44" rx="10" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="500" y="80" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Discount level</text>
+          <text x="500" y="96" text-anchor="middle" fill="#ede9fe" font-size="9">test: correlation</text>
+        </g>
+        <g>
+          <rect x="400" y="128" width="200" height="44" rx="10" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="500" y="148" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Category mix</text>
+          <text x="500" y="164" text-anchor="middle" fill="#ede9fe" font-size="9">test: chi-square</text>
+        </g>
+        <g>
+          <rect x="400" y="196" width="200" height="44" rx="10" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="500" y="216" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Region</text>
+          <text x="500" y="232" text-anchor="middle" fill="#ede9fe" font-size="9">test: control</text>
+        </g>
+        <g>
+          <rect x="780" y="120" width="160" height="60" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="860" y="146" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Confirmed driver</text>
+          <text x="860" y="166" text-anchor="middle" fill="#e0f2fe" font-size="10">deep discounts</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="3.8"><animateMotion dur="1.7s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.7s" begin="0.55s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.7s" begin="0.25s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.6s" begin="0.9s" repeatCount="indefinite"><mpath href="#d1"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.6s" begin="0.6s" repeatCount="indefinite"><mpath href="#d2"/></animateMotion></circle>
+          <circle r="3.8"><animateMotion dur="1.6s" begin="1.2s" repeatCount="indefinite"><mpath href="#d3"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Diagnostic analytics turns one symptom into testable hypotheses, then keeps only the drivers the evidence supports.</p>
+
+    <h3>The Four Chapters</h3>
+    <div class="series-parts">
+      <a href="diag-correlation.html" class="part-link">
+        <div class="part-number">Chapter 1 &rarr;</div>
+        <h4>Correlating Drivers with the Target</h4>
+        <p>The fast first pass — rank which numeric variables move with the metric, with a correlation matrix and a ranked correlation-to-target chart.</p>
+      </a>
+      <a href="diag-hypothesis-testing.html" class="part-link">
+        <div class="part-number">Chapter 2 &rarr;</div>
+        <h4>Hypothesis Testing — Signal or Noise?</h4>
+        <p>The t-test for two group means and the chi-square test for categorical association, each run and rendered on the retail data.</p>
+      </a>
+      <a href="diag-drilldown.html" class="part-link">
+        <div class="part-number">Chapter 3 &rarr;</div>
+        <h4>Drilling Down to Localize the Cause</h4>
+        <p>Aggregates hide their own explanation. Slice the metric one dimension at a time until the change concentrates in a specific cell.</p>
+      </a>
+      <a href="diag-correlation-causation.html" class="part-link">
+        <div class="part-number">Chapter 4 &rarr;</div>
+        <h4>Correlation Is Not Causation</h4>
+        <p>The discipline that keeps diagnosis honest — confounders, lurking variables, and why a clean correlation can still be a trap.</p>
+      </a>
+    </div>
+
+    <h3>Reference Code</h3>
+    <p>
+      The correlation-to-target and group-comparison helpers shown here are packaged as reusable functions in the
+      <a href="../../projects/project-data-analytics-library.html">Data Analytics Library</a>'s
+      <code>diagnosticanalysis</code> module. Diagnostic analytics sits between
+      <a href="../../publications/descriptive-analytics.html">Descriptive</a> ("what happened") and
+      <a href="predictive-analytics.html">Predictive</a> ("what will happen").
+    </p>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>
