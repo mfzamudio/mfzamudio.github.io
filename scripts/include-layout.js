@@ -127,11 +127,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   } else if (page === "projects.html" || path.includes("/projects/")) {
     // Projects: the same nav on the grid page AND every project detail page,
-    // so you stay oriented. Both groups start expanded (full list visible) and
-    // are collapsible; the project you're viewing is highlighted. Only the
-    // home link + leaf items can match (section headers point at the grid).
+    // so you stay oriented. Mirrors the writing sidebar — groups start
+    // collapsed; only the group holding the project you're viewing expands (on
+    // the "All Projects" grid nothing matches, so everything stays collapsed).
+    // Each group is collapsible via its chevron. Only the home link + leaf
+    // items can match (section headers point at the grid).
     injectSidebar("/partials/projects-nav.html", aside => {
-      aside.querySelectorAll(".pub-nav-group").forEach(g => g.classList.add("active-group"));
       markActiveByFilename(aside, "projects.html",
         aside.querySelectorAll(".pub-nav-home, .pub-nav-group li a"));
       wireCollapsibles(aside);
