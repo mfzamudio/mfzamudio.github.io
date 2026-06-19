@@ -90,10 +90,14 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   // Make each first-level group with sub-items collapsible: wrap its header
-  // link in a row and prepend a chevron toggle button. The header keeps
-  // navigating; the chevron expands/collapses the group (toggling .active-group,
-  // which drives the <ul> display). aria-expanded is kept in sync.
-  const wireCollapsibles = (aside) => {
+  // link in a row and prepend a chevron toggle button (toggling .active-group,
+  // which drives the <ul> display; aria-expanded kept in sync). When
+  // `headerToggles` is set, the whole header row also toggles instead of
+  // navigating — used by projects, whose headers point at the grid sections
+  // (no per-group landing), so a header click should expand in place. Writing
+  // leaves `headerToggles` off so its header still navigates to the series
+  // landing (which then shows the group expanded).
+  const wireCollapsibles = (aside, headerToggles) => {
     aside.querySelectorAll(".pub-nav-group").forEach(group => {
       const ul = group.querySelector(":scope > ul");
       const series = group.querySelector(":scope > .pub-nav-series");
@@ -109,11 +113,12 @@ document.addEventListener("DOMContentLoaded", function () {
       row.appendChild(series);
       const sync = () => btn.setAttribute("aria-expanded",
         group.classList.contains("active-group") ? "true" : "false");
+      const toggle = () => { group.classList.toggle("active-group"); sync(); };
       sync();
-      btn.addEventListener("click", () => {
-        group.classList.toggle("active-group");
-        sync();
-      });
+      btn.addEventListener("click", toggle);
+      if (headerToggles) {
+        series.addEventListener("click", e => { e.preventDefault(); toggle(); });
+      }
     });
   };
 
@@ -135,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
     injectSidebar("/partials/projects-nav.html", aside => {
       markActiveByFilename(aside, "projects.html",
         aside.querySelectorAll(".pub-nav-home, .pub-nav-group li a"));
-      wireCollapsibles(aside);
+      wireCollapsibles(aside, true);   // header click expands the group in place
     });
   } else if (page === "resume.html") {
     // Resume: single page — in-page scroll-spy TOC.
