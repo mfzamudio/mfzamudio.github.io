@@ -75,22 +75,37 @@ document.addEventListener("DOMContentLoaded", function () {
     setActive(targets[0].id);
   };
 
-  if (path.includes("/publications/")) {
-    // Publications: cross-page series nav — mark the current page active by
-    // matching its filename, and reveal the series group it belongs to.
-    injectSidebar("/partials/publications-nav.html", aside => {
-      const here = page || "publications.html";
-      aside.querySelectorAll("a").forEach(a => {
-        if (a.getAttribute("href").split("/").pop() === here) {
-          a.classList.add("active");
-          const group = a.closest(".pub-nav-group");
-          if (group) group.classList.add("active-group");
-        }
-      });
+  // Cross-page nav: mark the current page active by filename and reveal the
+  // group it belongs to (used by publications + projects). `links` limits
+  // which anchors can match (so section-header links don't false-match).
+  const markActiveByFilename = (aside, fallback, links) => {
+    const here = page || fallback;
+    (links || aside.querySelectorAll("a")).forEach(a => {
+      if (a.getAttribute("href").split("/").pop().split("#")[0] === here) {
+        a.classList.add("active");
+        const group = a.closest(".pub-nav-group");
+        if (group) group.classList.add("active-group");
+      }
     });
-  } else if (page === "projects.html") {
-    injectSidebar("/partials/projects-nav.html", initScrollSpy);
+  };
+
+  if (path.includes("/publications/")) {
+    // Publications: only the current series expands. Series-landing links are
+    // matchable, so the header can highlight on its own landing page.
+    injectSidebar("/partials/publications-nav.html", aside =>
+      markActiveByFilename(aside, "publications.html"));
+  } else if (page === "projects.html" || path.includes("/projects/")) {
+    // Projects: the same nav on the grid page AND every project detail page,
+    // so you stay oriented. Keep BOTH groups expanded (full list always
+    // visible) and highlight the project you're currently viewing. Only the
+    // home link + leaf items can match (section headers point at the grid).
+    injectSidebar("/partials/projects-nav.html", aside => {
+      aside.querySelectorAll(".pub-nav-group").forEach(g => g.classList.add("active-group"));
+      markActiveByFilename(aside, "projects.html",
+        aside.querySelectorAll(".pub-nav-home, .pub-nav-group li a"));
+    });
   } else if (page === "resume.html") {
+    // Resume: single page — in-page scroll-spy TOC.
     injectSidebar("/partials/resume-nav.html", initScrollSpy);
   }
 });
