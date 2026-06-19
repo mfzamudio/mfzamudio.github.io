@@ -36,49 +36,191 @@
           or creating calculated fields. Aggregation involves summarizing data (e.g., monthly totals, averages, or counts) to highlight patterns and reduce complexity.
         </li>
       
-        <li><strong>Filtering & Reducing Noise:</strong> 
+        <li><strong><a href="filtering-reducing-noise.html">Filtering & Reducing Noise</a>:</strong>
           Not all collected data is useful. This step involves removing irrelevant variables, filtering out extreme outliers that may skew results, 
           and reducing random fluctuations (noise) that do not represent meaningful trends. The goal is to keep the dataset focused on variables 
           that provide valuable insights.
         </li>
       
-        <li><strong>Segmentation & Clustering:</strong> 
+        <li><strong><a href="segmentation-clustering.html">Segmentation & Clustering</a>:</strong>
           Here, data is divided into meaningful groups for deeper analysis. Segmentation is often rule-based (e.g., by region, age group, or customer type), 
           while clustering uses algorithms (such as K-Means) to identify hidden patterns and natural groupings in the data. This step is essential for 
           understanding differences within large populations.
         </li>
       
-        <li><strong>Visualization & Trending:</strong> 
+        <li><strong><a href="visualization-trending.html">Visualization & Trending</a>:</strong>
           Visualizations turn complex data into easy-to-understand graphics, such as bar charts, line graphs, heatmaps, or dashboards. Trending analysis 
           helps identify growth, decline, seasonality, and other key patterns over time, making it easier for stakeholders to grasp insights at a glance.
         </li>
       
-        <li><strong>Comparing:</strong> 
+        <li><strong><a href="comparing.html">Comparing</a>:</strong>
           Comparison enables the evaluation of performance across different dimensions, such as time periods, product categories, customer segments, 
           or geographic regions. This step highlights differences and similarities that support benchmarking and informed decision-making.
         </li>
       
-        <li><strong>Reporting:</strong> 
+        <li><strong><a href="reporting.html">Reporting</a>:</strong>
           In this step, insights are documented in structured formats such as dashboards, presentations, or written reports. A good report is concise, 
           highlights key metrics, includes visual aids, and provides actionable recommendations tailored to its audience.
         </li>
       
-        <li><strong>Patterns & Insights:</strong> 
+        <li><strong><a href="patterns-insights.html">Patterns & Insights</a>:</strong>
           Beyond numbers, this step focuses on interpreting the meaning of the results. Analysts identify recurring behaviors, correlations, anomalies, 
           or emerging opportunities. Insights often provide the foundation for business strategies, predictive models, and decision-making processes.
         </li>
       
-        <li><strong>Sharing & Publishing:</strong> 
+        <li><strong><a href="sharing-publishing.html">Sharing & Publishing</a>:</strong>
           Finally, results are communicated to stakeholders through dashboards, online portals, presentations, or publications. 
           Effective sharing ensures that the insights reach the right audience, are easy to interpret, and can drive evidence-based actions across the organization.
         </li>
       </ol>
     </ol>
 
-    <div style="margin-top: 32px;"> 
+    <h3 style="margin-top: 48px;">Putting It All Together — The 10-Step Pipeline</h3>
+    <p>
+      Each step above is one stage of a single flow: raw data enters on the left, and a published, decision-ready
+      insight comes out on the right. The companion notebook runs the whole thing end to end on a
+      <strong>synthetic retail dataset</strong> generated in code — so it reproduces anywhere, with no external files.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 360" role="img" aria-label="The ten descriptive-analytics steps as one connected pipeline with flowing data">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="p1" d="M170,90 L210,90"/>
+          <path id="p2" d="M370,90 L410,90"/>
+          <path id="p3" d="M570,90 L610,90"/>
+          <path id="p4" d="M770,90 L810,90"/>
+          <path id="p5" d="M890,128 C890,150 110,150 110,172"/>
+          <path id="p6" d="M170,200 L210,200"/>
+          <path id="p7" d="M370,200 L410,200"/>
+          <path id="p8" d="M570,200 L610,200"/>
+          <path id="p9" d="M770,200 L810,200"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="360" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="38" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Ten steps, one continuous flow</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <line x1="170" y1="90" x2="210" y2="90"/>
+          <line x1="370" y1="90" x2="410" y2="90"/>
+          <line x1="570" y1="90" x2="610" y2="90"/>
+          <line x1="770" y1="90" x2="810" y2="90"/>
+          <path d="M890,128 C890,150 110,150 110,172"/>
+          <line x1="170" y1="200" x2="210" y2="200"/>
+          <line x1="370" y1="200" x2="410" y2="200"/>
+          <line x1="570" y1="200" x2="610" y2="200"/>
+          <line x1="770" y1="200" x2="810" y2="200"/>
+        </g>
+        <!-- Row 1: steps 1-5 -->
+        <g>
+          <rect x="20" y="62" width="150" height="56" rx="11" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="95" y="88" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">1 · Collect</text>
+          <text x="95" y="105" text-anchor="middle" fill="#dbeafe" font-size="9">sources → table</text>
+        </g>
+        <g>
+          <rect x="220" y="62" width="150" height="56" rx="11" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="295" y="88" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">2 · Clean</text>
+          <text x="295" y="105" text-anchor="middle" fill="#dbeafe" font-size="9">dedupe · types</text>
+        </g>
+        <g>
+          <rect x="420" y="62" width="150" height="56" rx="11" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="495" y="88" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">3 · Transform</text>
+          <text x="495" y="105" text-anchor="middle" fill="#dbeafe" font-size="9">derive · aggregate</text>
+        </g>
+        <g>
+          <rect x="620" y="62" width="150" height="56" rx="11" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="695" y="88" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">4 · Filter</text>
+          <text x="695" y="105" text-anchor="middle" fill="#ede9fe" font-size="9">reduce noise</text>
+        </g>
+        <g>
+          <rect x="820" y="62" width="150" height="56" rx="11" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="895" y="88" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">5 · Segment</text>
+          <text x="895" y="105" text-anchor="middle" fill="#ede9fe" font-size="9">cluster cohorts</text>
+        </g>
+        <!-- Row 2: steps 6-10 -->
+        <g>
+          <rect x="20" y="172" width="150" height="56" rx="11" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="95" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">6 · Visualize</text>
+          <text x="95" y="215" text-anchor="middle" fill="#ede9fe" font-size="9">chart · trend</text>
+        </g>
+        <g>
+          <rect x="220" y="172" width="150" height="56" rx="11" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="295" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">7 · Compare</text>
+          <text x="295" y="215" text-anchor="middle" fill="#ede9fe" font-size="9">period · category</text>
+        </g>
+        <g>
+          <rect x="420" y="172" width="150" height="56" rx="11" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="495" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">8 · Report</text>
+          <text x="495" y="215" text-anchor="middle" fill="#e0f2fe" font-size="9">KPIs · summary</text>
+        </g>
+        <g>
+          <rect x="620" y="172" width="150" height="56" rx="11" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="695" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">9 · Patterns</text>
+          <text x="695" y="215" text-anchor="middle" fill="#e0f2fe" font-size="9">insights</text>
+        </g>
+        <g>
+          <rect x="820" y="172" width="150" height="56" rx="11" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="895" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">10 · Share</text>
+          <text x="895" y="215" text-anchor="middle" fill="#e0f2fe" font-size="9">publish</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="3.6"><animateMotion dur="1.5s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.5s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.2s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.7s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.35s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.85s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.15s" repeatCount="indefinite"><mpath href="#p4"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.65s" repeatCount="indefinite"><mpath href="#p4"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#p5"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite"><mpath href="#p5"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.25s" repeatCount="indefinite"><mpath href="#p6"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.75s" repeatCount="indefinite"><mpath href="#p6"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.4s" repeatCount="indefinite"><mpath href="#p7"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.9s" repeatCount="indefinite"><mpath href="#p7"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.1s" repeatCount="indefinite"><mpath href="#p8"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.6s" repeatCount="indefinite"><mpath href="#p8"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.3s" repeatCount="indefinite"><mpath href="#p9"/></animateMotion></circle>
+          <circle r="3.6"><animateMotion dur="1.5s" begin="0.8s" repeatCount="indefinite"><mpath href="#p9"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Blue = data preparation &nbsp;|&nbsp; Violet = analysis &nbsp;|&nbsp; Teal = communication. The same flow the notebook runs end to end.</p>
+
+    <h3>The Companion Notebook</h3>
+    <p>
+      The Jupyter notebook below implements every one of these ten steps in order, on the synthetic retail
+      dataset, with the same pandas and SQL patterns shown on each step's page:
+    </p>
+    <ul>
+      <li><strong>Collect:</strong> generate 20,000 synthetic retail orders (seeded, reproducible).</li>
+      <li><strong>Clean:</strong> drop duplicates, fix data types, standardize text, handle missing values.</li>
+      <li><strong>Transform &amp; aggregate:</strong> derive sales/profit, roll up to monthly metrics by region.</li>
+      <li><strong>Filter, segment, visualize, compare:</strong> trim outliers, cluster customers, plot the trend, compute YoY change.</li>
+      <li><strong>Report, find patterns, share:</strong> build the KPI summary, surface correlations and a Pareto concentration, export the deliverables.</li>
+    </ul>
+    <p>
+      <strong>Download:</strong>
+      <a href="../../projects/descriptive-analytics-pipeline.ipynb" download>descriptive-analytics-pipeline.ipynb</a>
+    </p>
+
+    <h3>Reference Library</h3>
+    <p>
+      Want these stages as reusable, tested code rather than a one-off notebook? The
+      <a href="../../projects/project-data-analytics-library.html">Data Analytics Library</a> is the
+      code companion to this series — a documented Python package that turns the same lifecycle
+      (loading, cleansing, exploration, visualization, and descriptive → diagnostic → predictive →
+      prescriptive analysis, plus a reusable ML pipeline) into composable, <code>DataFrame</code>-in /
+      <code>DataFrame</code>-out modules with 81 tests and CI.
+      <a href="https://github.com/mfzamudio/DataAnalyticsLibrary" target="_blank">View it on GitHub →</a>
+    </p>
+
+    <div style="margin-top: 32px;">
       <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
     </div>
-    
+
   </section>
 </main>
 

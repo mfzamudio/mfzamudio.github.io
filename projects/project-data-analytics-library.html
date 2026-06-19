@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Analytics Library – Mario Zamudio</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main class="project-detail">
+  <section>
+    <a href="/projects.html" class="home-link">← Back to Projects</a>
+    <h2>Data Analytics Library — A Reference Toolkit for the Analytics Lifecycle</h2>
+    <p><em>Python Library · pandas · scikit-learn · Tested &amp; CI · June 2026</em></p>
+    <img src="/images/data-analytics-library.svg" alt="Data Analytics Library — the analytics lifecycle as a Python pipeline" class="project-image" />
+
+    <p>
+      A small, heavily-documented Python library that implements the standard stages of a
+      data-analytics project as composable modules. Every stage takes and/or returns a pandas
+      <code>DataFrame</code>, so the modules chain cleanly into a single pipeline. It is written as a
+      <strong>reference base</strong> and a practical starting point — each module and every non-obvious
+      line is commented in English — and it is the code companion to the
+      <a href="/publications/descriptive-analytics.html">Data Analytics: Tackling the Data</a> series.
+    </p>
+
+    <div style="margin: 1.5rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
+      <a href="https://github.com/mfzamudio/DataAnalyticsLibrary" target="_blank" class="home-link">GitHub Repository</a>
+      <a href="/publications/descriptive-analytics.html" class="home-link">Related Series</a>
+    </div>
+
+    <h3>The Analytics Lifecycle It Implements</h3>
+    <p>Ten modules covering ingestion through machine learning — each answering one question:</p>
+    <ul>
+      <li><strong>Data Loading</strong> (<code>dataloading</code>) — CSV, text, Excel, JSON, Parquet, and SQL into a DataFrame.</li>
+      <li><strong>Streaming Ingestion</strong> (<code>datastreaming</code>) — Kafka / RabbitMQ / simulated streams consumed as micro-batch DataFrames behind one common interface.</li>
+      <li><strong>Data Cleansing</strong> (<code>datacleansing</code>) — column names, whitespace, missing values, duplicates, types, outliers.</li>
+      <li><strong>Data Exploration</strong> (<code>dataexploration</code>) — numeric/categorical summaries and correlations (EDA).</li>
+      <li><strong>Data Visualization</strong> (<code>datavisualization</code>) — basic and advanced charts (matplotlib / seaborn).</li>
+      <li><strong>Descriptive</strong> (<code>descriptiveanalysis</code>) — aggregation, KPIs, trends: <em>what happened?</em></li>
+      <li><strong>Diagnostic</strong> (<code>diagnosticanalysis</code>) — correlation-to-target, t-test, chi-square, drill-down: <em>why did it happen?</em></li>
+      <li><strong>Predictive</strong> (<code>predictiveanalysis</code>) — regression, classification, clustering: <em>what will happen?</em></li>
+      <li><strong>Prescriptive</strong> (<code>prescriptiveanalysis</code>) — scenarios, rules, budget optimization: <em>what should we do?</em></li>
+      <li><strong>Machine Learning</strong> (<code>machinelearning</code>) — reusable split / preprocess / pipeline / cross-validate / persist.</li>
+    </ul>
+
+    <h3>Design Principles</h3>
+    <ul>
+      <li><strong>One standard currency:</strong> every loader returns a pandas <code>DataFrame</code>; every transformer takes and returns one.</li>
+      <li><strong>Non-mutating transformers:</strong> cleansing functions <code>copy()</code> their input, so pipelines are reproducible and side-effect free.</li>
+      <li><strong>Fail loudly:</strong> invalid input raises a clear exception instead of silently returning <code>None</code>.</li>
+      <li><strong>Optional dependencies stay optional:</strong> plotting, SQL, and stats imports are lazy and raise a helpful message if a package is missing.</li>
+      <li><strong>Separation of concerns:</strong> numbers (<code>dataexploration</code>) and charts (<code>datavisualization</code>) live in different modules.</li>
+    </ul>
+
+    <h3>Engineering &amp; Quality</h3>
+    <ul>
+      <li><strong>Tested:</strong> a <code>pytest</code> suite of <strong>81 tests</strong>, one file per module; plotting tests run headless via the <code>Agg</code> backend.</li>
+      <li><strong>CI:</strong> GitHub Actions runs the suite on <strong>Python 3.10–3.12</strong> and executes the demo notebook on every push.</li>
+      <li><strong>Packaged:</strong> pinned <code>requirements.txt</code> and a <code>pyproject.toml</code>; isolated <code>venv</code> setup documented in the README.</li>
+      <li><strong>Reproducible data:</strong> <code>data/generate_sample_data.py</code> creates a synthetic <code>sample_sales.csv</code> so the demo runs with no external files.</li>
+    </ul>
+
+    <h3>Quick Start</h3>
+    <p class="code-label">Python</p>
+    <pre class="code-block"><code>from analytics import dataloading, datacleansing, dataexploration
+
+# 1. Load any supported source into a DataFrame
+df = dataloading.load_csv("data/sample_sales.csv", parse_dates=["Order Date"])
+
+# 2. Clean it (each step returns a new DataFrame; nothing is mutated in place)
+df = datacleansing.standardize_column_names(df)
+df = datacleansing.handle_missing(df, strategy="median")
+
+# 3. Explore it
+print(dataexploration.overview(df))
+print(dataexploration.numeric_summary(df))</code></pre>
+
+    <p class="code-label">Python · predictive + persistence</p>
+    <pre class="code-block"><code>from analytics import predictiveanalysis, machinelearning
+
+result = predictiveanalysis.train_regressor(df, target="profit", model="random_forest")
+print(result["metrics"])                       # {'r2': ..., 'mae': ..., 'rmse': ...}
+
+machinelearning.save_model(result["pipeline"], "profit_model.joblib")</code></pre>
+
+    <h3>Streaming Without a Broker</h3>
+    <p>
+      The streaming module exposes one <code>StreamSource</code> interface, so a simulated stream and a real
+      Kafka/RabbitMQ source are interchangeable — your pipeline code does not change.
+    </p>
+    <p class="code-label">Python · streaming micro-batches</p>
+    <pre class="code-block"><code>from analytics import datastreaming as ds, datacleansing
+
+# A simulated, infinite event stream -- swap for KafkaStreamSource /
+# RabbitMQStreamSource in production (same interface).
+source = ds.SimulatedStreamSource(n_messages=250)
+
+for batch in ds.micro_batch(source, batch_size=100):
+    clean = datacleansing.standardize_column_names(batch)
+    print("batch rows:", len(clean))</code></pre>
+
+    <h3>Honest Scope</h3>
+    <p>
+      The bundled dataset is <strong>synthetic</strong> (NumPy-generated) and exists only to demonstrate the
+      pipeline — it is not real business data. The library is built for learning and as a practical
+      starting point, not as a drop-in replacement for a managed platform.
+    </p>
+
+    <h3>Resources</h3>
+    <ul>
+      <li><a href="https://github.com/mfzamudio/DataAnalyticsLibrary" target="_blank">Full Source Code — GitHub</a></li>
+      <li><a href="/publications/descriptive-analytics.html">Data Analytics: Tackling the Data — the concepts behind the code</a></li>
+    </ul>
+
+    <div style="margin-top: 2rem;">
+      <a href="/projects.html" class="home-link">← Back to Projects</a>
+    </div>
+  </section>
+</main>
+<div id="footer-placeholder"></div>
+<script src="/scripts/include-layout.js"></script>
+</body>
+</html>

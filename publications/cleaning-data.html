@@ -11,18 +11,63 @@
 
 <main class="project-detail">
   <section>
-    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Publications</a>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
     <h2>Cleaning Data</h2>
     <h3>Turning Raw Data into Reliable Insights</h3>
-        <img src="../../publications/images/data-cleaning-errors.png" alt="Data Cleaning Process" class="project-image" />
+
     <p>
-      Cleaning data is a <strong>critical step in the analytics process</strong>. Raw data often contains errors, missing values, 
-      duplicates, or inconsistencies that can lead to misleading results if not addressed. The goal of data cleaning is to prepare a dataset 
+      Cleaning data is a <strong>critical step in the analytics process</strong>. Raw data often contains errors, missing values,
+      duplicates, or inconsistencies that can lead to misleading results if not addressed. The goal of data cleaning is to prepare a dataset
       that is accurate, consistent, and ready for meaningful analysis.
     </p>
 
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 220" role="img" aria-label="Raw data with issues passing through cleaning into a reliable dataset">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M300,120 L380,120"/>
+          <path id="c2" d="M600,120 L680,120"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="220" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="42" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Messy in, trustworthy out</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="300" y1="120" x2="380" y2="120"/>
+          <line x1="600" y1="120" x2="680" y2="120"/>
+        </g>
+        <g>
+          <rect x="80" y="78" width="220" height="84" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Raw data</text>
+          <text x="190" y="128" text-anchor="middle" fill="#dbeafe" font-size="10.5">dupes · nulls</text>
+          <text x="190" y="144" text-anchor="middle" fill="#dbeafe" font-size="10.5">bad types · typos</text>
+        </g>
+        <g>
+          <rect x="380" y="78" width="220" height="84" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="490" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Cleaning</text>
+          <text x="490" y="128" text-anchor="middle" fill="#ede9fe" font-size="10.5">dedupe · impute</text>
+          <text x="490" y="144" text-anchor="middle" fill="#ede9fe" font-size="10.5">standardize</text>
+        </g>
+        <g>
+          <rect x="680" y="78" width="220" height="84" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="790" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Reliable dataset</text>
+          <text x="790" y="134" text-anchor="middle" fill="#e0f2fe" font-size="10.5">consistent · accurate</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.26s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.33s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Cleaning removes duplicates and errors, fills gaps, and standardizes formats before any analysis begins.</p>
+
     <h3>Common Data Issues</h3>
-    <img src="../../publications/images/data-cleaning-issues.png" alt="Common Data Issues" class="project-image" />
     <ul>
       <li><strong>Missing Values:</strong> Incomplete records due to system errors, human input mistakes, or unavailable data.</li>
       <li><strong>Duplicates:</strong> Multiple identical entries that can skew counts and averages.</li>
@@ -32,8 +77,6 @@
     </ul>
 
     <h3>Techniques for Data Cleaning</h3>
-    <img src="../../publications/images/data-cleaning-techniques.png" alt="Data Cleaning Techniques" class="project-image" />
-
     <ol>
       <li><strong>Handling Missing Data:</strong> Options include imputation (mean, median, mode), predictive modelling, or removing incomplete records.</li>
       <li><strong>Removing Duplicates:</strong> Identify and delete redundant rows to avoid double counting.</li>
@@ -42,20 +85,57 @@
       <li><strong>Dealing with Outliers:</strong> Use statistical thresholds (e.g., z-scores, IQR) to detect and decide whether to keep or remove outliers.</li>
     </ol>
 
-    <h3>Tools Commonly Used</h3>
-    <img src="../../publications/images/data-cleaning-tools.png" alt="Data Cleaning Tools" class="project-image" />
+    <h3>In Python — a typical cleaning pass</h3>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>import pandas as pd
 
+# 1. Remove exact duplicate orders
+orders = orders.drop_duplicates(subset="order_id")
+
+# 2. Fix data types
+orders["order_date"] = pd.to_datetime(orders["order_date"], errors="coerce")
+orders["quantity"]   = pd.to_numeric(orders["quantity"], errors="coerce")
+
+# 3. Standardize categorical text (trim + title case)
+for col in ["region", "category", "segment"]:
+    orders[col] = orders[col].str.strip().str.title()
+
+# 4. Handle missing values: drop rows missing a key, impute the rest
+orders = orders.dropna(subset=["order_id", "order_date"])
+orders["discount"] = orders["discount"].fillna(0)
+
+print(orders.isna().sum())   # confirm no critical nulls remain</code></pre>
+
+    <h3>In SQL — cleaning in the warehouse</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>-- Deduplicate, standardize text, and drop invalid rows in one view
+CREATE OR REPLACE VIEW staging.orders_clean AS
+SELECT
+  order_id,
+  CAST(order_date AS DATE)              AS order_date,
+  INITCAP(TRIM(region))                 AS region,
+  INITCAP(TRIM(category))               AS category,
+  COALESCE(discount, 0)                 AS discount,
+  quantity
+FROM (
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY order_id
+                               ORDER BY order_date DESC) AS rn
+  FROM staging.orders
+) d
+WHERE rn = 1                 -- keep one row per order_id
+  AND order_date IS NOT NULL
+  AND quantity > 0;</code></pre>
+
+    <h3>Tools Commonly Used</h3>
     <ul>
       <li><strong>Python:</strong> Pandas, NumPy, Scikit-learn for imputation, cleaning, and validation.</li>
-      <li><strong>SQL:</strong> Data profiling, filtering, and cleaning using queries.</li>
-      <li><strong>Power BI & Tableau:</strong> Built-in cleaning tools in Power Query and data preparation workflows.</li>
+      <li><strong>SQL:</strong> Data profiling, filtering, and cleaning using queries and window functions.</li>
+      <li><strong>Power BI &amp; Tableau:</strong> Built-in cleaning tools in Power Query and data preparation workflows.</li>
       <li><strong>SPSS:</strong> Handling missing values, recoding variables, and outlier analysis.</li>
       <li><strong>ETL Platforms:</strong> Talend, Informatica, or Apache Nifi for large-scale automated cleaning.</li>
     </ul>
 
     <h3>Best Practices</h3>
-    <img src="../../publications/images/data-cleaning-bp.png" alt="Data Cleaning Best Practices" class="project-image" />
-   
     <ul>
       <li>Document each cleaning step for <strong>data lineage and reproducibility</strong>.</li>
       <li>Automate repetitive cleaning tasks where possible.</li>
@@ -64,20 +144,19 @@
       <li>Ensure compliance with <strong>data governance and privacy standards</strong>.</li>
     </ul>
 
-    <h3>Example: Cleaning Customer Data</h3>
+    <h3>Example: Cleaning the Retail Orders</h3>
     <p>
-      Consider a dataset from an e-commerce platform. Cleaning may involve:
+      For the retail dataset used throughout this series, cleaning may involve:
     </p>
     <ul>
-      <li>Filling missing postal codes using external reference data.</li>
-      <li>Removing duplicate customer records with identical IDs.</li>
-      <li>Standardizing phone numbers to international format.</li>
-      <li>Correcting inconsistent country names (e.g., “USA”, “United States”, “U.S.”).</li>
-      <li>Flagging unusually high purchase amounts for review.</li>
+      <li>Removing duplicate order rows that the e-commerce export emitted twice.</li>
+      <li>Coercing <code>order_date</code> and <code>quantity</code> to proper date and numeric types.</li>
+      <li>Standardizing region and category text (e.g., “west”, “West ”, “WEST” → “West”).</li>
+      <li>Filling a missing <code>discount</code> with 0 and dropping rows with no order date.</li>
     </ul>
 
-    <div style="margin-top: 32px;"> 
-      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Publications</a>
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
     </div>
   </section>
 </main>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Data Analytics Library — the analytics lifecycle as a Python pipeline">
+  <defs>
+    <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+    <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+    <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+    <path id="c1" d="M160,300 L190,300"/>
+    <path id="c2" d="M310,300 L340,300"/>
+    <path id="c3" d="M460,300 L490,300"/>
+    <path id="c4" d="M610,300 L640,300"/>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="500" rx="18" fill="url(#gBg)"/>
+
+  <text x="400" y="110" text-anchor="middle" fill="#e7ecf6" font-family="'Space Grotesk', Inter, sans-serif" font-size="46" font-weight="700">Data Analytics Library</text>
+  <text x="400" y="150" text-anchor="middle" fill="#56b6ff" font-family="'JetBrains Mono', monospace" font-size="18" letter-spacing="1">the analytics lifecycle, in Python</text>
+
+  <g stroke="#475569" stroke-width="2.5">
+    <line x1="160" y1="300" x2="190" y2="300"/>
+    <line x1="310" y1="300" x2="340" y2="300"/>
+    <line x1="460" y1="300" x2="490" y2="300"/>
+    <line x1="610" y1="300" x2="640" y2="300"/>
+  </g>
+
+  <g font-family="'JetBrains Mono', monospace">
+    <g>
+      <rect x="40" y="255" width="120" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+      <text x="100" y="295" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">Ingest</text>
+      <text x="100" y="316" text-anchor="middle" fill="#dbeafe" font-size="10.5">batch · stream</text>
+    </g>
+    <g>
+      <rect x="190" y="255" width="120" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+      <text x="250" y="295" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">Clean</text>
+      <text x="250" y="316" text-anchor="middle" fill="#dbeafe" font-size="10.5">quality fixes</text>
+    </g>
+    <g>
+      <rect x="340" y="255" width="120" height="90" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+      <text x="400" y="290" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">Explore</text>
+      <text x="400" y="310" text-anchor="middle" fill="#ede9fe" font-size="10.5">EDA · charts</text>
+    </g>
+    <g>
+      <rect x="490" y="255" width="120" height="90" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+      <text x="550" y="290" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">Analyze</text>
+      <text x="550" y="310" text-anchor="middle" fill="#ede9fe" font-size="10">desc · diag</text>
+      <text x="550" y="326" text-anchor="middle" fill="#ede9fe" font-size="10">pred · presc</text>
+    </g>
+    <g>
+      <rect x="640" y="255" width="120" height="90" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+      <text x="700" y="295" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">ML</text>
+      <text x="700" y="316" text-anchor="middle" fill="#e0f2fe" font-size="10.5">pipeline · persist</text>
+    </g>
+  </g>
+
+  <g fill="#bae6fd" filter="url(#glow)">
+    <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+    <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+    <circle r="4"><animateMotion dur="1.6s" begin="0.2s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+    <circle r="4"><animateMotion dur="1.6s" begin="1.0s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+    <circle r="4"><animateMotion dur="1.6s" begin="0.4s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+    <circle r="4"><animateMotion dur="1.6s" begin="1.2s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+    <circle r="4"><animateMotion dur="1.6s" begin="0.6s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+    <circle r="4"><animateMotion dur="1.6s" begin="1.4s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+  </g>
+
+  <g font-family="'JetBrains Mono', monospace" font-size="13" fill="#94a3bd" text-anchor="middle">
+    <text x="400" y="410">pandas · scikit-learn · matplotlib · pytest · GitHub Actions CI</text>
+    <text x="400" y="440" fill="#5d6b86" font-size="12">10 modules · 81 tests · non-mutating, DataFrame-in / DataFrame-out</text>
+  </g>
+</svg>

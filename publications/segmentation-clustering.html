@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Segmentation & Clustering | Descriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    <h2>Segmentation & Clustering</h2>
+    <h3>Finding the Groups Hidden in the Data</h3>
+
+    <p>
+      A single average hides more than it reveals. The "average customer" rarely exists — what exists are
+      distinct groups that behave differently. <strong>Segmentation</strong> splits the data into meaningful
+      groups using rules you define (region, customer type, spend tier). <strong>Clustering</strong> goes
+      further: it lets an algorithm discover natural groupings you did not pre-define. Both turn one blurry
+      population into several sharp, comparable cohorts.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 280" role="img" aria-label="One population fanning out into three discovered segments">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M300,140 C360,140 360,70 420,70"/>
+          <path id="c2" d="M300,140 L420,140"/>
+          <path id="c3" d="M300,140 C360,140 360,210 420,210"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="280" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="40" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">One population, several natural groups</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <path d="M300,140 C360,140 360,70 420,70"/>
+          <path d="M300,140 L420,140"/>
+          <path d="M300,140 C360,140 360,210 420,210"/>
+        </g>
+        <g>
+          <rect x="80" y="100" width="220" height="84" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="134" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">All customers</text>
+          <text x="190" y="156" text-anchor="middle" fill="#dbeafe" font-size="10.5">one blurry average</text>
+        </g>
+        <g>
+          <rect x="420" y="40" width="200" height="60" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="520" y="66" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">High value</text>
+          <text x="520" y="84" text-anchor="middle" fill="#e0f2fe" font-size="10">low discount</text>
+        </g>
+        <g>
+          <rect x="420" y="110" width="200" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="520" y="136" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Mid value</text>
+          <text x="520" y="154" text-anchor="middle" fill="#ede9fe" font-size="10">steady</text>
+        </g>
+        <g>
+          <rect x="420" y="180" width="200" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="520" y="206" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Discount-driven</text>
+          <text x="520" y="224" text-anchor="middle" fill="#ede9fe" font-size="10">thin margin</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.3s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.45s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="1.05s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Segmentation and clustering split one population into cohorts that can finally be compared like-for-like.</p>
+
+    <h3>Segmentation vs Clustering</h3>
+    <ul>
+      <li><strong>Segmentation (rule-based):</strong> you decide the boundaries — region, segment, or spend tier via quantiles. Transparent and easy to explain to stakeholders.</li>
+      <li><strong>Clustering (algorithmic):</strong> an unsupervised algorithm such as <strong>K-Means</strong> groups rows by similarity across several features at once, surfacing patterns no single rule would catch.</li>
+    </ul>
+
+    <h3>How K-Means Works (in one paragraph)</h3>
+    <p>
+      K-Means picks <code>k</code> centers, assigns each row to its nearest center, recomputes the centers as
+      the mean of their members, and repeats until the assignments stop moving. Features must be
+      <strong>scaled first</strong> (so that "sales in dollars" doesn't dominate "quantity in units"), and you
+      choose <code>k</code> with the elbow method or a silhouette score.
+    </p>
+
+    <h3>In Python — rule-based tiers and K-Means</h3>
+    <p class="code-label">Python · pandas + scikit-learn</p>
+    <pre class="code-block"><code>import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+# Build a customer-level table from the order lines
+cust = (orders.groupby("customer_id")
+              .agg(total_sales=("sales", "sum"),
+                   orders=("order_id", "nunique"),
+                   avg_discount=("discount", "mean"))
+              .reset_index())
+
+# Rule-based segmentation: spend tiers via quantiles
+cust["tier"] = pd.qcut(cust["total_sales"], q=3,
+                       labels=["Low", "Mid", "High"])
+
+# Algorithmic clustering: scale, then K-Means on 3 features
+X = StandardScaler().fit_transform(
+        cust[["total_sales", "orders", "avg_discount"]])
+cust["cluster"] = KMeans(n_clusters=3, n_init=10,
+                         random_state=42).fit_predict(X)
+
+print(cust.groupby("cluster")[["total_sales", "orders", "avg_discount"]].mean())</code></pre>
+
+    <h3>In SQL — quantile tiers with NTILE</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>-- Rule-based segmentation is natural in SQL with NTILE / CASE.
+-- (True clustering like K-Means lives in Python or a warehouse ML add-on.)
+SELECT
+  customer_id,
+  SUM(sales) AS total_sales,
+  COUNT(DISTINCT order_id) AS orders,
+  NTILE(3) OVER (ORDER BY SUM(sales)) AS spend_tier,   -- 1=low, 3=high
+  CASE WHEN AVG(discount) > 0.20 THEN 'Discount-driven'
+       ELSE 'Full-price' END AS price_behavior
+FROM orders
+GROUP BY customer_id;</code></pre>
+
+    <h3>Tools Commonly Used</h3>
+    <ul>
+      <li><strong>Python:</strong> Pandas <code>qcut</code>/<code>cut</code>, scikit-learn <code>KMeans</code>, <code>DBSCAN</code>, <code>StandardScaler</code>.</li>
+      <li><strong>SQL:</strong> <code>NTILE</code>, <code>CASE</code>, and <code>GROUP BY</code> for rule-based tiers.</li>
+      <li><strong>Power BI / Tableau:</strong> grouping, binning, and built-in clustering on a scatter plot.</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li><strong>Scale features</strong> before clustering so large-magnitude columns don't dominate the distance.</li>
+      <li>Choose <code>k</code> deliberately (elbow / silhouette), not by guessing.</li>
+      <li>Give clusters <strong>business names</strong> ("Discount-driven", "Loyal high-value") — a numbered cluster means nothing to a stakeholder.</li>
+      <li>Validate that segments are actually different — if two groups behave identically, you have too many.</li>
+    </ul>
+
+    <h3>Example: Retail Customer Segments</h3>
+    <p>
+      In the retail dataset, segmentation and clustering might produce:
+    </p>
+    <ul>
+      <li>Three spend tiers (Low / Mid / High) from a simple quantile rule for reporting.</li>
+      <li>A K-Means model that surfaces a "discount-driven, thin-margin" cluster hidden inside the Mid tier.</li>
+      <li>Region- and segment-level cohorts that feed the comparisons and visuals in the next steps.</li>
+    </ul>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

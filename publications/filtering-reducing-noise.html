@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Filtering & Reducing Noise | Descriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    <h2>Filtering & Reducing Noise</h2>
+    <h3>Keeping Only the Signal That Matters</h3>
+
+    <p>
+      Once data is clean, it is rarely <em>focused</em>. A raw table usually carries columns the analysis will
+      never touch, rows outside the question's scope, and extreme values that pull averages and trend lines
+      away from what is actually happening. <strong>Filtering</strong> narrows the dataset to the rows and
+      columns relevant to the business question; <strong>reducing noise</strong> removes the random
+      fluctuations and outliers that obscure the underlying pattern. The goal is a smaller, sharper dataset
+      where the signal is easy to see.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 220" role="img" aria-label="Filtering pipeline: all rows to relevance filter to clean signal">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M300,120 L380,120"/>
+          <path id="c2" d="M600,120 L680,120"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="220" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="42" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Many rows in, focused signal out</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="300" y1="120" x2="380" y2="120"/>
+          <line x1="600" y1="120" x2="680" y2="120"/>
+        </g>
+        <g>
+          <rect x="80" y="78" width="220" height="84" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">All rows</text>
+          <text x="190" y="134" text-anchor="middle" fill="#dbeafe" font-size="10.5">every column · every period</text>
+        </g>
+        <g>
+          <rect x="380" y="78" width="220" height="84" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="490" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Filter</text>
+          <text x="490" y="126" text-anchor="middle" fill="#ede9fe" font-size="10.5">relevance · scope</text>
+          <text x="490" y="142" text-anchor="middle" fill="#ede9fe" font-size="10.5">outlier trim</text>
+        </g>
+        <g>
+          <rect x="680" y="78" width="220" height="84" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="790" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Clean signal</text>
+          <text x="790" y="134" text-anchor="middle" fill="#e0f2fe" font-size="10.5">ready to analyze</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.26s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.33s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Filtering removes irrelevant rows and columns; noise reduction trims the outliers that distort the pattern.</p>
+
+    <h3>Two Different Jobs</h3>
+    <ul>
+      <li><strong>Filtering for relevance:</strong> restrict the dataset to the rows that answer the question — a date range, a region, a product category, paying customers only. This is a business decision, not a statistical one.</li>
+      <li><strong>Reducing noise:</strong> dampen or remove values that do not represent a meaningful trend — extreme outliers, data-entry spikes, or short-term volatility that hides the longer signal.</li>
+    </ul>
+
+    <h3>Detecting Outliers</h3>
+    <ol>
+      <li><strong>IQR rule:</strong> flag values below <code>Q1 − 1.5·IQR</code> or above <code>Q3 + 1.5·IQR</code>. Robust and distribution-free.</li>
+      <li><strong>Z-score:</strong> flag values more than 3 standard deviations from the mean. Works when data is roughly normal.</li>
+      <li><strong>Domain thresholds:</strong> rules the business already knows (e.g., a single order over $50,000 needs review).</li>
+    </ol>
+    <p>
+      Outliers are <strong>flagged, not blindly deleted</strong> — a spike can be a data error or the single most
+      important event in the dataset. Smoothing (rolling means, see <a href="visualization-trending.html">Visualization &amp; Trending</a>)
+      is the gentler alternative when you want to keep every row but calm the volatility.
+    </p>
+
+    <h3>In Python (pandas)</h3>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>import pandas as pd
+
+# Keep only the columns this analysis needs
+cols = ["order_date", "region", "category", "segment",
+        "sales", "quantity", "discount", "profit"]
+df = orders[cols].copy()
+
+# 1. Relevance filter — scope the question (2023 onward, real sales only)
+df = df[(df["order_date"] >= "2023-01-01") & (df["sales"] > 0)]
+
+# 2. Noise reduction — trim sales outliers with the IQR rule
+q1, q3 = df["sales"].quantile([0.25, 0.75])
+iqr = q3 - q1
+low, high = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+focused = df[df["sales"].between(low, high)]
+
+print(f"{len(orders):,} rows -> {len(df):,} relevant -> {len(focused):,} after outlier trim")</code></pre>
+
+    <h3>In SQL</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>-- Relevance filter + IQR outlier bounds in a single statement.
+-- PERCENTILE_CONT / QUALIFY syntax varies slightly by engine
+-- (BigQuery, Snowflake, Postgres) -- adjust to your dialect.
+WITH bounds AS (
+  SELECT
+    PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY sales) AS q1,
+    PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY sales) AS q3
+  FROM orders
+  WHERE order_date >= DATE '2023-01-01' AND sales > 0
+)
+SELECT o.*
+FROM orders o, bounds b
+WHERE o.order_date >= DATE '2023-01-01'
+  AND o.sales > 0
+  AND o.sales BETWEEN b.q1 - 1.5 * (b.q3 - b.q1)
+                  AND b.q3 + 1.5 * (b.q3 - b.q1);</code></pre>
+
+    <h3>Tools Commonly Used</h3>
+    <ul>
+      <li><strong>Python:</strong> Pandas boolean masks, <code>.between()</code>, <code>.clip()</code>; SciPy <code>zscore</code>.</li>
+      <li><strong>SQL:</strong> <code>WHERE</code>, <code>QUALIFY</code>, and <code>PERCENTILE_CONT</code> window functions.</li>
+      <li><strong>Power BI / Tableau:</strong> visual filters, top-N filters, and parameter-driven thresholds.</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Filter for relevance <strong>before</strong> trimming outliers — scope first, then clean within scope.</li>
+      <li>Always log how many rows each filter removed, for <strong>transparency and reproducibility</strong>.</li>
+      <li>Flag outliers and review them before deleting; keep an audit copy of what was excluded.</li>
+      <li>Prefer smoothing over deletion when the goal is to see a trend rather than to drop bad records.</li>
+    </ul>
+
+    <h3>Example: Focusing the Retail Dataset</h3>
+    <p>
+      For the running retail example, filtering and noise reduction might involve:
+    </p>
+    <ul>
+      <li>Keeping only orders from the last two full years (the relevant analysis window).</li>
+      <li>Dropping internal test orders flagged with a zero or negative sales amount.</li>
+      <li>Trimming a handful of bulk B2B orders whose values are 20× the typical basket so they do not distort the regional averages.</li>
+    </ul>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

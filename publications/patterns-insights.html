@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Patterns & Insights | Descriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    <h2>Patterns & Insights</h2>
+    <h3>From "What Happened" to "What It Means"</h3>
+
+    <p>
+      Every step so far has organized and displayed the data. This step interprets it. <strong>Patterns</strong>
+      are the recurring structures in the data — correlations, seasonality, anomalies, and relationships between
+      variables. <strong>Insights</strong> are the so-what: the conclusions that change a decision. This is the
+      payoff of descriptive analytics, and it is also the bridge to predictive work, because a pattern worth
+      acting on is often a pattern worth modelling.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 220" role="img" aria-label="Analyzed data passing through pattern detection into an insight">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M300,120 L380,120"/>
+          <path id="c2" d="M600,120 L680,120"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="220" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="42" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Detect the pattern, then state the insight</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="300" y1="120" x2="380" y2="120"/>
+          <line x1="600" y1="120" x2="680" y2="120"/>
+        </g>
+        <g>
+          <rect x="80" y="78" width="220" height="84" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Analyzed data</text>
+          <text x="190" y="134" text-anchor="middle" fill="#dbeafe" font-size="10.5">metrics · trends · segments</text>
+        </g>
+        <g>
+          <rect x="380" y="78" width="220" height="84" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="490" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Patterns</text>
+          <text x="490" y="128" text-anchor="middle" fill="#ede9fe" font-size="10.5">correlation · anomaly</text>
+        </g>
+        <g>
+          <rect x="680" y="78" width="220" height="84" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="790" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Insight</text>
+          <text x="790" y="134" text-anchor="middle" fill="#e0f2fe" font-size="10.5">the decision-changing so-what</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.26s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.33s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">A pattern is a structure in the data; an insight is the conclusion that changes a decision.</p>
+
+    <h3>Kinds of Patterns to Look For</h3>
+    <ul>
+      <li><strong>Correlation:</strong> two variables that move together (discount and volume, or discount and margin).</li>
+      <li><strong>Seasonality:</strong> repeating cycles by week, month, or quarter.</li>
+      <li><strong>Anomalies:</strong> points that break the pattern — a sudden spike or a region falling off a cliff.</li>
+      <li><strong>Concentration:</strong> the Pareto effect, where a small share of items drives most of the result.</li>
+    </ul>
+
+    <h3>Correlation Is Not Causation</h3>
+    <p>
+      The most important discipline in this step: a relationship in the data does not prove one thing causes the
+      other. Heavy discounting may correlate with high volume, but it may also correlate with low margin — and
+      the cause could be a third factor entirely. Treat patterns as <strong>hypotheses to test</strong>, not
+      conclusions to ship.
+    </p>
+
+    <h3>In Python — correlations and anomalies</h3>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>import pandas as pd
+
+# 1. Correlation between the numeric drivers
+corr = orders[["sales", "quantity", "discount", "profit"]].corr()
+print(corr["profit"].sort_values())   # how each driver relates to profit
+
+# 2. Pareto concentration: do 20% of customers drive ~80% of sales?
+cust = orders.groupby("customer_id")["sales"].sum().sort_values(ascending=False)
+share = cust.cumsum() / cust.sum()
+top20 = share.iloc[: max(1, int(0.20 * len(cust))) - 1].iloc[-1]
+print(f"Top 20% of customers = {top20:.0%} of sales")
+
+# 3. Anomaly flag: months more than 2 std dev from the mean
+monthly = orders.set_index("order_date").resample("ME")["sales"].sum()
+z = (monthly - monthly.mean()) / monthly.std()
+print(monthly[z.abs() > 2])</code></pre>
+
+    <h3>In SQL — flag the outlier periods</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>WITH monthly AS (
+  SELECT DATE_TRUNC('month', order_date) AS month, SUM(sales) AS sales
+  FROM orders GROUP BY DATE_TRUNC('month', order_date)
+),
+stats AS (
+  SELECT AVG(sales) AS mu, STDDEV(sales) AS sd FROM monthly
+)
+SELECT m.month, m.sales,
+       ROUND((m.sales - s.mu) / NULLIF(s.sd, 0), 2) AS z_score
+FROM monthly m, stats s
+WHERE ABS((m.sales - s.mu) / NULLIF(s.sd, 0)) > 2     -- anomalous months
+ORDER BY m.month;</code></pre>
+
+    <h3>Tools Commonly Used</h3>
+    <ul>
+      <li><strong>Python:</strong> Pandas <code>corr</code>, statsmodels for seasonal decomposition, SciPy for tests.</li>
+      <li><strong>SQL:</strong> <code>STDDEV</code>, window functions, and threshold filters for anomaly detection.</li>
+      <li><strong>BI:</strong> Power BI Key Influencers, Tableau clustering and trend models.</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Frame each pattern as a testable hypothesis before calling it an insight.</li>
+      <li>Quantify the insight — "the top 20% of customers drive 78% of sales" beats "a few customers matter".</li>
+      <li>Distinguish correlation from causation explicitly in the write-up.</li>
+      <li>Tie every insight back to a decision; an insight no one can act on is trivia.</li>
+    </ul>
+
+    <h3>Example: Insights from the Retail Data</h3>
+    <p>
+      For the retail dataset, this step might surface:
+    </p>
+    <ul>
+      <li>A negative correlation between discount depth and profit margin, strongest in one category.</li>
+      <li>A clear Q4 seasonal pattern that explains most of the year-over-year growth.</li>
+      <li>A Pareto concentration: a small set of customers driving the majority of revenue — a retention priority.</li>
+    </ul>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

@@ -11,26 +11,69 @@
 
 <main class="project-detail">
   <section>
-    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Publications</a>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
     <h2>Transforming & Aggregation</h2>
     <h3>Making Data Ready for Analysis</h3>
-    <img src="../../publications/images/data-transformation-aggregation.png" alt="Transformation and Aggregation Process" class="project-image" />
+
     <p>
-      After collecting and cleaning data, the next step is <strong>Transforming and Aggregating</strong>. 
-      At this stage, raw but clean data is reshaped into structures that are easier to analyze and interpret. 
-      <em>Transformation</em> focuses on adjusting the format, scale, and relationships within the dataset — for example, converting categorical text into numerical codes, normalizing values to ensure comparability, or merging different sources into a unified dataset. 
+      After collecting and cleaning data, the next step is <strong>Transforming and Aggregating</strong>.
+      At this stage, raw but clean data is reshaped into structures that are easier to analyze and interpret.
+      <em>Transformation</em> focuses on adjusting the format, scale, and relationships within the dataset — for example, converting categorical text into numerical codes, normalizing values to ensure comparability, or merging different sources into a unified dataset.
       This process often involves feature engineering, where new variables are created to capture additional insights that may not be directly available from the raw data.
     </p>
     <p>
-      <em>Aggregation</em>, on the other hand, condenses detailed records into higher-level summaries that highlight key trends and reduce complexity. 
-      This could mean grouping transactions by month, calculating averages or totals per category, or computing rolling metrics like moving averages to smooth fluctuations. 
-      The combination of transformation and aggregation not only makes large datasets more manageable but also ensures that the analysis focuses on metrics that are consistent, relevant, and aligned with business objectives. 
+      <em>Aggregation</em>, on the other hand, condenses detailed records into higher-level summaries that highlight key trends and reduce complexity.
+      This could mean grouping transactions by month, calculating averages or totals per category, or computing rolling metrics like moving averages to smooth fluctuations.
+      The combination of transformation and aggregation not only makes large datasets more manageable but also ensures that the analysis focuses on metrics that are consistent, relevant, and aligned with business objectives.
       In essence, this step bridges the gap between raw data and actionable insights, preparing the ground for advanced analytics, visualization, and reporting.
     </p>
 
-    <h3>Data Transformation</h3>
-    <img src="../../publications/images/data-transformation.png" alt="Transformation Process" class="project-image" />
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 220" role="img" aria-label="Clean rows transformed then aggregated into summary metrics">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M300,120 L380,120"/>
+          <path id="c2" d="M600,120 L680,120"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="220" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="42" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Reshape the rows, then summarize them</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="300" y1="120" x2="380" y2="120"/>
+          <line x1="600" y1="120" x2="680" y2="120"/>
+        </g>
+        <g>
+          <rect x="80" y="78" width="220" height="84" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Clean rows</text>
+          <text x="190" y="134" text-anchor="middle" fill="#dbeafe" font-size="10.5">transaction level</text>
+        </g>
+        <g>
+          <rect x="380" y="78" width="220" height="84" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="490" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Transform</text>
+          <text x="490" y="128" text-anchor="middle" fill="#ede9fe" font-size="10.5">derive · encode</text>
+          <text x="490" y="144" text-anchor="middle" fill="#ede9fe" font-size="10.5">join · scale</text>
+        </g>
+        <g>
+          <rect x="680" y="78" width="220" height="84" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="790" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Aggregated metrics</text>
+          <text x="790" y="134" text-anchor="middle" fill="#e0f2fe" font-size="10.5">by month · region</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.26s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.33s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Transformation engineers new fields and reshapes the data; aggregation condenses it into the metrics that matter.</p>
 
+    <h3>Data Transformation</h3>
     <p>Transformation involves converting data into a format suitable for analysis. Common techniques include:</p>
     <ul>
       <li><strong>Normalization:</strong> Scaling values into a common range to avoid bias (e.g., 0–1 for machine learning).</li>
@@ -41,7 +84,6 @@
     </ul>
 
     <h3>Data Aggregation</h3>
-    <img src="../../publications/images/data-aggregation.png" alt="Aggregation Process" class="project-image" />
     <p>Aggregation helps summarize data into higher-level views:</p>
     <ul>
       <li><strong>Summation:</strong> Total sales, revenue, or counts.</li>
@@ -51,19 +93,46 @@
       <li><strong>Rolling Calculations:</strong> Moving averages to smooth trends.</li>
     </ul>
 
-    <h3>Tools for Transformation & Aggregation</h3>
-    <img src="../../publications/images/data-tras_aggr_tools.png" alt="Transformation and Aggregation Tools" class="project-image" />
+    <h3>In Python — feature engineering and aggregation</h3>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>import pandas as pd
 
+# Feature engineering: derive unit price, revenue and profit per order
+price = {"Furniture": 180, "Office": 25, "Technology": 320}
+orders["unit_price"] = orders["category"].map(price)
+orders["sales"]  = orders["quantity"] * orders["unit_price"] * (1 - orders["discount"])
+orders["profit"] = orders["sales"] * (0.30 - orders["discount"])   # margin shrinks with discount
+orders["month"]  = orders["order_date"].dt.to_period("M").dt.to_timestamp()
+
+# Aggregation: monthly sales and profit by region
+monthly = (orders.groupby(["month", "region"])
+                 .agg(sales=("sales", "sum"),
+                      profit=("profit", "sum"),
+                      orders=("order_id", "nunique"))
+                 .reset_index())
+print(monthly.head())</code></pre>
+
+    <h3>In SQL — derive and aggregate</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>SELECT
+  DATE_TRUNC('month', order_date)            AS month,
+  region,
+  SUM(quantity * unit_price * (1 - discount)) AS sales,
+  SUM(quantity * unit_price * (1 - discount) * (0.30 - discount)) AS profit,
+  COUNT(DISTINCT order_id)                    AS orders
+FROM staging.orders_clean
+GROUP BY DATE_TRUNC('month', order_date), region
+ORDER BY month, region;</code></pre>
+
+    <h3>Tools for Transformation &amp; Aggregation</h3>
     <ul>
-      <li><strong>Python:</strong> Pandas (`groupby`, `pivot_table`), NumPy, PySpark.</li>
-      <li><strong>SQL:</strong> `GROUP BY`, `JOIN`, `CAST`, and window functions for aggregation.</li>
+      <li><strong>Python:</strong> Pandas (<code>groupby</code>, <code>pivot_table</code>), NumPy, PySpark.</li>
+      <li><strong>SQL:</strong> <code>GROUP BY</code>, <code>JOIN</code>, <code>CAST</code>, and window functions for aggregation.</li>
       <li><strong>Power BI / Tableau:</strong> Built-in transformations, calculated columns, and aggregation measures.</li>
       <li><strong>ETL Pipelines:</strong> Talend, Informatica, AWS Glue, or Azure Data Factory for large-scale operations.</li>
     </ul>
 
     <h3>Best Practices</h3>
-    <img src="../../publications/images/data-tras_aggr_bp.png" alt="Transformation and Aggregation Best Practices" class="project-image" />
-
     <ul>
       <li>Apply <strong>consistent transformations</strong> across all datasets to ensure comparability.</li>
       <li>Document every transformation for <strong>data lineage</strong>.</li>
@@ -71,17 +140,11 @@
       <li>Validate aggregated results against raw data to ensure accuracy.</li>
     </ul>
 
-    <h3>Example: Sales Data Transformation</h3>
+    <h3>Example: Retail Sales Transformation</h3>
     <p>
-      Consider a dataset of retail transactions. Transformations may include:
-    </p>
-    <ul>
-      <li>Converting transaction timestamps into calendar dates and extracting week or month.</li>
-      <li>Joining product tables to attach category and supplier details.</li>
-      <li>Encoding customer loyalty levels as numeric values.</li>
-    </ul>
-    <p>
-      Aggregations could include:
+      For the retail dataset, transformations may include deriving <code>sales</code> and <code>profit</code> from
+      quantity, price, and discount; mapping each category to a unit price; and extracting the order month.
+      Aggregations could then include:
     </p>
     <ul>
       <li>Total monthly sales per region.</li>
@@ -89,8 +152,8 @@
       <li>Moving average of revenue to identify seasonal patterns.</li>
     </ul>
 
-    <div style="margin-top: 32px;"> 
-      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Publications</a>
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
     </div>
   </section>
 </main>

@@ -139,9 +139,10 @@ Use `<pre class="mermaid">` blocks wrapped in a `<div class="diagram-wrap">` con
 
 ## Existing Projects
 
-### Featured (9)
+### Featured
 | Project | Tools |
 |---|---|
+| Data Analytics Library (project page `project-data-analytics-library.html`, SVG cover, GitHub-linked) | Python, pandas, scikit-learn, pytest, GitHub Actions — full analytics-lifecycle library, code companion to the Descriptive Analytics series |
 | Spotify 2023 Analysis | SPSS, EDA, hypothesis testing |
 | Traffic Accident Prediction | Python, regression |
 | Sales Forecasting | Power BI, DAX |
@@ -159,8 +160,23 @@ Bicycle Store SQL, Bus Scheduling Optimization (LP), Sales Modeling DAX, Iris Da
 
 ## Existing Publications
 
-### Descriptive Analytics Series
-Sub-pages linked from `descriptive-analytics.html`: `collecting-data.html`, `cleaning-data.html`, `transforming-aggregation.html`. Steps 4–10 (Filtering, Segmentation, Visualization, Comparing, Reporting, Patterns, Sharing) do not yet have sub-pages — pending work.
+### Descriptive Analytics Series — *Data Analytics: Tackling the Data* (completed June 2026)
+A 10-step walk-through of descriptive analytics, all sub-pages linked from `descriptive-analytics.html`. **Complete** — every step now has its own page, all using the **particle-flow inline SVG** diagram style (same SMIL technique as the "Learn the Pattern" series, **no PNG infographics, no Mermaid**) plus **Python/pandas + SQL code blocks**. A running **synthetic retail dataset** (orders → derived sales/profit) ties the examples across all pages.
+
+| File | Step |
+|---|---|
+| `collecting-data.html` | 1 — Collecting Data |
+| `cleaning-data.html` | 2 — Cleaning Data |
+| `transforming-aggregation.html` | 3 — Transforming & Aggregation |
+| `filtering-reducing-noise.html` | 4 — Filtering & Reducing Noise |
+| `segmentation-clustering.html` | 5 — Segmentation & Clustering |
+| `visualization-trending.html` | 6 — Visualization & Trending |
+| `comparing.html` | 7 — Comparing |
+| `reporting.html` | 8 — Reporting |
+| `patterns-insights.html` | 9 — Patterns & Insights |
+| `sharing-publishing.html` | 10 — Sharing & Publishing |
+
+**Companion notebook:** `projects/descriptive-analytics-pipeline.ipynb` runs all 10 steps end-to-end on the synthetic dataset (seeded, reproducible, no external files; verified to execute clean). Linked for download from a "Putting It All Together" section on the landing page. These sub-pages are linked **only** from `descriptive-analytics.html` (not added to `publications.html`). The chapter pages now back-link to `descriptive-analytics.html` ("← Back to Descriptive Analytics"); the landing page itself still back-links to `publications.html`.
 
 ### Learn the Pattern, Not the Product (12-Part Series) — June 2026
 Platform-agnostic data engineering fundamentals. The through-line is **transferability** — each concept applies across Snowflake, Databricks, BigQuery, and Microsoft Fabric without vendor lock-in. Every concept page follows a fixed anatomy: an "In 60 seconds" box, "How it actually works" concept sections, an **animated particle-flow inline SVG diagram**, and a **"Same pattern, every platform"** mapping table.
@@ -241,6 +257,25 @@ Platform-agnostic data engineering fundamentals. The through-line is **transfera
 ---
 
 ## Session History / Changelog
+
+### June 19, 2026 — Added "Data Analytics Library" project
+Added Mario's GitHub repo [`DataAnalyticsLibrary`](https://github.com/mfzamudio/DataAnalyticsLibrary) (local at `/home/devuser/Projects/DataAnalyticsLibrary`) as a portfolio project — a full analytics-lifecycle Python library (10 modules, **81 pytest tests** verified, CI on 3.10–3.12), positioned as the code companion to the Descriptive Analytics series.
+
+- New detail page `projects/project-data-analytics-library.html` (dark, GitHub-linked, lifecycle table + code blocks + honest scope).
+- New **Featured #1** card in `projects.html`; the previous 11 featured cards renumbered 2–12.
+- On-brand **SVG cover** `images/data-analytics-library.svg` used as the thumbnail (no PNG generated).
+- Cross-linked both ways: a "Reference Library" block added to `publications/descriptive-analytics.html`, and the project page links back to the series.
+- README featured table updated. NOTE: the repo's own `README.md` says "71 tests" but the suite actually has **81** — flag to fix upstream.
+
+### June 19, 2026 — Descriptive Analytics series completed
+Finished the *Data Analytics: Tackling the Data* series (steps 4–10 were previously pending).
+
+- **7 new chapter pages** created (`filtering-reducing-noise`, `segmentation-clustering`, `visualization-trending`, `comparing`, `reporting`, `patterns-insights`, `sharing-publishing`), each with an animated **particle-flow SVG** diagram + **Python/pandas + SQL** code blocks.
+- **3 original pages re-done** (`collecting-data`, `cleaning-data`, `transforming-aggregation`): PNG infographics replaced with particle-flow SVGs and code blocks added, for series homogeneity. Old PNGs left unused in `publications/images/`.
+- **`style.css`**: added dark `pre.code-block` / `.code-label` / inline `code` styling and base `.diagram-wrap` / `.diagram-caption` box model (the prior overrides only set colours).
+- **`descriptive-analytics.html`**: wired the 7 remaining bullets to their pages; added a "Putting It All Together" 10-node pipeline SVG + companion-notebook download link.
+- **`projects/descriptive-analytics-pipeline.ipynb`**: new end-to-end notebook on a synthetic retail dataset (verified to run; `.style` export degrades gracefully without `jinja2`; no HTML export — `nbconvert` unavailable locally).
+- Docs updated: `README.md`, `ROADMAP.md` (§8 appendix), this file.
 
 ### June 2026 — Dark redesign (merged to `main`)
 A full visual migration of the site from the original light theme to a **dark, sober, "tech" aesthetic** (built with the `frontend-design` guidance, anchored in Mario's own world — his measurable "delivery deltas" and particle-flow diagram language).

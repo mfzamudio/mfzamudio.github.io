@@ -11,31 +11,86 @@
 
 <main class="project-detail">
   <section>
-    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Publications</a>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
     <h2>Collecting Data</h2>
     <h3>The Foundation of Descriptive Analytics</h3>
 
     <p>
-      Collecting data is the <strong>first and most critical step</strong> in any data analytics process. 
-      Without reliable, comprehensive, and well-structured data, even the most advanced models and analyses 
-      cannot produce meaningful insights. The goal of this stage is to gather raw information that truly 
+      Collecting data is the <strong>first and most critical step</strong> in any data analytics process.
+      Without reliable, comprehensive, and well-structured data, even the most advanced models and analyses
+      cannot produce meaningful insights. The goal of this stage is to gather raw information that truly
       represents the phenomena we want to analyze.
     </p>
 
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 280" role="img" aria-label="Multiple sources extracted and loaded into a single analysis-ready table">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M340,70 C400,70 400,130 460,130"/>
+          <path id="c2" d="M340,140 L460,140"/>
+          <path id="c3" d="M340,210 C400,210 400,150 460,150"/>
+          <path id="c4" d="M680,140 L760,140"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="280" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="40" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Many sources, one analysis-ready table</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <path d="M340,70 C400,70 400,130 460,130"/>
+          <path d="M340,140 L460,140"/>
+          <path d="M340,210 C400,210 400,150 460,150"/>
+          <line x1="680" y1="140" x2="760" y2="140"/>
+        </g>
+        <g>
+          <rect x="60" y="44" width="280" height="52" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="200" y="75" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Databases &amp; warehouses</text>
+        </g>
+        <g>
+          <rect x="60" y="114" width="280" height="52" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="200" y="145" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">APIs &amp; flat files</text>
+        </g>
+        <g>
+          <rect x="60" y="184" width="280" height="52" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="200" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Logs &amp; sensors</text>
+        </g>
+        <g>
+          <rect x="460" y="108" width="220" height="64" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="570" y="136" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">ETL</text>
+          <text x="570" y="156" text-anchor="middle" fill="#ede9fe" font-size="10.5">extract · transform · load</text>
+        </g>
+        <g>
+          <rect x="760" y="108" width="180" height="64" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="850" y="136" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Raw dataset</text>
+          <text x="850" y="156" text-anchor="middle" fill="#e0f2fe" font-size="10">unified</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.3s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.45s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="1.05s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.2s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Collection extracts from many sources and loads them into one unified, analysis-ready dataset.</p>
+
     <h3>Typical Sources of Data</h3>
-    <img src="../../publications/images/data-collection-sources.png" alt="Data Collection Sources" class="project-image" />
     <ul>
       <li><strong>Databases:</strong> SQL databases such as MySQL, PostgreSQL, Oracle, and enterprise data warehouses.</li>
       <li><strong>APIs:</strong> REST or GraphQL APIs providing data from platforms like Twitter, Google Analytics, or financial services.</li>
       <li><strong>Spreadsheets:</strong> Excel or CSV files often used in business reporting and small-scale analytics.</li>
-      <li><strong>Surveys & Questionnaires:</strong> Data collected directly from users or customers.</li>
+      <li><strong>Surveys &amp; Questionnaires:</strong> Data collected directly from users or customers.</li>
       <li><strong>System Logs:</strong> Information captured from web servers, applications, or IoT devices.</li>
       <li><strong>Open Data Portals:</strong> Government datasets (e.g., data.gov, WHO data) and academic repositories.</li>
       <li><strong>Third-Party Data Providers:</strong> Commercial data providers for financial, demographic, or market data.</li>
     </ul>
 
     <h3>ETL (Extract, Transform, Load) in Data Collection</h3>
-    <img src="../../publications/images/data-collection-etl.png" alt="Data Collection ETL Process" class="project-image" />
     <p>
       In professional environments, data collection is often part of an <strong>ETL process</strong>:
     </p>
@@ -45,18 +100,53 @@
       <li><strong>Load:</strong> Store the processed data in a target system, such as a data warehouse or cloud platform, ready for analysis.</li>
     </ol>
 
+    <h3>In Python — gathering from multiple sources</h3>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>import pandas as pd
+
+# Typical collection: read each source, then concatenate into one frame
+orders_db   = pd.read_sql("SELECT * FROM orders", conn)      # database
+orders_csv  = pd.read_csv("data/legacy_orders.csv")          # flat file
+orders_api  = pd.json_normalize(requests.get(API_URL).json())# API
+
+orders = pd.concat([orders_db, orders_csv, orders_api], ignore_index=True)
+orders["order_date"] = pd.to_datetime(orders["order_date"])
+print(f"Collected {len(orders):,} rows from {orders['region'].nunique()} regions")</code></pre>
+
     <p>
-      Tools commonly used in ETL processes include:
-      <ul>
-        <li><strong>Python libraries:</strong> Pandas, PySpark for handling large-scale data.</li>
-        <li><strong>ETL platforms:</strong> Talend, Apache Nifi, Informatica, Microsoft SSIS.</li>
-        <li><strong>Cloud services:</strong> AWS Glue, Azure Data Factory, Google Cloud Dataflow.</li>
-      </ul>
+      The companion notebook at the end of this series <strong>generates a synthetic retail dataset</strong>
+      instead, so the whole pipeline runs anywhere with no external files:
     </p>
+    <p class="code-label">Python · synthetic source (notebook)</p>
+    <pre class="code-block"><code>import numpy as np, pandas as pd
+rng = np.random.default_rng(42)
+
+n = 20_000
+orders = pd.DataFrame({
+    "order_id":   np.arange(1, n + 1),
+    "order_date": pd.to_datetime("2022-01-01") +
+                  pd.to_timedelta(rng.integers(0, 730, n), unit="D"),
+    "region":     rng.choice(["West", "East", "Central", "South"], n),
+    "category":   rng.choice(["Furniture", "Office", "Technology"], n),
+    "segment":    rng.choice(["Consumer", "Corporate", "Home Office"], n),
+    "customer_id":rng.integers(1, 2_000, n),
+    "quantity":   rng.integers(1, 12, n),
+    "discount":   rng.choice([0, 0.1, 0.2, 0.3], n, p=[.5, .25, .15, .1]),
+})</code></pre>
+
+    <h3>In SQL — extracting and unioning sources</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>-- Collection in the warehouse: union staged sources into one table
+CREATE TABLE staging.orders AS
+SELECT order_id, order_date, region, category, segment,
+       customer_id, quantity, discount
+FROM raw.orders_pos
+UNION ALL
+SELECT order_id, order_date, region, category, segment,
+       customer_id, quantity, discount
+FROM raw.orders_ecommerce;</code></pre>
 
     <h3>Best Practices</h3>
-    <img src="../../publications/images/data-collection-management.png" alt="Data Collection Management" class="project-image" />
-
     <ul>
       <li>Define clear <strong>data requirements</strong> aligned with the business question.</li>
       <li>Ensure <strong>data quality</strong> by validating formats, completeness, and accuracy.</li>
@@ -65,21 +155,22 @@
       <li>Automate data collection pipelines to reduce human error and improve efficiency.</li>
     </ul>
 
-    <h3>Example: Collecting Traffic Data</h3>
+    <h3>Example: Collecting Retail Sales Data</h3>
     <p>
-      For a project predicting traffic accidents, data may come from multiple sources:
+      For the retail example used throughout this series, data may come from multiple sources:
     </p>
     <ul>
-      <li>Government open data portals (collision reports, road safety records).</li>
-      <li>Weather APIs (temperature, precipitation, visibility).</li>
-      <li>Traffic sensors and GPS systems provide vehicle flow and congestion levels.</li>
-      <li>Historical accident databases maintained by municipalities or insurance companies.</li>
+      <li>A point-of-sale database (in-store transactions).</li>
+      <li>An e-commerce platform export (online orders).</li>
+      <li>A product catalogue providing category and pricing details.</li>
+      <li>A customer table providing segment and region.</li>
     </ul>
     <p>
-      Integrating these sources through an ETL pipeline ensures analysts can work with a unified and consistent dataset.
+      Integrating these sources through an ETL pipeline gives analysts a single, consistent dataset to clean and analyze.
     </p>
-    <div style="margin-top: 32px;"> 
-      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Publications</a>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
     </div>
   </section>
 </main>

@@ -29,6 +29,7 @@ Dark, sober "tech" theme — vanilla HTML/CSS/JS, no frameworks, no build step.
 
 | Project | Tools | Links |
 |---------|-------|-------|
+| [Data Analytics Library](projects/project-data-analytics-library.html) | Python, pandas, scikit-learn, matplotlib, pytest, GitHub Actions | [GitHub](https://github.com/mfzamudio/DataAnalyticsLibrary) |
 | [Profit Erosion from E-Commerce Returns](projects/project-profiterosion.html) | Python, scikit-learn, BigQuery, Streamlit, GitHub Actions | [Live App](https://profiterosion.streamlit.app) · [GitHub](https://github.com/mfzamudio/unfc-mda-capstone-project) |
 | [Warzone Armory – AI-Native Full-Stack](projects/project-warzone-armory.html) | Python, GitHub Actions, Claude Code, Vanilla JS | [Live App](https://mfzamudio.github.io/warzone-armory/frontend/) |
 | [LR Presets Catalog](projects/project-lr-presets.html) | Python, Pillow, OpenCV, Chart.js, Claude Code | [Live Site](https://mfzamudio.github.io/lr-mz-presets) |
@@ -89,7 +90,13 @@ A practitioner's guide to the three specialized engineering roles shaping data o
 | Part 3 | [Data Architect: The Strategist](publications/data-architect.html) |
 | Part 4 | [ML/AI Engineer: The Deployer](publications/ml-ai-engineer.html) |
 
-**Descriptive Analytics Series** (July 2025) — [Data Analytics: Tackling the Data](publications/descriptive-analytics.html)
+**Descriptive Analytics Series** — *Data Analytics: Tackling the Data* (completed June 2026)
+A 10-step walk-through of descriptive analytics: collecting, cleaning, transforming, filtering, segmenting, visualizing, comparing, reporting, finding patterns, and publishing. Each step has its own page with an animated particle-flow diagram and runnable Python/pandas + SQL examples, all tied to one synthetic retail dataset. The series closes with a companion notebook that runs all ten steps end-to-end.
+
+| | |
+|---------|-------|
+| Landing | [Data Analytics: Tackling the Data](publications/descriptive-analytics.html) |
+| Notebook | [Descriptive Analytics — End-to-End Pipeline](projects/descriptive-analytics-pipeline.ipynb) |
 
 ---
 

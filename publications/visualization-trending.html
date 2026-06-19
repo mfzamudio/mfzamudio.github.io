@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Visualization & Trending | Descriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    <h2>Visualization & Trending</h2>
+    <h3>Turning Numbers into Something the Eye Can Read</h3>
+
+    <p>
+      A table of numbers asks the reader to do the work. A good chart does the work for them. <strong>Visualization</strong>
+      maps data onto position, length, and colour so patterns jump out at a glance — bar charts for comparison,
+      line charts for time, heatmaps for density. <strong>Trending</strong> is the time-aware half of this step:
+      it reveals growth, decline, seasonality, and turning points, usually by smoothing short-term noise into a
+      readable longer-term signal.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 220" role="img" aria-label="Aggregated data flowing into a chart and then a smoothed trend">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M300,120 L380,120"/>
+          <path id="c2" d="M600,120 L680,120"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="220" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="42" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">From rows, to a chart, to a trend</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="300" y1="120" x2="380" y2="120"/>
+          <line x1="600" y1="120" x2="680" y2="120"/>
+        </g>
+        <g>
+          <rect x="80" y="78" width="220" height="84" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Aggregated data</text>
+          <text x="190" y="134" text-anchor="middle" fill="#dbeafe" font-size="10.5">sales by month</text>
+        </g>
+        <g>
+          <rect x="380" y="78" width="220" height="84" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="490" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Chart</text>
+          <text x="490" y="128" text-anchor="middle" fill="#ede9fe" font-size="10.5">bar · line · heatmap</text>
+        </g>
+        <g>
+          <rect x="680" y="78" width="220" height="84" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="790" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Trend</text>
+          <text x="790" y="128" text-anchor="middle" fill="#e0f2fe" font-size="10.5">smoothed · seasonal</text>
+          <polyline points="700,150 720,144 740,148 760,138 780,140 800,130 820,134 840,124 860,126 880,118" fill="none" stroke="#bae6fd" stroke-width="2"/>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.26s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.33s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Pick the chart that matches the question, then smooth the series to expose the underlying trend.</p>
+
+    <h3>Choosing the Right Chart</h3>
+    <ul>
+      <li><strong>Line chart</strong> — a value over time (revenue by month). The default for trending.</li>
+      <li><strong>Bar chart</strong> — comparison across categories (sales by region).</li>
+      <li><strong>Heatmap</strong> — density or intensity across two dimensions (sales by region × month).</li>
+      <li><strong>Scatter plot</strong> — the relationship between two numeric variables (discount vs profit).</li>
+    </ul>
+
+    <h3>Trending: Smoothing the Signal</h3>
+    <p>
+      Raw monthly numbers bounce around. A <strong>rolling (moving) average</strong> averages each point with its
+      neighbours, flattening the noise so growth, decline, and seasonality become obvious. The wider the window,
+      the smoother — and the slower to react — the line becomes.
+    </p>
+
+    <h3>In Python — chart + rolling trend</h3>
+    <p class="code-label">Python · pandas + matplotlib</p>
+    <pre class="code-block"><code>import pandas as pd
+import matplotlib.pyplot as plt
+
+# Monthly sales series
+monthly = (orders
+           .assign(month=orders["order_date"].dt.to_period("M").dt.to_timestamp())
+           .groupby("month")["sales"].sum())
+
+# 3-month rolling average smooths the noise into a trend
+trend = monthly.rolling(window=3, min_periods=1).mean()
+
+ax = monthly.plot(label="Monthly sales", alpha=0.5)
+trend.plot(ax=ax, label="3-month trend", linewidth=2)
+ax.set_title("Monthly sales with rolling trend")
+ax.legend()
+plt.tight_layout()
+plt.show()</code></pre>
+
+    <h3>In SQL — moving average with a window function</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>SELECT
+  DATE_TRUNC('month', order_date) AS month,
+  SUM(sales) AS monthly_sales,
+  AVG(SUM(sales)) OVER (
+    ORDER BY DATE_TRUNC('month', order_date)
+    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+  ) AS sales_3m_avg
+FROM orders
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month;</code></pre>
+
+    <h3>Tools Commonly Used</h3>
+    <ul>
+      <li><strong>Python:</strong> Matplotlib, Seaborn, Plotly; Pandas <code>rolling</code> for smoothing.</li>
+      <li><strong>SQL:</strong> windowed <code>AVG() OVER (...)</code> for moving averages.</li>
+      <li><strong>Power BI / Tableau:</strong> line/bar visuals, trend lines, and built-in moving-average quick calcs.</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Match the chart to the question — don't use a pie chart where a bar chart is clearer.</li>
+      <li>Start value axes at zero for bar charts to avoid exaggerating differences.</li>
+      <li>Label axes and units; a chart without context is decoration, not analysis.</li>
+      <li>Show the raw series and the smoothed trend together so readers see what was filtered out.</li>
+    </ul>
+
+    <h3>Example: Retail Sales Trend</h3>
+    <p>
+      For the retail dataset, this step typically yields:
+    </p>
+    <ul>
+      <li>A line chart of monthly sales with a 3-month rolling average revealing a clear seasonal lift in Q4.</li>
+      <li>A bar chart ranking categories by total sales.</li>
+      <li>A region × month heatmap that exposes which markets drive the year-end spike.</li>
+    </ul>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

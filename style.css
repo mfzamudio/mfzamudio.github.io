@@ -585,6 +585,63 @@ main section h4 {
 .arch-table .layer-silver { color: #cbd5e1 !important; }
 .arch-table .layer-gold { color: #fcd34d !important; }
 
+/* ─── Descriptive Analytics series — diagrams & code blocks ──
+   Base layout for the inline particle-flow SVG cards and the
+   Python/SQL code blocks used by the chapter pages. Colours for
+   .diagram-wrap / .diagram-caption come from the dark overrides
+   above; these rules supply the box model the scoped pattern
+   pages used to carry inline. */
+.diagram-wrap {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 28px auto 8px;
+  overflow-x: auto;
+  text-align: center;
+}
+.diagram-wrap svg { width: 100%; height: auto; display: block; }
+.diagram-caption {
+  text-align: center;
+  font-size: 0.83rem;
+  margin: 0 auto 24px;
+  font-style: italic;
+}
+
+/* Code blocks */
+pre.code-block {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 18px 0 8px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: var(--text);
+  -moz-tab-size: 4;
+  tab-size: 4;
+}
+pre.code-block code { font-family: inherit; color: inherit; background: none; padding: 0; }
+.code-label {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 18px 0 -2px;
+}
+code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 0.1em 0.4em;
+  border-radius: 5px;
+}
+
 /* ─── Responsive ──────────────────────────────────────────── */
 @media (max-width: 800px) {
   .about-container {

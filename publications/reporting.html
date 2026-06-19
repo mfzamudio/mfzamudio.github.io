@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reporting | Descriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    <h2>Reporting</h2>
+    <h3>Packaging the Analysis for People Who Will Act on It</h3>
+
+    <p>
+      Reporting is where analysis becomes communication. The numbers, charts, and comparisons from the previous
+      steps are assembled into a structured artifact — a dashboard, a slide deck, or a written report — designed
+      for a specific audience and a specific decision. A good report is not a data dump; it is concise, leads
+      with the metrics that matter, and ends with a recommendation someone can act on.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 260" role="img" aria-label="Multiple analysis outputs converging into a single report">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M300,60 C400,60 420,130 520,130"/>
+          <path id="c2" d="M300,130 L520,130"/>
+          <path id="c3" d="M300,200 C400,200 420,130 520,130"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="260" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="40" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Metrics, charts &amp; comparisons converge into one report</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <path d="M300,60 C400,60 420,130 520,130"/>
+          <path d="M300,130 L520,130"/>
+          <path d="M300,200 C400,200 420,130 520,130"/>
+        </g>
+        <g>
+          <rect x="80" y="34" width="220" height="52" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="65" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Key metrics</text>
+        </g>
+        <g>
+          <rect x="80" y="104" width="220" height="52" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="135" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Charts &amp; trends</text>
+        </g>
+        <g>
+          <rect x="80" y="174" width="220" height="52" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="205" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Comparisons</text>
+        </g>
+        <g>
+          <rect x="520" y="96" width="240" height="68" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-width="2"><animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></rect>
+          <text x="640" y="126" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Report</text>
+          <text x="640" y="146" text-anchor="middle" fill="#e0f2fe" font-size="10.5">dashboard · deck · doc</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.9s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="0.63s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="0.3s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="0.95s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="0.45s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.9s" begin="1.1s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Reporting consolidates the analysis into one artifact built for a specific audience and decision.</p>
+
+    <h3>Know the Audience First</h3>
+    <ul>
+      <li><strong>Executives</strong> want the headline, the trend, and the recommendation — one screen, no clutter.</li>
+      <li><strong>Operational teams</strong> want detail they can act on — by region, by SKU, refreshed often.</li>
+      <li><strong>Analysts</strong> want the methodology and the ability to drill down into the underlying data.</li>
+    </ul>
+
+    <h3>Anatomy of a Good Report</h3>
+    <ol>
+      <li><strong>Headline metrics</strong> (KPIs) at the top — the few numbers that define success.</li>
+      <li><strong>Trend and comparison</strong> visuals that give those numbers context.</li>
+      <li><strong>A short narrative</strong>: what happened, why, and what to do about it.</li>
+      <li><strong>Supporting detail</strong> for those who need to dig deeper, kept out of the main flow.</li>
+    </ol>
+
+    <h3>In Python — a summary table for the report</h3>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>import pandas as pd
+
+# One consolidated summary table by region and category
+summary = (orders.groupby(["region", "category"])
+                 .agg(sales=("sales", "sum"),
+                      profit=("profit", "sum"),
+                      orders=("order_id", "nunique"))
+                 .assign(margin=lambda d: (d["profit"] / d["sales"]).round(3))
+                 .sort_values("sales", ascending=False)
+                 .reset_index())
+
+# Headline KPIs for the top of the report
+kpis = {
+    "total_sales": orders["sales"].sum(),
+    "total_profit": orders["profit"].sum(),
+    "overall_margin": orders["profit"].sum() / orders["sales"].sum(),
+}
+
+# Export the table for a dashboard or document
+summary.to_html("report_summary.html", index=False)
+print(kpis)</code></pre>
+
+    <h3>In SQL — a roll-up with subtotals</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>-- GROUPING SETS produces detail rows AND subtotals in one pass,
+-- exactly what a report's summary table needs.
+SELECT
+  region,
+  category,
+  SUM(sales)  AS sales,
+  SUM(profit) AS profit
+FROM orders
+GROUP BY GROUPING SETS (
+  (region, category),   -- detail
+  (region),             -- per-region subtotal
+  ()                    -- grand total
+)
+ORDER BY region, category;</code></pre>
+
+    <h3>Tools Commonly Used</h3>
+    <ul>
+      <li><strong>Python:</strong> Pandas <code>groupby.agg</code>, <code>Styler</code>, <code>to_html</code>/<code>to_excel</code>; Jupyter notebooks.</li>
+      <li><strong>SQL:</strong> <code>GROUP BY GROUPING SETS</code>, <code>ROLLUP</code>, <code>CUBE</code> for subtotals.</li>
+      <li><strong>BI:</strong> Power BI and Tableau dashboards; presentation tools for executive decks.</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Lead with the answer, not the methodology — put the recommendation where it will be read.</li>
+      <li>Keep one idea per chart; resist the urge to crowd a dashboard.</li>
+      <li>State assumptions, the date range, and data freshness so the report is trustworthy.</li>
+      <li>Automate recurring reports so the numbers are always current and never hand-copied.</li>
+    </ul>
+
+    <h3>Example: The Retail Performance Report</h3>
+    <p>
+      For the retail dataset, the report might consist of:
+    </p>
+    <ul>
+      <li>Three KPI cards: total sales, total profit, and overall margin, each with a YoY delta.</li>
+      <li>A sales-by-region-and-category table with subtotals.</li>
+      <li>A short narrative flagging the one region that is growing revenue while losing margin.</li>
+    </ul>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

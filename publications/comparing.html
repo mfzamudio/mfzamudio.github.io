@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comparing | Descriptive Analytics</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    <h2>Comparing</h2>
+    <h3>A Number Only Means Something Next to Another Number</h3>
+
+    <p>
+      "$2.4M in sales" is just a figure until you ask: compared to what? Last year? The target? The other region?
+      <strong>Comparison</strong> is the step that turns measurements into judgements. It evaluates performance
+      across dimensions — time periods, categories, segments, geographies — to expose what is growing, what is
+      lagging, and what is simply different. Almost every business insight is, at heart, a comparison.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 260" role="img" aria-label="Two periods feeding a comparison that produces a delta">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M300,80 C360,80 360,130 420,130"/>
+          <path id="c2" d="M300,180 C360,180 360,130 420,130"/>
+          <path id="c3" d="M620,130 L700,130"/>
+        </defs>
+        <rect x="0" y="0" width="980" height="260" rx="14" fill="url(#gBg)"/>
+        <text x="490" y="40" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Baseline vs current produces the delta</text>
+        <g stroke="#475569" stroke-width="2.5" fill="none">
+          <path d="M300,80 C360,80 360,130 420,130"/>
+          <path d="M300,180 C360,180 360,130 420,130"/>
+          <path d="M620,130 L700,130"/>
+        </g>
+        <g>
+          <rect x="80" y="50" width="220" height="60" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="76" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Prior period</text>
+          <text x="190" y="94" text-anchor="middle" fill="#dbeafe" font-size="10">baseline</text>
+        </g>
+        <g>
+          <rect x="80" y="150" width="220" height="60" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="190" y="176" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Current period</text>
+          <text x="190" y="194" text-anchor="middle" fill="#dbeafe" font-size="10">actual</text>
+        </g>
+        <g>
+          <rect x="420" y="100" width="200" height="60" rx="12" fill="url(#gPurple)" stroke="#ddd6fe" stroke-opacity="0.5"/>
+          <text x="520" y="126" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Compare</text>
+          <text x="520" y="144" text-anchor="middle" fill="#ede9fe" font-size="10">align &amp; difference</text>
+        </g>
+        <g>
+          <rect x="700" y="100" width="200" height="60" rx="12" fill="url(#gTeal)" stroke="#7dd3fc" stroke-opacity="0.5"/>
+          <text x="800" y="126" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Delta</text>
+          <text x="800" y="144" text-anchor="middle" fill="#e0f2fe" font-size="10">+12% YoY</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.6s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.3s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.2s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Comparison aligns two like-for-like figures and reports the difference that matters.</p>
+
+    <h3>Common Types of Comparison</h3>
+    <ul>
+      <li><strong>Period-over-period:</strong> this month vs last month, or year-over-year (YoY) to strip out seasonality.</li>
+      <li><strong>Category vs category:</strong> which product line, region, or segment outperforms the others.</li>
+      <li><strong>Actual vs target:</strong> performance against a plan, budget, or benchmark.</li>
+      <li><strong>Cohort vs cohort:</strong> the segments built in the previous step, compared side by side.</li>
+    </ul>
+
+    <h3>The Golden Rule: Compare Like with Like</h3>
+    <p>
+      A comparison is only honest when both sides are measured the same way. Align the time windows (a partial
+      month vs a full month is meaningless), the units, and the filters. Express the difference as both an
+      <strong>absolute change</strong> and a <strong>percentage change</strong> — each tells a different part of
+      the story.
+    </p>
+
+    <h3>In Python — period-over-period change</h3>
+    <p class="code-label">Python · pandas</p>
+    <pre class="code-block"><code>import pandas as pd
+
+# Monthly sales, then month-over-month and year-over-year change
+monthly = (orders
+           .assign(month=orders["order_date"].dt.to_period("M"))
+           .groupby("month")["sales"].sum()
+           .rename("sales").to_frame())
+
+monthly["mom_pct"] = monthly["sales"].pct_change() * 100        # vs last month
+monthly["yoy_pct"] = monthly["sales"].pct_change(periods=12) * 100  # vs last year
+
+# Category comparison as a pivot
+by_cat = orders.pivot_table(index="category", columns="region",
+                            values="sales", aggfunc="sum")
+print(monthly.tail()); print(by_cat)</code></pre>
+
+    <h3>In SQL — LAG for period-over-period</h3>
+    <p class="code-label">SQL</p>
+    <pre class="code-block"><code>WITH monthly AS (
+  SELECT DATE_TRUNC('month', order_date) AS month,
+         SUM(sales) AS sales
+  FROM orders
+  GROUP BY DATE_TRUNC('month', order_date)
+)
+SELECT
+  month,
+  sales,
+  LAG(sales) OVER (ORDER BY month) AS prev_month,
+  ROUND(100.0 * (sales - LAG(sales) OVER (ORDER BY month))
+        / NULLIF(LAG(sales) OVER (ORDER BY month), 0), 1) AS mom_pct
+FROM monthly
+ORDER BY month;</code></pre>
+
+    <h3>Tools Commonly Used</h3>
+    <ul>
+      <li><strong>Python:</strong> Pandas <code>pct_change</code>, <code>pivot_table</code>, <code>diff</code>, <code>merge</code>.</li>
+      <li><strong>SQL:</strong> <code>LAG</code>/<code>LEAD</code> window functions and self-joins.</li>
+      <li><strong>Power BI / Tableau:</strong> time-intelligence DAX (<code>SAMEPERIODLASTYEAR</code>), table calculations.</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Always state the baseline explicitly — "vs the same month last year", not just "+12%".</li>
+      <li>Guard against divide-by-zero with <code>NULLIF</code> (SQL) or by filtering zero baselines (pandas).</li>
+      <li>Report absolute and relative change together; a 200% jump on a tiny base can mislead.</li>
+      <li>Normalize for different population sizes (per-customer, per-store) when comparing unequal groups.</li>
+    </ul>
+
+    <h3>Example: Comparing the Retail Regions</h3>
+    <p>
+      For the retail dataset, comparison might reveal:
+    </p>
+    <ul>
+      <li>Year-over-year sales up 12% overall, but flat in one region that is dragging the average.</li>
+      <li>One category growing while another quietly declines — invisible in the headline total.</li>
+      <li>The "discount-driven" segment from the clustering step growing fastest in revenue but slowest in profit.</li>
+    </ul>
+
+    <div style="margin-top: 32px;">
+      <a href="../../publications/descriptive-analytics.html" class="home-link">← Back to Descriptive Analytics</a>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>
