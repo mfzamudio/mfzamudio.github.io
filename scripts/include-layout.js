@@ -89,14 +89,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   };
 
-  // Make each first-level group with sub-items collapsible: wrap its header
-  // link in a row and prepend a chevron toggle button (toggling .active-group,
-  // which drives the <ul> display; aria-expanded kept in sync). When
-  // `headerToggles` is set, the whole header row also toggles instead of
-  // navigating — used by projects, whose headers point at the grid sections
-  // (no per-group landing), so a header click should expand in place. Writing
-  // leaves `headerToggles` off so its header still navigates to the series
-  // landing (which then shows the group expanded).
+  // Make each first-level group with sub-items collapsible. Wrap its header in
+  // a row + a chevron toggle button (always collapses/expands in place,
+  // flipping .active-group which drives the <ul> display; aria-expanded synced).
+  // The HEADER text behaves per sidebar:
+  //   • Writing (default): the header keeps navigating to the series landing —
+  //     so it does BOTH (chevron collapses, header text opens the landing).
+  //   • Projects (headerToggles=true): the header has no per-group landing, so
+  //     its text toggles the group in place too.
   const wireCollapsibles = (aside, headerToggles) => {
     aside.querySelectorAll(".pub-nav-group").forEach(group => {
       const ul = group.querySelector(":scope > ul");
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
     injectSidebar("/partials/projects-nav.html", aside => {
       markActiveByFilename(aside, "projects.html",
         aside.querySelectorAll(".pub-nav-home, .pub-nav-group li a"));
-      wireCollapsibles(aside, true);   // header click expands the group in place
+      wireCollapsibles(aside, true);   // no per-group landing → header toggles in place
     });
   } else if (page === "resume.html") {
     // Resume: single page — in-page scroll-spy TOC.
