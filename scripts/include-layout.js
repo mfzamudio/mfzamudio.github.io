@@ -89,20 +89,52 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   };
 
+  // Make each first-level group with sub-items collapsible: wrap its header
+  // link in a row and prepend a chevron toggle button. The header keeps
+  // navigating; the chevron expands/collapses the group (toggling .active-group,
+  // which drives the <ul> display). aria-expanded is kept in sync.
+  const wireCollapsibles = (aside) => {
+    aside.querySelectorAll(".pub-nav-group").forEach(group => {
+      const ul = group.querySelector(":scope > ul");
+      const series = group.querySelector(":scope > .pub-nav-series");
+      if (!ul || !series) return;   // childless groups stay plain links
+      const row = document.createElement("div");
+      row.className = "pub-nav-series-row";
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "pub-nav-toggle";
+      btn.setAttribute("aria-label", "Expand or collapse section");
+      group.insertBefore(row, series);
+      row.appendChild(btn);
+      row.appendChild(series);
+      const sync = () => btn.setAttribute("aria-expanded",
+        group.classList.contains("active-group") ? "true" : "false");
+      sync();
+      btn.addEventListener("click", () => {
+        group.classList.toggle("active-group");
+        sync();
+      });
+    });
+  };
+
   if (path.includes("/publications/")) {
-    // Publications: only the current series expands. Series-landing links are
-    // matchable, so the header can highlight on its own landing page.
-    injectSidebar("/partials/publications-nav.html", aside =>
-      markActiveByFilename(aside, "publications.html"));
+    // Publications: the current series starts expanded; any group can be
+    // toggled open/closed via its chevron. Series-landing links are matchable,
+    // so the header can highlight on its own landing page.
+    injectSidebar("/partials/publications-nav.html", aside => {
+      markActiveByFilename(aside, "publications.html");
+      wireCollapsibles(aside);
+    });
   } else if (page === "projects.html" || path.includes("/projects/")) {
     // Projects: the same nav on the grid page AND every project detail page,
-    // so you stay oriented. Keep BOTH groups expanded (full list always
-    // visible) and highlight the project you're currently viewing. Only the
+    // so you stay oriented. Both groups start expanded (full list visible) and
+    // are collapsible; the project you're viewing is highlighted. Only the
     // home link + leaf items can match (section headers point at the grid).
     injectSidebar("/partials/projects-nav.html", aside => {
       aside.querySelectorAll(".pub-nav-group").forEach(g => g.classList.add("active-group"));
       markActiveByFilename(aside, "projects.html",
         aside.querySelectorAll(".pub-nav-home, .pub-nav-group li a"));
+      wireCollapsibles(aside);
     });
   } else if (page === "resume.html") {
     // Resume: single page — in-page scroll-spy TOC.

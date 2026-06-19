@@ -674,8 +674,35 @@ main section h4 {
 }
 .pub-nav-series:only-child::before { display: none; }   /* childless groups (Capstone) */
 .pub-nav-series:hover { color: var(--text); }
-.pub-nav-group.active-group > .pub-nav-series { color: #fff; }
+.pub-nav-group.active-group > .pub-nav-series,
+.pub-nav-group.active-group > .pub-nav-series-row > .pub-nav-series { color: #fff; }
 .pub-nav-group.active-group > .pub-nav-series::before { transform: rotate(90deg); color: var(--accent); }
+
+/* Collapsible first level: include-layout.js wraps each header that has
+   sub-items in a .pub-nav-series-row and prepends a chevron toggle button.
+   The header still navigates; the chevron expands/collapses the group. */
+.pub-nav-series-row { display: flex; align-items: stretch; }
+.pub-nav-series-row > .pub-nav-series { flex: 1 1 auto; padding-left: 2px; }
+.pub-nav-series-row > .pub-nav-series::before { display: none; }   /* button is the indicator now */
+.pub-nav-toggle {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 6px 0 10px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--text-faint);
+  -webkit-tap-highlight-color: transparent;
+}
+.pub-nav-toggle::before {
+  content: "\25B8";
+  font-size: 0.7rem;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+.pub-nav-toggle[aria-expanded="true"]::before { transform: rotate(90deg); color: var(--accent); }
+.pub-nav-toggle:hover::before { color: var(--text); }
 
 /* Second level: shown only for the series you're currently in. */
 .pub-nav-group ul { list-style: none; margin: 0 0 8px; padding: 0; display: none; }
