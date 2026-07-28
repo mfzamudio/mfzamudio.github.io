@@ -147,8 +147,23 @@
     </div>
 
     <div class="concept-section">
+      <h4>LIMIT / TOP &mdash; What They Are, and Why You'd Use Them</h4>
+      <p><code>LIMIT</code>/<code>TOP</code> cap how many rows a query returns, after everything else (<code>WHERE</code>, <code>JOIN</code>, <code>GROUP BY</code>, <code>ORDER BY</code>) has already run. The everyday reasons to reach for it: previewing a huge table without pulling millions of rows to your screen, pagination (page 2 = skip the first N, then limit), and "top-N" reports (highest spenders, most recent orders) once you've sorted with <code>ORDER BY</code>. Without an explicit <code>ORDER BY</code>, which rows you get back is not guaranteed to be stable across runs.</p>
+      <p class="code-label">SQL &middot; LIMIT vs. TOP, same result</p>
+      <pre class="code-block"><code>-- ANSI / DuckDB / BigQuery / Snowflake / Databricks / Redshift: LIMIT trails the query
+SELECT id, order_date, amount
+FROM orders
+ORDER BY order_date DESC
+LIMIT 5;
+
+-- Fabric / SQL Server: TOP is positional, right after SELECT -- not a trailing clause
+SELECT TOP 5 id, order_date, amount
+FROM orders
+ORDER BY order_date DESC;</code></pre>
+    </div>
+    <div class="concept-section">
       <h4>The ANSI Baseline &mdash; Run for Real, Then Compared</h4>
-      <p>Every query on this page starts from an ANSI baseline that actually runs in DuckDB, so the comparisons below aren't hypothetical &mdash; they're annotated variants of a query that executes. <code>DATE_TRUNC</code>'s argument order is the single most common copy-paste bug moving a query between BigQuery and any other platform on this list.</p>
+      <p>Every query on this page starts from an ANSI baseline that actually runs in DuckDB, so the comparisons below aren't hypothetical &mdash; they're annotated variants of a query that executes. <code>DATE_TRUNC(unit, timestamp)</code> rounds a date/timestamp <em>down</em> to the start of the given unit (month, quarter, year) &mdash; the standard way to bucket a timestamp column so <code>GROUP BY</code> can aggregate "per month" instead of per exact instant. <code>DATE_TRUNC</code>'s argument order is the single most common copy-paste bug moving a query between BigQuery and any other platform on this list.</p>
       <p class="code-label">SQL &middot; ANSI baseline (executed) + the DATE_TRUNC gotcha</p>
       <pre class="code-block"><code>-- Runs for real in DuckDB / PostgreSQL / Snowflake / Redshift as-is:
 SELECT DATE_TRUNC('month', order_date) AS month, SUM(amount)
@@ -160,7 +175,8 @@ SELECT DATE_TRUNC(order_date, MONTH) AS month, SUM(amount)
 FROM orders
 GROUP BY month;
 
--- String concatenation: -- works everywhere except Fabric/SQL Server
+-- CONCAT / || joins strings end to end -- building a display label from parts:
+-- works everywhere except Fabric/SQL Server
 SELECT first_name || ' ' || last_name AS full_name FROM customers;
 -- Fabric/SQL Server: `+` overloads for strings, but silently does numeric addition
 -- if either side isn't already a string -- BigQuery/Snowflake's CONCAT() can't do that by accident
@@ -168,7 +184,7 @@ SELECT first_name + ' ' + last_name AS full_name FROM customers;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Semi-Structured Data, Four Names (ties to Part 6)</h4>
-      <p>BigQuery <code>STRUCT</code>/<code>ARRAY</code> with dot notation; Snowflake <code>VARIANT</code> with colon notation; Databricks <code>STRUCT</code>/<code>MAP</code>; Redshift <code>SUPER</code>. Unnesting an array also has four names: <code>UNNEST()</code>, <code>LATERAL FLATTEN</code>, <code>EXPLODE()</code> &mdash; same concept throughout.</p>
+      <p>These are types built to hold a whole nested/hierarchical value &mdash; an object, an array, a mix &mdash; in one column, instead of forcing you to normalize every nested field into its own table before you can query it. <strong><code>STRUCT</code></strong> (BigQuery, Databricks) is a fixed, named record type: a set of sub-fields with known names and types, accessed with dot notation, like a mini-table living inside one column. <strong><code>VARIANT</code></strong> (Snowflake) is the opposite trade-off: a flexible, schema-less container that can hold any JSON-like value (object, array, scalar) without declaring its shape up front, accessed with colon notation. <strong><code>MAP</code></strong> (Databricks) holds an arbitrary number of key-value pairs of the same type, for when the set of keys isn't fixed (e.g. a shopping cart's product IDs). BigQuery <code>STRUCT</code>/<code>ARRAY</code> with dot notation; Snowflake <code>VARIANT</code> with colon notation; Databricks <code>STRUCT</code>/<code>MAP</code>; Redshift <code>SUPER</code>. Unnesting an array also has four names: <code>UNNEST()</code>, <code>LATERAL FLATTEN</code>, <code>EXPLODE()</code> &mdash; same concept throughout.</p>
       <p class="code-label">SQL &middot; same field, four extraction syntaxes (reference)</p>
       <pre class="code-block"><code>-- This series (SQLite/DuckDB), Part 6:
 SELECT json_extract(payload, '$.device') FROM customer_events;
@@ -184,7 +200,7 @@ SELECT JSON_VALUE(payload, '$.device') FROM customer_events;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Partitioning & Clustering, Four Names Plus One Different Architecture (ties to Part 9)</h4>
-      <p>BigQuery/Databricks/Fabric all separate storage from compute (see <a href="pattern-storage-vs-compute.html">Storage vs. Compute</a>), so partitioning/clustering is purely a storage-layout decision. Redshift's <code>DISTKEY</code> controls which <em>node</em> a row lives on &mdash; a genuinely different, node-distributed architecture, not just different syntax for the same idea.</p>
+      <p><code>PARTITION BY</code> (table DDL, not the <code>OVER (PARTITION BY ...)</code> window-function clause from Part 4 &mdash; same keywords, unrelated purpose) physically splits a table's data into separate files/segments by a column's value, almost always a date. A query that filters on that column then only has to read the matching segments instead of the whole table &mdash; Part 9's DuckDB demo measures exactly this ("Scanning Files: 1/3"). Clustering sorts the rows <em>within</em> each partition by a second column, so filters on that column are also fast. BigQuery/Databricks/Fabric all separate storage from compute (see <a href="pattern-storage-vs-compute.html">Storage vs. Compute</a>), so partitioning/clustering is purely a storage-layout decision. Redshift's <code>DISTKEY</code> controls which <em>node</em> a row lives on &mdash; a genuinely different, node-distributed architecture, not just different syntax for the same idea.</p>
       <p class="code-label">SQL &middot; partition + cluster DDL, four platforms (reference)</p>
       <pre class="code-block"><code>-- BigQuery
 CREATE TABLE orders PARTITION BY DATE(order_date) CLUSTER BY customer_id AS SELECT ...;
