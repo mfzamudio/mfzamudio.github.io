@@ -150,23 +150,45 @@
     <div class="concept-section">
       <h4>Indexes: SCAN Becomes SEARCH</h4>
       <p>An <strong>index</strong> is a separate, sorted data structure the engine keeps alongside a table, mapping a column's values to the rows that have them &mdash; conceptually the same as a book's index letting you jump straight to a page instead of reading the whole book to find a topic. Without one, an unindexed filter forces the engine to read every single row (a <code>SCAN</code>) just to check whether it matches; an index on the filtered/joined column lets the engine jump straight to matching rows instead (a <code>SEARCH</code>). <code>EXPLAIN QUERY PLAN</code> (SQLite's syntax; every platform has an equivalent) shows you which one is actually happening, rather than requiring you to guess. Three common anti-patterns quietly defeat an index even when one exists: <code>SELECT *</code> (the engine often still has to read the full row even after finding it via the index), a function wrapped around the indexed column in <code>WHERE</code> like <code>WHERE UPPER(city) = 'TORONTO'</code> (the index is built on the raw column, not the function's output), and implicit type conversion (comparing a text column to a numeric literal forces a conversion on every row, which usually blocks index use too).</p>
-      <p class="code-label">SQL &middot; EXPLAIN QUERY PLAN, before &amp; after an index</p>
-      <pre class="code-block"><code>-- Before: no index on the filtered/joined columns
-EXPLAIN QUERY PLAN
+      <p class="code-label">SQL &middot; EXPLAIN QUERY PLAN, before an index (measured output, this exact seed data)</p>
+      <pre class="code-block"><code>EXPLAIN QUERY PLAN
 SELECT c.name, SUM(oi.quantity * oi.unit_price) AS spend
 FROM customers c
 JOIN orders o       ON o.customer_id = c.id
 JOIN order_items oi ON oi.order_id   = o.id
 WHERE c.city = 'Toronto'
 GROUP BY c.name;
--- ... SCAN oi / SCAN c -- reads every row of each table
 
-CREATE INDEX idx_customers_city      ON customers(city);
-CREATE INDEX idx_orders_customer_id  ON orders(customer_id);
-CREATE INDEX idx_order_items_order_id ON order_items(order_id);
+--  id  parent  detail
+--   8       0  SCAN oi                                          -- reads ALL 80 order_items rows
+--  10       0  SEARCH o USING INTEGER PRIMARY KEY (rowid=?)
+--  13       0  SEARCH c USING INTEGER PRIMARY KEY (rowid=?)
+--  18       0  USE TEMP B-TREE FOR GROUP BY
+--
+-- The cost is on line 1: with no index to start from customers, the engine has no
+-- cheaper entry point than order_items, so it SCANs all 80 rows and only checks the
+-- city filter afterward, per row -- the city filter isn't reducing any work yet.</code></pre>
+      <p class="code-label">SQL &middot; the fix</p>
+      <pre class="code-block"><code>CREATE INDEX idx_customers_city       ON customers(city);
+CREATE INDEX idx_orders_customer_id   ON orders(customer_id);
+CREATE INDEX idx_order_items_order_id ON order_items(order_id);</code></pre>
+      <p class="code-label">SQL &middot; EXPLAIN QUERY PLAN, after (measured output, same query, same data)</p>
+      <pre class="code-block"><code>--  id  parent  detail
+--  10       0  SEARCH c  USING INDEX idx_customers_city (city=?)
+--  15       0  SEARCH o  USING COVERING INDEX idx_orders_customer_id (customer_id=?)
+--  19       0  SEARCH oi USING INDEX idx_order_items_order_id (order_id=?)
+--  24       0  USE TEMP B-TREE FOR GROUP BY
+--
+-- Every SCAN became a SEARCH. The engine now starts from the city index, so it only
+-- ever touches rows that can possibly qualify.</code></pre>
+      <p class="code-label">Cost, before vs. after (measured against this exact 25-customer / 40-order / 80-order_item dataset)</p>
+      <pre class="code-block"><code>Before: 1 full scan  = all 80 order_items rows touched, regardless of the Toronto filter
+After:  7 customers -> 13 orders -> 26 order_items rows touched via the three indexes
 
--- After: the same EXPLAIN QUERY PLAN now shows SEARCH ... USING INDEX
--- instead of SCAN -- the engine jumps straight to matching rows</code></pre>
+-- ~3x fewer rows touched on a toy dataset this small -- the same SCAN-to-SEARCH change
+-- on a production table with millions of rows is the difference between a query that
+-- times out and one that returns instantly, because the gap scales with table size,
+-- not with the shape of the query.</code></pre>
     </div>
     <div class="concept-section">
       <h4>Partition Pruning, for Real</h4>
