@@ -142,6 +142,7 @@
         <li><strong>OLTP</strong> (PostgreSQL, MySQL, SQL Server, Oracle) &mdash; "record this transaction correctly, right now, with many people writing at once."</li>
         <li><strong>Cloud analytical warehouses</strong> (Snowflake, BigQuery, Databricks, Fabric, Redshift) &mdash; "scan and aggregate billions of rows, cheaply, without me managing a cluster."</li>
         <li><strong>Embedded/local</strong> (SQLite, DuckDB) &mdash; "run real SQL with no server, for development or a genuinely small dataset."</li>
+        <li><strong>In-memory</strong> (Redis, Memcached, SAP HANA, Oracle TimesTen) &mdash; not a 4th category, an orthogonal property: "make one hot, frequently-read thing sub-millisecond fast." Redis/Memcached aren't SQL at all.</li>
         <li>Existing cloud commitment is usually the strongest real-world constraint &mdash; often stronger than any feature comparison.</li>
       </ol>
     </div>
@@ -199,6 +200,24 @@
       <p><strong>Real scenario &mdash; why it wins:</strong> writing and testing this entire series' 14 notebooks. Every concept from JOINs to window functions to a real dbt project needed to run reproducibly on any machine, with zero setup and no cloud account or credit card required. SQLite/DuckDB win here because the job isn't "serve production traffic" &mdash; it's "verify the SQL is correct, fast, for free, anywhere" &mdash; and spinning up a warehouse account for that would add friction for zero benefit.</p>
     </div>
     <div class="concept-section">
+      <h4>In-Memory Databases: A Different Axis Entirely</h4>
+      <p>"In-memory" isn't a fourth category alongside the three above &mdash; it's an orthogonal property that cuts across all of them. An in-memory database keeps its working data resident in RAM instead of reading it from disk on every query, which is what makes SQLite's <code>:memory:</code> mode and DuckDB's default in-memory connection (both used throughout this series) so fast for small datasets. The same idea scales up in production: <strong>Redis</strong> and <strong>Memcached</strong> are the two most widely used in-memory stores by far, almost always deployed as a caching layer in front of a slower OLTP database or warehouse &mdash; a session store, a rate limiter, a leaderboard, or a cache of expensive query results. Purpose-built in-memory <em>SQL</em> engines exist too for when the whole workload needs that speed, not just a cache: <strong>SAP HANA</strong> and <strong>Oracle TimesTen</strong> are the enterprise names, built for sub-millisecond transactional and analytical SQL at scale.</p>
+      <p><strong>Accuracy note:</strong> Redis and Memcached are <em>not</em> SQL databases &mdash; they're key-value stores with their own APIs. They come up constantly in "in-memory database" conversations, but they don't belong next to SQLite/DuckDB/HANA/TimesTen on a "which SQL engine" decision; they solve a different problem (a fast cache in front of a system of record) rather than replacing that system of record.</p>
+      <p><strong>Pros:</strong></p>
+      <ul>
+        <li><strong>Sub-millisecond latency</strong> &mdash; no disk I/O in the read/write path, often 10-100x faster than the same operation against a disk-backed database.</li>
+        <li><strong>Very high throughput</strong> for simple, repeated lookups &mdash; exactly the shape of a cache hit or a session read.</li>
+        <li><strong>Simple mental model</strong> (for Redis/Memcached specifically) &mdash; mostly key-value gets and sets, easy to reason about and operate.</li>
+      </ul>
+      <p><strong>Cons:</strong></p>
+      <ul>
+        <li><strong>Volatility risk</strong> &mdash; data in RAM disappears on a crash or restart unless the specific product adds persistence (snapshotting, an append-only log, replication); never treat a cache as the system of record unless it's explicitly built to be one.</li>
+        <li><strong>Cost</strong> &mdash; RAM is priced far higher per gigabyte than disk, so an in-memory dataset that would be cheap to store on a warehouse gets expensive fast at scale.</li>
+        <li><strong>A hard ceiling</strong> &mdash; the dataset has to fit in the memory of the machine (or cluster) running it; this doesn't scale to "billions of rows" the way a disk-backed warehouse does.</li>
+      </ul>
+      <p><strong>Real scenario &mdash; why it wins:</strong> a product page showing "1,204 people viewed this today." Recomputing that count from the warehouse on every page load would be slow and expensive at any real traffic volume; incrementing a counter in Redis and reading it back is a sub-millisecond operation that can absorb enormous read traffic. Redis wins here because the job is "serve a hot, frequently-read number fast," not "be the durable record of every view event" &mdash; the warehouse or OLTP database still owns that.</p>
+    </div>
+    <div class="concept-section">
       <h4>The Decision Isn't Permanent</h4>
       <p>Many real architectures run more than one category at once &mdash; an OLTP engine feeding a warehouse via CDC (<a href="pattern-orchestration-cdc.html">Orchestration &amp; CDC</a>). Don't default to "whatever's newest": an OLTP question answered with a warehouse (or vice versa) usually surfaces as a cost or performance problem months later, not immediately.</p>
     </div>
@@ -211,6 +230,7 @@
           <tr><td>Does this serve a live application's reads/writes?</td><td>An OLTP engine (Category 1)</td></tr>
           <tr><td>Am I aggregating/analyzing large historical volumes?</td><td>A cloud warehouse (Category 2)</td></tr>
           <tr><td>Am I developing/testing locally, or is the data genuinely small?</td><td>SQLite/DuckDB (Category 3)</td></tr>
+          <tr><td>Am I caching a hot, frequently-read value in front of a system of record?</td><td>Redis/Memcached (in-memory, not SQL) &mdash; keep the system of record elsewhere</td></tr>
           <tr><td>Do I already have a dominant cloud provider?</td><td>Often decides the warehouse for you (BigQuery&rarr;GCP, Redshift&rarr;AWS, Fabric&rarr;Azure) &mdash; Snowflake and Databricks are the two credible multi-cloud choices</td></tr>
           <tr><td>Does my organization already run Oracle/SQL Server for OLTP?</td><td>Worth knowing PL/SQL/T-SQL (Part 11) regardless of which warehouse sits alongside it</td></tr>
         </tbody>
