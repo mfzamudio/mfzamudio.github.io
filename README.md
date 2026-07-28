@@ -115,6 +115,27 @@ The bridge from an exploratory notebook (or the Data Analytics Library) to a sch
 |---------|-------|
 | Capstone | [From Notebook to Platform Pipeline](publications/from-notebook-to-platform-pipeline.html) |
 
+**SQL for Every Data Platform** — 14-Part Series (July 2026)
+The first skill any new platform assumes. Fundamentals (DDL/DML/DQL) through schema design, data cleaning, semi-structured/JSON data, the query cookbook, Slowly Changing Dimensions & incremental loading, performance tuning, simulating a platform locally with dbt, procedural SQL (stored procedures/triggers), and a "same query, every platform" comparison across BigQuery, Snowflake, Databricks, Fabric, and Redshift. Code companion: [`sql-for-data-platforms`](https://github.com/mfzamudio/sql-for-data-platforms) — 14 runnable Jupyter notebooks (SQLite/DuckDB, no server required) plus a working dbt-duckdb project.
+
+| Part | Title |
+|------|-------|
+| Part 1 | [SQL Fundamentals: DDL, DML, DQL](publications/sql-fundamentals.html) |
+| Part 2 | [Designing the Schema: Star vs. Snowflake](publications/sql-schema-design-star-snowflake.html) |
+| Part 3 | [Joins & Aggregations](publications/sql-joins-aggregations.html) |
+| Part 4 | [Subqueries, CTEs & Window Functions](publications/sql-subqueries-ctes-window-functions.html) |
+| Part 5 | [Data Cleaning & Formatting with SQL](publications/sql-data-cleaning-formatting.html) |
+| Part 6 | [Semi-Structured Data & JSON in SQL](publications/sql-json-semi-structured-data.html) |
+| Part 7 | [The Query Cookbook: Day-to-Day Patterns](publications/sql-query-cookbook.html) |
+| Part 8 | [Slowly Changing Dimensions & Incremental Loading](publications/sql-scd-incremental-loading.html) |
+| Part 9 | [Query Performance & Tuning](publications/sql-performance-tuning.html) |
+| Part 10 | [Simulating a Platform Locally (dbt & Governance)](publications/sql-local-simulation.html) |
+| Part 11 | [Procedural SQL: Stored Procedures, Triggers & PL/SQL](publications/sql-procedural-plsql-tsql.html) |
+| Part 12 | [Same Query, Every Platform](publications/sql-syntax-across-platforms.html) |
+| Part 13 | [Choosing Your Database](publications/sql-choosing-your-database.html) |
+| Part 14 | [SQL Style & Best Practices](publications/sql-style-best-practices.html) |
+| Code | [sql-for-data-platforms — GitHub](https://github.com/mfzamudio/sql-for-data-platforms) |
+
 ---
 
 ## Technical Skills

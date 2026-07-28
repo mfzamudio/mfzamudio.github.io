@@ -225,6 +225,34 @@ Platform-agnostic data engineering fundamentals. The through-line is **transfera
 | `data-architect.html` | Part 3 — Data Architect: The Strategist (Medallion diagram, Data Mesh, cloud table) |
 | `ml-ai-engineer.html` | Part 4 — ML/AI Engineer: The Deployer (RAG pipeline diagram, MLOps lifecycle) |
 
+### SQL for Every Data Platform (14-Part Series) — July 2026
+The first skill any new platform assumes. A flat 14-part series, fundamentals through procedural
+SQL through cross-platform syntax, using the **same anatomy as Learn the Pattern** (In 60 seconds
+box, concept sections, particle-flow SVG diagram) — **but with no separate landing page**: Part 1
+carries the series framing inline, and both Part 1's "prev" and Part 14's "next" nav link back to
+`publications.html` directly. A `platform-table` ("Same query, every platform") appears only on
+Part 12. **Code companion:** public GitHub repo [`sql-for-data-platforms`](https://github.com/mfzamudio/sql-for-data-platforms) —
+14 independently runnable Jupyter notebooks (SQLite/DuckDB, zero server except an optional Docker
+Postgres for Part 11's procedural-SQL demo) plus a working dbt-duckdb project (seeds, staging/mart
+models, an incremental model, generic + singular tests).
+
+| File | Title |
+|---|---|
+| `sql-fundamentals.html` | Part 1 — SQL Fundamentals: DDL, DML, DQL |
+| `sql-schema-design-star-snowflake.html` | Part 2 — Designing the Schema: Star vs. Snowflake |
+| `sql-joins-aggregations.html` | Part 3 — Joins & Aggregations |
+| `sql-subqueries-ctes-window-functions.html` | Part 4 — Subqueries, CTEs & Window Functions |
+| `sql-data-cleaning-formatting.html` | Part 5 — Data Cleaning & Formatting with SQL |
+| `sql-json-semi-structured-data.html` | Part 6 — Semi-Structured Data & JSON in SQL |
+| `sql-query-cookbook.html` | Part 7 — The Query Cookbook: Day-to-Day Patterns |
+| `sql-scd-incremental-loading.html` | Part 8 — Slowly Changing Dimensions & Incremental Loading |
+| `sql-performance-tuning.html` | Part 9 — Query Performance & Tuning |
+| `sql-local-simulation.html` | Part 10 — Simulating a Platform Locally (dbt & Governance) |
+| `sql-procedural-plsql-tsql.html` | Part 11 — Procedural SQL: Stored Procedures, Triggers & PL/SQL |
+| `sql-syntax-across-platforms.html` | Part 12 — Same Query, Every Platform (BigQuery/Snowflake/Databricks/Fabric/Redshift) |
+| `sql-choosing-your-database.html` | Part 13 — Choosing Your Database |
+| `sql-style-best-practices.html` | Part 14 — SQL Style & Best Practices |
+
 ---
 
 ## Skills & Tools Inventory
@@ -274,6 +302,43 @@ Platform-agnostic data engineering fundamentals. The through-line is **transfera
 ---
 
 ## Session History / Changelog
+
+### July 28, 2026 — "SQL for Every Data Platform" series (Program E) + new public code repo
+Built a new 14-part flat series after Mario asked to check whether the portfolio referenced his
+private `data-analytics-knowledge-base` vault (it didn't) and to audit/complement its SQL content.
+Real gaps found there: no performance-tuning concept note, no local-simulation write-up, zero
+cross-platform syntax comparison, and (surfaced across several follow-ups) nothing on schema
+design technique, data cleaning, semi-structured/JSON, SCD + incremental loading, procedural SQL,
+or a best-practices module.
+
+- **New public repo, not an edit to the private vault:** [`sql-for-data-platforms`](https://github.com/mfzamudio/sql-for-data-platforms)
+  (Mario's choice, confirmed via AskUserQuestion) — 14 independently runnable Jupyter notebooks,
+  all executed with **0 error cells**, reusing/adapting the private vault's `sql-concepts-masterclass`
+  project (Parts 1/3/4/7/10) and writing 9 new modules from scratch. Includes a real dbt-duckdb
+  project (`dbt build` passes 52/52: 5 seeds, staging/mart models, one **incremental** model, generic
+  + singular tests) and a `docker-compose.yml` Postgres setup for Part 11's procedural-SQL demo
+  (the one module needing a real server — flagged and gracefully skipped if Docker isn't running).
+- **14 new portfolio pages** (`publications/sql-*.html`) in Program A's flat-series format (no
+  landing page — Part 1 carries the framing inline, matching Program A's own precedent). Every page
+  has a particle-flow SVG built from a shared node-flow generator; `platform-table` on Part 12 only.
+  Named cross-links added to 7 existing "Learn the Pattern" pages plus `cleaning-data.html` and
+  `data-engineer.html`. New `.pub-nav-group` in `partials/publications-nav.html`; one featured
+  `.post-card` in `publications/publications.html`.
+- **ROADMAP.md**: new `## Program E` section (E0–E5: status, pages, publishing calendar, build
+  checklist, 14 LinkedIn posts, series assets); §0 and the Master Publishing Calendar updated —
+  Program E's 14 posts appended after Program D's (Thu Sep 10 → Tue Oct 27, 2026, same Tue 10am/
+  Thu 1pm ET cadence), **not yet scheduled** in LinkedIn as of this session.
+- **Verified, not assumed:** every internal link on all 14 pages resolves (browser-style relative
+  path resolution, not naive filesystem checks — this site's `publications/*.html` convention
+  deliberately over-corrects `../` paths that browsers clamp at root); tag balance checked; the
+  `sql-for-data-platforms` GitHub repo confirmed public via `gh repo view`.
+- **Known limitation, disclosed:** Part 11's PL/pgSQL demo could not be execution-verified in the
+  build sandbox (no Docker available there) — the SQL is correct by inspection/domain knowledge but
+  needs a real `docker compose up` run to confirm end-to-end, same bar as the vault's own
+  "real executed output" convention.
+- **Open/deferred, not assumed:** whether `sql-for-data-platforms` should also get its own
+  portfolio **project card** (like `DataAnalyticsLibrary`'s Featured #1) is a separate decision from
+  publishing the series — flagged for Mario, not decided here.
 
 ### June 19, 2026 — Side TOC extended to Projects & Resume + ROADMAP/content audit
 Reused the publications left-sidebar pattern as an **in-page table of contents** on `projects.html` and `resume.html` (the user asked for "the same lateral content bar"), and audited the ROADMAP against the live pages.

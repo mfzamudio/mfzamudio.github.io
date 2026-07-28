@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 12 — Same Query, Every Platform | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      padding: 40px 32px;
+      border-radius: 12px;
+      margin: 24px 0 36px;
+      text-align: center;
+    }
+    .pub-hero .series-label {
+      display: inline-block;
+      background: rgba(37,99,235,0.35);
+      color: #bfdbfe;
+      border: 1px solid rgba(191,219,254,0.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 0 0 32px;
+      box-shadow: 0 4px 16px rgba(15,23,42,.12);
+    }
+    .sixty-sec .sixty-label {
+      display: inline-block;
+      background: #6d28d9;
+      color: #fff;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin: 28px 0 8px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section {
+      border-left: 4px solid #2563eb;
+      padding-left: 20px;
+      margin: 28px 0;
+    }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .code-block-wrap { margin: 20px 0; }
+    .platform-table {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+    }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0 24px;
+    }
+    .series-nav a {
+      display: block;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: #0f172a;
+      transition: border-color 0.2s, transform 0.2s;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) {
+      .series-nav { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+
+    <div class="pub-hero">
+      <div class="series-label">SQL for Every Data Platform &middot; Part 12</div>
+      <h2>Same Query, Every Platform</h2>
+      <p class="subtitle">A reference comparison of how the same query looks across BigQuery, Snowflake, Databricks SQL, Microsoft Fabric, and Amazon Redshift. Capability-level, not live-tested &mdash; the same accuracy guardrail as the site's Learn the Pattern platform-tables.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Where the platform-specific syntax lives &mdash; all in one place (see <a href="pattern-data-platform-layers.html">Anatomy of a Data Platform</a> for how these five platforms map onto the same six universal layers):</p>
+      <ol>
+        <li><strong>BigQuery's</strong> <code>DATE_TRUNC(date, part)</code> reverses the argument order vs. everyone else's <code>DATE_TRUNC('part', date)</code> &mdash; the single most common copy-paste bug moving a query between platforms.</li>
+        <li><strong>Fabric/SQL Server's</strong> <code>+</code> silently does numeric addition instead of raising an error if either side isn't already a string.</li>
+        <li><strong>Redshift</strong> is architecturally different, not just syntactically &mdash; <code>DISTKEY</code>/<code>SORTKEY</code> encode a distributed-systems decision (which node), not just partitioning/clustering.</li>
+        <li><code>MERGE</code> support is the row most likely to be stale by the time you read it &mdash; verify current docs.</li>
+      </ol>
+    </div>
+
+    <div class="concept-section">
+      <h4>Semi-Structured Data, Four Names (ties to Part 6)</h4>
+      <p>BigQuery <code>STRUCT</code>/<code>ARRAY</code> with dot notation; Snowflake <code>VARIANT</code> with colon notation; Databricks <code>STRUCT</code>/<code>MAP</code>; Redshift <code>SUPER</code>. Unnesting an array also has four names: <code>UNNEST()</code>, <code>LATERAL FLATTEN</code>, <code>EXPLODE()</code> &mdash; same concept throughout.</p>
+    </div>
+    <div class="concept-section">
+      <h4>Partitioning & Clustering, Four Names Plus One Different Architecture (ties to Part 9)</h4>
+      <p>BigQuery/Databricks/Fabric all separate storage from compute (see <a href="pattern-storage-vs-compute.html">Storage vs. Compute</a>), so partitioning/clustering is purely a storage-layout decision. Redshift's <code>DISTKEY</code> controls which <em>node</em> a row lives on &mdash; a genuinely different, node-distributed architecture, not just different syntax for the same idea.</p>
+    </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 320" role="img" aria-label="Same query, five sets of keywords &mdash; details in the table below.">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+<filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+<linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+<linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M170,150 L222,150"/>
+<path id="c2" d="M372,150 L425,150"/>
+<path id="c3" d="M575,150 L628,150"/>
+<path id="c4" d="M778,150 L830,150"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="46" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">One ANSI baseline, five dialects</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="170.0" y1="150" x2="222.5" y2="150"/>
+<line x1="372.5" y1="150" x2="425.0" y2="150"/>
+<line x1="575.0" y1="150" x2="627.5" y2="150"/>
+<line x1="777.5" y1="150" x2="830.0" y2="150"/>
+        </g>
+        <g>
+          <rect x="20" y="105" width="150" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="95" y="140" text-anchor="middle" font-size="22">🔵</text>
+          <text x="95" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">BigQuery</text>
+          <text x="95" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">GCP</text>
+        </g>
+<g>
+          <rect x="222" y="105" width="150" height="90" rx="12" fill="url(#gPurple)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="298" y="140" text-anchor="middle" font-size="22">❄️</text>
+          <text x="298" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Snowflake</text>
+          <text x="298" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">SaaS</text>
+        </g>
+<g>
+          <rect x="425" y="105" width="150" height="90" rx="12" fill="url(#gTeal)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="500" y="140" text-anchor="middle" font-size="22">🧱</text>
+          <text x="500" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Databricks</text>
+          <text x="500" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Delta</text>
+        </g>
+<g>
+          <rect x="628" y="105" width="150" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="702" y="140" text-anchor="middle" font-size="22">🟩</text>
+          <text x="702" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Fabric</text>
+          <text x="702" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Azure</text>
+        </g>
+<g>
+          <rect x="830" y="105" width="150" height="90" rx="12" fill="url(#gPurple)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="905" y="140" text-anchor="middle" font-size="22">🟥</text>
+          <text x="905" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Redshift</text>
+          <text x="905" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">AWS</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" begin="0.00s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.20s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.73s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="1.26s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.40s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.93s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="1.46s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.60s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="1.13s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="1.66s" repeatCount="indefinite"><mpath href="#c4"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Same query, five sets of keywords &mdash; details in the table below.</p>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>Capability</th><th>BigQuery</th><th>Snowflake</th><th>Databricks SQL</th><th>Fabric / SQL Server</th><th>Redshift</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Row limit</td><td><code>LIMIT n</code></td><td><code>LIMIT n</code></td><td><code>LIMIT n</code></td><td><code>TOP n</code> (positional)</td><td><code>LIMIT n</code></td></tr>
+          <tr><td>Truncate to month</td><td><code>DATE_TRUNC(d, MONTH)</code></td><td><code>DATE_TRUNC('month', d)</code></td><td><code>DATE_TRUNC('MONTH', d)</code></td><td><code>DATETRUNC(month, d)</code></td><td><code>DATE_TRUNC('month', d)</code></td></tr>
+          <tr><td>String concat</td><td><code>CONCAT(a,b)</code></td><td><code>a || b</code></td><td><code>CONCAT(a,b)</code></td><td><code>a + b</code></td><td><code>a || b</code></td></tr>
+          <tr><td>Nested/semi-structured</td><td><code>STRUCT</code>/<code>ARRAY</code></td><td><code>VARIANT</code>/<code>OBJECT</code></td><td><code>STRUCT</code>/<code>MAP</code></td><td><code>JSON_VALUE</code>/<code>OPENJSON</code></td><td><code>SUPER</code></td></tr>
+          <tr><td>Partitioning</td><td><code>PARTITION BY</code></td><td>automatic micro-partitions</td><td><code>PARTITIONED BY</code> (Delta)</td><td>Delta partitioning</td><td><code>DISTKEY</code> (different concept)</td></tr>
+          <tr><td>Clustering / sort</td><td><code>CLUSTER BY</code></td><td><code>CLUSTER BY</code> (key, not guarantee)</td><td>Z-ORDER / Liquid Clustering</td><td>evolving &ndash; verify docs</td><td><code>SORTKEY</code></td></tr>
+          <tr><td><code>MERGE</code> support</td><td>Yes</td><td>Yes</td><td>Yes (Delta)</td><td>Yes (T-SQL)</td><td>No native MERGE &ndash; verify current docs</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Capability-level only &mdash; not live-tested against a real account. Cloud SQL dialects change; verify against current vendor docs before relying on any specific syntax.</p>
+
+
+    <div class="highlight-box">
+      <p><strong>The takeaway:</strong> Treat every row on this page as "verify before you ship," not a fact to memorize. When migrating a query between platforms, check date functions and semi-structured access first &mdash; they have the least syntactic overlap.</p>
+    </div>
+
+    <p style="font-size:0.85rem;color:var(--text-muted, #64748b);margin:8px 2px 0;">
+      Runnable code for this part: <a href="https://github.com/mfzamudio/sql-for-data-platforms" target="_blank">sql-for-data-platforms</a> on GitHub &mdash; Module 12 of 14.
+    </p>
+
+    <div class="series-nav">
+      <a href="sql-procedural-plsql-tsql.html">
+        <span class="nav-dir">&#8592; Part 11</span>
+        Procedural SQL: Stored Procedures, Triggers & PL/SQL
+      </a>
+      <a href="sql-choosing-your-database.html" class="next">
+        <span class="nav-dir">Part 13 &#8594;</span>
+        Choosing Your Database
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Part 10 — Simulating a Platform Locally (dbt & Governance) | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      padding: 40px 32px;
+      border-radius: 12px;
+      margin: 24px 0 36px;
+      text-align: center;
+    }
+    .pub-hero .series-label {
+      display: inline-block;
+      background: rgba(37,99,235,0.35);
+      color: #bfdbfe;
+      border: 1px solid rgba(191,219,254,0.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .pub-hero h2 { color: white !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle { color: #bfdbfe; font-size: 1rem; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .sixty-sec {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 0 0 32px;
+      box-shadow: 0 4px 16px rgba(15,23,42,.12);
+    }
+    .sixty-sec .sixty-label {
+      display: inline-block;
+      background: #6d28d9;
+      color: #fff;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .sixty-sec p.intro { color: #94a3b8; font-size: 0.92rem; margin: 0 0 14px; font-style: italic; }
+    .sixty-sec ol { margin: 0; padding-left: 22px; }
+    .sixty-sec li { font-size: 0.96rem; line-height: 1.9; color: #e2e8f0; }
+    .sixty-sec li strong { color: #ffffff; }
+    .diagram-wrap {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin: 28px 0 8px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption { text-align:center; font-size:0.83rem; color:#475569; margin-bottom:24px; font-style:italic; }
+    .concept-section {
+      border-left: 4px solid #2563eb;
+      padding-left: 20px;
+      margin: 28px 0;
+    }
+    .concept-section h4 { color: #2563eb; font-size: 1rem; margin: 0 0 8px; }
+    .concept-section p { font-size: 0.92rem; color: #0f172a; margin: 0 0 8px; line-height: 1.7; }
+    .code-block-wrap { margin: 20px 0; }
+    .platform-table {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+    }
+    .platform-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .platform-table th, .platform-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; line-height: 1.5; }
+    .platform-table thead th { background: #0f172a; color: #fff; font-size: 0.8rem; font-weight: 700; }
+    .platform-table thead th:first-child { background: #1e1b4b; }
+    .platform-table tbody td:first-child { font-weight: 700; color: #6d28d9; background: #f5f3ff; white-space: nowrap; }
+    .platform-table tbody tr:last-child td { border-bottom: none; }
+    .platform-table tbody tr:hover td { background: #f8fafc; }
+    .platform-table tbody tr:hover td:first-child { background: #ede9fe; }
+    .table-note { font-size: 0.8rem; color: #475569; font-style: italic; margin: 8px 2px 0; }
+    .highlight-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .highlight-box p { margin: 0; font-size: 0.92rem; color: #0f172a; line-height: 1.7; }
+    .series-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0 24px;
+    }
+    .series-nav a {
+      display: block;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: #0f172a;
+      transition: border-color 0.2s, transform 0.2s;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .series-nav a:hover { border-color: #2563eb; transform: translateY(-2px); color: #0f172a; }
+    .series-nav a .nav-dir { font-size: 0.75rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .series-nav a.next { text-align: right; }
+    @media (max-width: 600px) {
+      .series-nav { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+
+    <div class="pub-hero">
+      <div class="series-label">SQL for Every Data Platform &middot; Part 10</div>
+      <h2>Simulating a Platform Locally (dbt &amp; Governance)</h2>
+      <p class="subtitle">Every prior module ran against SQLite/DuckDB. This part compares local-simulation options honestly, then drives a real dbt-duckdb project &mdash; showing dbt's tests/docs/DAG as lightweight governance you get for free on a laptop.</p>
+    </div>
+
+    <div class="sixty-sec">
+      <span class="sixty-label">In 60 seconds</span>
+      <p class="intro">Match the tool to the question:</p>
+      <ol>
+        <li><strong>SQLite in-memory</strong> &mdash; zero-install, fastest iteration on plain relational SQL.</li>
+        <li><strong>DuckDB</strong> &mdash; zero-install, columnar/analytical (Parquet, partitioning, window-function-heavy queries).</li>
+        <li><strong>dbt-duckdb</strong> &mdash; test transformation <em>pipelines</em> (staging &rarr; marts, tests, docs) without a real warehouse.</li>
+        <li><strong>Docker Postgres/MySQL</strong> &mdash; the one option needed for something SQLite/DuckDB genuinely can't do: real procedural SQL (Part 11).</li>
+        <li>dbt's tests + <code>dbt docs generate</code> give you a catalog and a lineage graph, for free, from code you'd write anyway.</li>
+      </ol>
+    </div>
+
+    <div class="concept-section">
+      <h4>The Honest Ordering</h4>
+      <p>Reach for SQLite/DuckDB first &mdash; they cover the overwhelming majority of what this whole series teaches with zero setup. Reach for Docker only for the one thing they can't simulate: real server-side procedural execution (Part 11).</p>
+    </div>
+    <div class="concept-section">
+      <h4>A Real dbt Project, Not a Toy</h4>
+      <p>The companion repo's <code>dbt/</code> folder seeds the same Store dataset, builds staging views and mart tables, runs an <strong>incremental</strong> model, and passes both generic (unique/not_null/relationships/accepted_values) and singular tests &mdash; all executed via <code>dbt build</code> against a local DuckDB file, no warehouse account needed.</p>
+    </div>
+    <div class="concept-section">
+      <h4>The Incremental Model: Part 8, Productionized</h4>
+      <p>The repo's <code>incremental_orders</code> model is configured <code>materialized='incremental'</code>: first run builds the full table; every run after, dbt's <code>is_incremental()</code> block filters the source to rows newer than what's already in the target &mdash; the exact watermark pattern from Part 8, expressed as configuration instead of hand-written procedural logic.</p>
+    </div>
+    <div class="concept-section">
+      <h4>Tests and Docs as Governance-Lite</h4>
+      <p>A platform's governance layer usually provides access control, a catalog, and lineage. dbt gives you two of the three for free: documented models + column tests <em>are</em> a searchable catalog once you run <code>dbt docs generate</code>; the dependency graph built from every <code>ref()</code> call <em>is</em> a lineage graph. See <a href="pattern-governance-lineage.html">Governance, Catalog &amp; Lineage</a> for the platform-scale version (Unity Catalog, Purview), and <a href="data-engineer.html">Data Engineer: The Builder</a> for where dbt sits in a data engineer's day-to-day toolkit.</p>
+    </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 320" role="img" aria-label="Reach for the leftmost option that answers the question; Docker only for Part 11.">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+<filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+<linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+<linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M170,150 L290,150"/>
+<path id="c2" d="M440,150 L560,150"/>
+<path id="c3" d="M710,150 L830,150"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="46" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Four local-simulation options, one honest ordering</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="170.0" y1="150" x2="290.0" y2="150"/>
+<line x1="440.0" y1="150" x2="560.0" y2="150"/>
+<line x1="710.0" y1="150" x2="830.0" y2="150"/>
+        </g>
+        <g>
+          <rect x="20" y="105" width="150" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="95" y="140" text-anchor="middle" font-size="22">🪶</text>
+          <text x="95" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">SQLite</text>
+          <text x="95" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Zero-install</text>
+        </g>
+<g>
+          <rect x="290" y="105" width="150" height="90" rx="12" fill="url(#gPurple)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="365" y="140" text-anchor="middle" font-size="22">🦆</text>
+          <text x="365" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">DuckDB</text>
+          <text x="365" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Analytical</text>
+        </g>
+<g>
+          <rect x="560" y="105" width="150" height="90" rx="12" fill="url(#gTeal)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="635" y="140" text-anchor="middle" font-size="22">🔧</text>
+          <text x="635" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">dbt</text>
+          <text x="635" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Pipelines + tests</text>
+        </g>
+<g>
+          <rect x="830" y="105" width="150" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="905" y="140" text-anchor="middle" font-size="22">🐳</text>
+          <text x="905" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Docker</text>
+          <text x="905" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Real server</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" begin="0.00s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.20s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.73s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="1.26s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.40s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="0.93s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+<circle r="4"><animateMotion dur="1.6s" begin="1.46s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Reach for the leftmost option that answers the question; Docker only for Part 11.</p>
+
+
+    <div class="highlight-box">
+      <p><strong>The takeaway:</strong> Access control is the one piece dbt genuinely can't simulate locally &mdash; that's inherently a platform-level concern. Everything else on this page (tests, docs, lineage) is something you get by documenting models well, not separate work.</p>
+    </div>
+
+    <p style="font-size:0.85rem;color:var(--text-muted, #64748b);margin:8px 2px 0;">
+      Runnable code for this part: <a href="https://github.com/mfzamudio/sql-for-data-platforms" target="_blank">sql-for-data-platforms</a> on GitHub &mdash; Module 10 of 14.
+    </p>
+
+    <div class="series-nav">
+      <a href="sql-performance-tuning.html">
+        <span class="nav-dir">&#8592; Part 9</span>
+        Query Performance & Tuning
+      </a>
+      <a href="sql-procedural-plsql-tsql.html" class="next">
+        <span class="nav-dir">Part 11 &#8594;</span>
+        Procedural SQL: Stored Procedures, Triggers & PL/SQL
+      </a>
+    </div>
+
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>
