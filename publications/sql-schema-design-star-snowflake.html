@@ -149,7 +149,7 @@
 
     <div class="concept-section">
       <h4>Fact and Dimension Tables</h4>
-      <p>Put one fact table in the middle with dimensions around it, and it looks like a star: <code>fact_sales</code> joined to <code>dim_customer</code>, <code>dim_product</code>, <code>dim_date</code>. Facts are numerous and narrow (mostly keys and numbers); dimensions are fewer and wide (rich descriptive text).</p>
+      <p>Put one fact table in the middle with dimensions around it, and it looks like a star: <code>fact_sales</code> joined to <code>dim_customer</code>, <code>dim_product</code>, <code>dim_date</code>. A <strong>fact table</strong> records something that happened &mdash; one row per event or transaction (an order line, a page view) &mdash; and is mostly foreign keys pointing at dimensions plus numeric measures to aggregate (quantity, revenue). A <strong>dimension table</strong> holds the descriptive angles you slice and filter by &mdash; who, what, when, where &mdash; and is comparatively wide, with rich text columns, but far fewer rows than the fact table it supports. This split exists because an analytical query almost never needs "everything about a customer" and "everything about an order" tangled into one flat table &mdash; it needs to filter/group by a handful of dimension attributes while summing a handful of fact measures, and keeping the two shapes separate is what makes that fast and simple to write.</p>
       <p class="code-label">SQL &middot; star schema DDL</p>
       <pre class="code-block"><code>-- DIMENSION: denormalized &mdash; city lives directly on the customer row
 CREATE TABLE dim_customer (
@@ -182,7 +182,7 @@ CREATE TABLE fact_sales (
     </div>
     <div class="concept-section">
       <h4>Surrogate Keys Matter More Than They Look</h4>
-      <p>Give every dimension its own surrogate key, separate from the source system's natural key. This single decision is the prerequisite for <strong>Slowly Changing Dimensions</strong> (Part 8) &mdash; you cannot version a row's history if its key <em>is</em> the natural key.</p>
+      <p>A <strong>surrogate key</strong> is a key the warehouse invents for itself &mdash; usually a simple auto-incrementing integer (<code>customer_key</code>) &mdash; instead of reusing the source system's own identifier (<code>customer_id</code>). It looks redundant at first (why not just use the ID that's already there?), but it decouples the warehouse from the source system: the same source <code>customer_id</code> can now correspond to <em>multiple</em> dimension rows over time, each with its own surrogate key, each representing what that customer looked like during a specific period. Give every dimension its own surrogate key, separate from the source system's natural key. This single decision is the prerequisite for <strong>Slowly Changing Dimensions</strong> (Part 8) &mdash; you cannot version a row's history if its key <em>is</em> the natural key, since a natural key by definition can only ever point at one row at a time.</p>
       <p class="code-label">SQL &middot; a star-schema query</p>
       <pre class="code-block"><code>-- Join the fact to every dimension it needs; nothing more
 SELECT c.city, p.category, d.month_name, SUM(f.revenue) AS revenue
@@ -194,7 +194,7 @@ GROUP BY c.city, p.category, d.month_name;</code></pre>
     </div>
     <div class="concept-section">
       <h4>When to Snowflake a Dimension</h4>
-      <p>Split a dimension into a sub-table (e.g. <code>dim_city</code> &rarr; <code>dim_customer</code>) only when the sub-attribute is reused by many rows and changes independently. Most modern column-oriented warehouses compress repeated text well enough that the storage savings from snowflaking rarely justify the extra JOIN &mdash; star is still the default.</p>
+      <p><strong>Snowflaking</strong> means normalizing a dimension one level further &mdash; pulling a repeated attribute (city, and everything that depends on it: province, country) out into its own sub-table, the same instinct that drives normalization in an OLTP schema (Part 1). The result, drawn out, looks like a snowflake instead of a plain star: the dimension branches into further dimensions. Split a dimension into a sub-table (e.g. <code>dim_city</code> &rarr; <code>dim_customer</code>) only when the sub-attribute is reused by many rows and changes independently of the parent dimension &mdash; a city's province practically never changes, but hundreds of customers all share the same one, so keeping it in exactly one place avoids updating it in hundreds of rows if it ever does. Most modern column-oriented warehouses compress repeated text well enough that the storage savings from snowflaking rarely justify the extra JOIN it costs on every query &mdash; star is still the default, and snowflaking should be a deliberate exception, not a habit carried over from OLTP design.</p>
       <p class="code-label">SQL &middot; snowflaked dimension</p>
       <pre class="code-block"><code>CREATE TABLE dim_city (
     city_key INTEGER PRIMARY KEY,

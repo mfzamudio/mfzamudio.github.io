@@ -148,7 +148,7 @@
 
     <div class="concept-section">
       <h4>Validate Before You Extract</h4>
-      <p><code>json_valid()</code> checks whether a string is well-formed JSON before you rely on it &mdash; especially important for data from an external API you don't control. A malformed payload should fail loudly, not silently return NULL for every field.</p>
+      <p>Semi-structured data is any value that doesn't fit neatly into flat columns &mdash; an API response, an event payload, a webhook body &mdash; typically arriving as JSON. Storing it as plain text and parsing it at query time (rather than forcing it into a rigid table schema up front) is what lets a pipeline ingest data whose exact shape you don't fully control or that varies event to event. <code>json_valid()</code> checks whether a string is well-formed JSON before you rely on it &mdash; especially important for data from an external API, since a source you don't control can and eventually will send a malformed payload. Checking validity explicitly means a bad payload fails loudly and gets flagged, instead of silently returning <code>NULL</code> for every field you try to extract from it and only being noticed much later, in a report that looks quietly wrong.</p>
       <p class="code-label">SQL &middot; storing + validating + extracting JSON</p>
       <pre class="code-block"><code>CREATE TABLE customer_events (
     id          INTEGER PRIMARY KEY,
@@ -205,7 +205,7 @@ WHERE event_type = 'page_view';</code></pre>
 
     <div class="concept-section">
       <h4>Unnesting an Array</h4>
-      <p>A table-valued function turns a nested array (e.g. a purchase event's list of line items) into one row per element, so it can be joined like any other table. Part 12 maps this same idea onto BigQuery's <code>UNNEST()</code>, Snowflake's <code>LATERAL FLATTEN</code>, and Databricks' <code>EXPLODE()</code> &mdash; one concept, four names.</p>
+      <p>A JSON payload often holds an array nested inside it &mdash; a purchase event's list of line items, an order's list of products &mdash; and that array can't be queried, grouped, or joined while it's still a single blob. <strong>Unnesting</strong> ("flattening") turns that array into one <em>row</em> per element, so each item becomes an ordinary row that can be joined, filtered, and aggregated exactly like data from a real table. SQLite's version of this is <code>json_each()</code>, a table-valued function: it takes a JSON array and returns a virtual table with one row per element, which you then join against in the <code>FROM</code> clause like any other table. Part 12 maps this same idea onto BigQuery's <code>UNNEST()</code>, Snowflake's <code>LATERAL FLATTEN</code>, and Databricks' <code>EXPLODE()</code> &mdash; one concept, four names, because every platform with native nested types needs a way to turn "array" into "rows."</p>
       <p class="code-label">SQL &middot; json_each unnests an array</p>
       <pre class="code-block"><code>-- payload: {"order_total": 174.98, "items": [{"product_id": 13, "qty": 1}, {"product_id": 15, "qty": 1}]}
 SELECT ce.id AS event_id, ce.customer_id,
@@ -216,7 +216,7 @@ WHERE ce.event_type = 'purchase';</code></pre>
     </div>
     <div class="concept-section">
       <h4>Extract What You Query Often</h4>
-      <p>Pull the fields you query repeatedly into real, typed columns (a view, or a dbt staging model &mdash; Part 10) rather than re-parsing JSON on every query. Keep the raw payload around for fields you only need occasionally.</p>
+      <p><code>json_extract()</code> (or its <code>-&gt;&gt;</code> shorthand) has a real, recurring cost: every time it's called, the engine re-parses the whole JSON blob just to pull out one field, on every row, on every query. If a field is queried constantly &mdash; grouped by, filtered on, joined against &mdash; that repeated parsing adds up. The fix is to pull the fields you query repeatedly out into real, typed columns once (a view, Part 1, or a dbt staging model, Part 10), so every downstream query reads an ordinary pre-extracted column instead of re-parsing JSON from scratch each time. Keep the raw payload column around too, untouched, for the fields you only need occasionally or haven't anticipated needing yet &mdash; the extraction is an optimization for the hot paths, not a replacement for keeping the original data.</p>
       <p class="code-label">SQL &middot; aggregating an extracted field</p>
       <pre class="code-block"><code>SELECT json_extract(payload, '$.device') AS device,
        COUNT(*)                          AS views,

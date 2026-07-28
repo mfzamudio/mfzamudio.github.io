@@ -150,7 +150,7 @@
 
     <div class="concept-section">
       <h4>The Full Eleven</h4>
-      <p>Top-N per group &middot; Nth highest value &middot; find/remove duplicates &middot; EXISTS vs. IN vs. NOT EXISTS &middot; UPSERT &middot; NULL handling (COALESCE/NULLIF) &middot; pivot/cross-tab &middot; month-over-month change &middot; percent of total &middot; INTERSECT/EXCEPT &middot; moving average. Full runnable code for every recipe is in the companion repo's Part 7 notebook.</p>
+      <p>Top-N per group &middot; Nth highest value &middot; find/remove duplicates &middot; EXISTS vs. IN vs. NOT EXISTS &middot; UPSERT &middot; NULL handling (COALESCE/NULLIF) &middot; pivot/cross-tab &middot; month-over-month change &middot; percent of total &middot; INTERSECT/EXCEPT &middot; moving average. Full runnable code for every recipe is in the companion repo's Part 7 notebook. <strong>Top-N per group</strong> &mdash; the featured recipe below &mdash; answers a question a plain <code>GROUP BY</code> genuinely can't: "the top 2 highest-priced products, <em>within each</em> category," not the single overall top 2 across everything. <code>GROUP BY</code> can compute the maximum price per category, but it can't return the top-2 <em>rows</em> per category, because grouping collapses rows instead of ranking and keeping them. The fix is <code>ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC)</code> (Part 4) to number each row within its own category, then filtering that number in an outer query.</p>
       <p class="code-label">SQL &middot; Recipe 1, Top-N per group</p>
       <pre class="code-block"><code>-- Top 2 highest-priced products, WITHIN each category
 WITH ranked AS (
@@ -170,7 +170,7 @@ ON CONFLICT(id) DO UPDATE SET stock_quantity = stock_quantity + 100;</code></pre
     </div>
     <div class="concept-section">
       <h4>The NOT IN Trap</h4>
-      <p><code>WHERE x NOT IN (SELECT ...)</code> silently returns <strong>zero rows</strong> if that subquery contains even one NULL &mdash; a classic, hard-to-spot bug. <code>NOT EXISTS</code> doesn't have this trap and should be the default choice.</p>
+      <p>"Rows that don't have a match in another table" (customers with no orders, products never sold) is one of the most common analytics questions, and the intuitive way to write it &mdash; <code>WHERE x NOT IN (SELECT y FROM ...)</code> &mdash; hides a real trap: if that subquery's result contains even a single <code>NULL</code>, the entire <code>NOT IN</code> comparison silently returns <strong>zero rows</strong>, for every row, with no error. This happens because <code>NOT IN</code> expands internally to a series of <code>!=</code> comparisons ANDed together, and <code>anything != NULL</code> evaluates to <code>NULL</code> rather than true, which poisons the whole condition. <code>NOT EXISTS</code> asks a logically equivalent question a different way (does any matching row exist at all) and never runs into this trap, which is why it should be the default choice over <code>NOT IN</code> whenever the subquery's column could ever contain a <code>NULL</code>.</p>
       <p class="code-label">SQL &middot; Recipe 4, the safe pattern</p>
       <pre class="code-block"><code>-- Customers who have never placed an order
 SELECT c.name
@@ -179,7 +179,7 @@ WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id);</code></pr
     </div>
     <div class="concept-section">
       <h4>Percent of Total, No Self-Join</h4>
-      <p>A window <code>SUM(...) OVER ()</code> with an <em>empty</em> <code>OVER ()</code> computes the sum across the whole result set, so every row can divide by it directly &mdash; no self-join required.</p>
+      <p>"What share of total revenue does each category represent" needs two numbers per row: that category's own revenue, and the grand total across every category, to divide by. Without window functions, getting the grand total onto every row would mean a self-join (joining the aggregated table back to itself) or a separate query whose result gets glued on afterward &mdash; both more moving parts than the question deserves. A window <code>SUM(...) OVER ()</code> with a completely <em>empty</em> <code>OVER ()</code> &mdash; no <code>PARTITION BY</code>, no <code>ORDER BY</code> &mdash; computes the sum across the <em>entire</em> result set and repeats that same total on every single row, so each row can divide its own value by it directly, in the same <code>SELECT</code>, no self-join required.</p>
       <p class="code-label">SQL &middot; Recipe 9, percent of total</p>
       <pre class="code-block"><code>SELECT p.category,
        ROUND(SUM(oi.quantity * oi.unit_price), 2) AS category_revenue,

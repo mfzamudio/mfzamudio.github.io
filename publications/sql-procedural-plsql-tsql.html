@@ -148,6 +148,10 @@
     </div>
 
     <div class="concept-section">
+      <h4>What Procedural SQL Adds Over Plain SQL</h4>
+      <p>Every module before this one was <strong>declarative</strong>: you describe the result you want (a <code>SELECT</code>), and the engine figures out how to get it, with no branching or looping in the query itself. <strong>Procedural SQL</strong> adds the missing pieces of a general-purpose programming language, still inside the database: <strong>variables</strong> (<code>DECLARE</code>) hold an intermediate value across several statements; <strong>control flow</strong> (<code>IF</code>/<code>ELSE</code>, and loops &mdash; plain SQL has no loop construct at all) lets logic branch on a condition; <strong>stored procedures/functions</strong> package a routine under a name so it can be saved once and called repeatedly, with parameters, instead of being retyped; <strong>triggers</strong> are routines the database fires automatically whenever a row is inserted/updated/deleted, with no application code having to remember to call them; <strong>cursors</strong> step through a result set one row at a time when a problem genuinely can't be expressed as a single set-based query (rare &mdash; reach for this last); and <strong>exception handling</strong> lets a routine catch and react to an error itself, instead of the error propagating straight back to the caller.</p>
+    </div>
+    <div class="concept-section">
       <h4>Runnable, via Docker Postgres</h4>
       <p>Neither SQLite nor DuckDB implement real stored procedures/triggers &mdash; this module's one runnable demo uses the optional Docker Postgres container from Part 10. A stored PL/pgSQL function restocks a product automatically when stock drops below a threshold; a trigger logs every price change to an audit table without any application code having to remember to call it.</p>
       <p class="code-label">PL/pgSQL &middot; a stored function with control flow</p>
@@ -188,7 +192,7 @@ UPDATE products SET price = 139.99 WHERE id = 1;   -- fires the trigger automati
     </div>
     <div class="concept-section">
       <h4>Oracle PL/SQL (reference)</h4>
-      <p>PL/SQL wraps SQL in <code>BEGIN</code>/<code>END</code> blocks with the same DECLARE/control-flow shape as PL/pgSQL. Distinctive features: <code>%ROWTYPE</code> (a variable mirroring a table row's structure) and <strong>packages</strong> (a named, versioned bundle of related procedures). <em>Capability description only &mdash; verify exact syntax against current Oracle docs.</em></p>
+      <p>PL/SQL wraps SQL in <code>BEGIN</code>/<code>END</code> blocks with the same <code>DECLARE</code>/control-flow shape as PL/pgSQL &mdash; the same underlying ideas from the section above, Oracle's specific spelling of them. Two features are distinctive to PL/SQL: <code>%ROWTYPE</code> declares a variable that automatically mirrors an entire table row's structure, without having to redeclare every column by hand (and <code>%TYPE</code> does the same for a single column); <strong>packages</strong> (<code>PACKAGE</code>/<code>PACKAGE BODY</code>) bundle a set of related procedures and functions together under one versioned name, closer to a code module than a single stored routine. <em>Capability description only &mdash; verify exact syntax against current Oracle docs.</em></p>
       <p class="code-label">PL/SQL &middot; reference, not executed here</p>
       <pre class="code-block"><code>CREATE OR REPLACE PROCEDURE restock_if_low(p_id IN products.id%TYPE, p_threshold IN NUMBER) IS
     v_product products%ROWTYPE;
@@ -205,7 +209,7 @@ END;
     </div>
     <div class="concept-section">
       <h4>SQL Server / Fabric T-SQL (reference)</h4>
-      <p>T-SQL structures error handling as <code>TRY</code>/<code>CATCH</code> and offers table variables (<code>DECLARE @t TABLE (...)</code>). Microsoft Fabric's Warehouse item supports a T-SQL subset; verify current feature coverage against Fabric docs, since it doesn't yet match on-prem SQL Server 1:1. <em>Capability description only.</em></p>
+      <p>T-SQL structures error handling as <code>BEGIN TRY</code>/<code>BEGIN CATCH</code> blocks, which reads closer to exception handling in a mainstream general-purpose language (Python's <code>try</code>/<code>except</code>) than PL/SQL's <code>EXCEPTION WHEN</code> clause does. Its other distinctive feature is <strong>table variables</strong> (<code>DECLARE @t TABLE (...)</code>) &mdash; a variable that holds an entire result set in memory for the duration of a batch, useful for staging an intermediate result inside a procedure without creating a real temp table. Microsoft Fabric's Warehouse item supports a T-SQL subset for querying and procedures; verify current feature coverage against Fabric docs, since it doesn't yet match on-premises SQL Server one-to-one. <em>Capability description only.</em></p>
       <p class="code-label">T-SQL &middot; reference, not executed here</p>
       <pre class="code-block"><code>CREATE OR ALTER PROCEDURE RestockIfLow @ProductId INT, @Threshold INT AS
 BEGIN

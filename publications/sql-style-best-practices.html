@@ -147,6 +147,27 @@
     </div>
 
     <div class="concept-section">
+      <h4>Naming Conventions That Scale</h4>
+      <p>A naming convention only pays off once more than one person (or future-you, in six months) reads the SQL, but it's cheap to establish and expensive to retrofit, so it's worth getting right from the first table. Three rules cover most of it: pick <strong><code>snake_case</code></strong> (the overwhelming SQL convention) and never mix it with <code>camelCase</code> in the same schema; <strong>prefix by pipeline layer, not by data type</strong> &mdash; <code>stg_</code>/<code>fct_</code>/<code>dim_</code> (Parts 2 and 10) tells a reader <em>where in the pipeline</em> a table sits, which is genuinely useful, while Hungarian-style prefixes like <code>tbl_</code>/<code>vw_</code> just restate what the schema already shows; and <strong>name booleans as questions</strong> &mdash; <code>is_current</code> (Part 8), <code>is_terminal_status</code> (Part 10's dbt macro) read unambiguously as true/false, where a name like <code>status_flag</code> or <code>current</code> leaves a reader guessing what true actually means.</p>
+    </div>
+    <div class="concept-section">
+      <h4>CTE vs. Subquery: The Decision</h4>
+      <p>Part 4 introduced both; this is the rule of thumb for choosing between them once you already know how to write either one.</p>
+      <div class="platform-table">
+        <table>
+          <thead>
+            <tr><th>Use a CTE when&hellip;</th><th>Use a subquery when&hellip;</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>The logic has 2+ sequential steps (Part 4, Part 10)</td><td>It's a single, simple filter (<code>WHERE x IN (SELECT ...)</code>)</td></tr>
+            <tr><td>The same computation is referenced more than once</td><td>It's used exactly once, inline</td></tr>
+            <tr><td>You want the query to read top-to-bottom</td><td>The nesting is genuinely shallow and clearer inline</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">Reminder from Part 9: don't assume a CTE referenced twice is computed only once &mdash; engines differ, and some decide based on cost. Check the plan.</p>
+    </div>
+    <div class="concept-section">
       <h4>The Hard Rule from Part 1</h4>
       <p>Every UPDATE/DELETE in this entire series was preceded by a SELECT using the identical WHERE clause. This is not optional style &mdash; it's the difference between a scoped change and an accidental full-table wipe.</p>
       <p class="code-label">SQL &middot; preview, then act, with the same WHERE both times</p>
@@ -169,7 +190,7 @@ COMMIT;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Comment the Why, Not the What</h4>
-      <p>"Grace MOVED cities" (Part 8) tells a reader something the SQL itself can't. "select all customers" next to <code>SELECT * FROM customers</code> tells them nothing.</p>
+      <p>A comment that restates what the SQL already says in plain English adds nothing &mdash; <code>-- select all customers</code> above <code>SELECT * FROM customers</code> tells a reader nothing they couldn't already read directly. A comment earns its place when it captures something the SQL itself structurally can't express: a hidden constraint, a business reason, a workaround for a specific known issue. "Grace moved from Vancouver to Montreal on 2024-06-15" (Part 8) is exactly that &mdash; the SQL shows <em>that</em> a row changed, but only a comment can say <em>why</em>, and why is usually what the next person reading it actually needs to know.</p>
       <p class="code-label">SQL &middot; naming + comments, good vs. not</p>
       <pre class="code-block"><code>-- GOOD: snake_case, layer-prefixed, boolean named as a question, comment explains WHY
 -- Grace moved from Vancouver to Montreal on 2024-06-15 -- see Part 8 for the full SCD history
@@ -184,7 +205,15 @@ FROM tbl_customer_snapshot;</code></pre>
     </div>
     <div class="concept-section">
       <h4>A Short Code-Review Checklist</h4>
-      <p>Every UPDATE/DELETE has a matching SELECT preview. No <code>SELECT *</code> in anything that runs repeatedly in production (Part 9). Multi-statement changes are wrapped in a transaction. New tables/models have at least unique/not_null tests on their primary key (Part 10). Any hard-coded date/threshold has a comment explaining why. If touching a dimension table, checked whether SCD Type 1 vs. Type 2 (Part 8) is the right call.</p>
+      <p>Every habit above, condensed into what to actually check before merging any SQL change:</p>
+      <ul>
+        <li>Every <code>UPDATE</code>/<code>DELETE</code> has a matching <code>SELECT</code> preview, tested against a non-production copy first.</li>
+        <li>No <code>SELECT *</code> in anything that runs repeatedly in production (Part 9 &mdash; costs both performance and, on consumption-priced platforms, money).</li>
+        <li>Multi-statement changes are wrapped in a transaction.</li>
+        <li>New tables/models have at least <code>unique</code>/<code>not_null</code> tests on their primary key (Part 10).</li>
+        <li>Any hard-coded date or threshold has a comment explaining why that specific value.</li>
+        <li>If touching a dimension table, confirm whether SCD Type 1 or Type 2 (Part 8) is the right call for the changed attribute &mdash; don't assume the existing pattern still applies.</li>
+      </ul>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="None of this is platform-specific &mdash; it's how you write SQL you can trust.">

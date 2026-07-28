@@ -149,7 +149,7 @@
 
     <div class="concept-section">
       <h4>Full Load vs. Incremental Load</h4>
-      <p>Full load: truncate and reload every row, every run &mdash; simple, always correct, scales badly. Incremental load processes only what changed, detected via a watermark timestamp, a hash comparison, or log-based CDC (see the site's <a href="pattern-orchestration-cdc.html">Orchestration &amp; CDC</a> page for the platform-architecture framing, and <a href="pattern-etl-vs-elt.html">ETL vs. ELT</a> for where this transform logic runs).</p>
+      <p><strong>Full load</strong> means truncating the target table and reloading every single row from the source, on every run &mdash; simple to reason about and always correct, since it never has to figure out what changed, but it scales badly: reloading a 500-million-row table nightly to pick up 5,000 changed rows wastes both time and compute, and that cost only grows as the table does. <strong>Incremental load</strong> processes only the rows that actually changed since the last run, which requires some way to <em>detect</em> what changed: a <strong>watermark</strong> filters the source on a reliable "last updated" timestamp column; a <strong>hash-diff</strong> compares a computed hash of each row's columns against the previous run's hash to spot changes even without a trustworthy timestamp; <strong>log-based CDC</strong> (Change Data Capture) reads the source database's transaction log directly, catching every insert/update/delete as it happens (see the site's <a href="pattern-orchestration-cdc.html">Orchestration &amp; CDC</a> page for the platform-architecture framing, and <a href="pattern-etl-vs-elt.html">ETL vs. ELT</a> for where this transform logic runs).</p>
       <p class="code-label">SQL &middot; watermark-based delta detection</p>
       <pre class="code-block"><code>-- Only rows changed since the previous run's watermark come back
 SELECT *
@@ -160,7 +160,7 @@ WHERE updated_at &gt; '2024-03-01 00:00:00';   -- last_load_timestamp
     </div>
     <div class="concept-section">
       <h4>Incremental Loading Is a Mechanism; SCD Is a Policy</h4>
-      <p>Detecting that a row changed (incremental loading) and deciding what to do about it (SCD Type 1/2/3) are two separate decisions. A watermark can feed either a Type 1 overwrite or a Type 2 versioned insert &mdash; the mechanism doesn't dictate the policy.</p>
+      <p>These two ideas get taught separately and asked about together, which is exactly why they're confusing: detecting <em>that</em> a row changed (incremental loading, above) and deciding <em>what to do about it</em> (Slowly Changing Dimensions) are genuinely two separate decisions, made independently. A watermark can feed either policy: <strong>SCD Type 1</strong> is the simplest &mdash; overwrite the changed value in place, no history kept, appropriate for correcting a typo or any attribute where the old value truly doesn't matter once it's wrong. <strong>SCD Type 2</strong> and <strong>Type 3</strong> (below) instead preserve some or all of that history. The mechanism that noticed the row changed doesn't dictate which of these three policies handles it &mdash; that choice depends entirely on whether anyone will ever need to ask "what was true before this changed."</p>
       <p class="code-label">SQL &middot; SCD Type 1, overwrite in place</p>
       <pre class="code-block"><code>-- Simplest policy: the old value is gone once this runs
 UPDATE dim_customer
@@ -223,8 +223,27 @@ WHERE customer_id = 7
     <p class="diagram-caption">Two rows, same <code>customer_id</code>, different surrogate <code>customer_key</code> &mdash; each valid for its own date range.</p>
 
     <div class="concept-section">
+      <h4>SCD Type 3: Just the Previous Value</h4>
+      <p>Type 2 answers "what was true on any date in the past," but that full history has a real cost: extra rows, a surrogate key, and every query needing an <code>effective_date</code>/<code>end_date</code> filter to pick the right version. <strong>Type 3</strong> is a deliberately cheaper middle ground for when you only ever need to know the <em>immediately previous</em> value, not the full timeline: instead of inserting a new row, add a <code>previous_X</code> column next to the current one, and on change, shift the old value sideways into it before overwriting the current column. No new rows, no surrogate-key versioning &mdash; but it only remembers one step back; a second change overwrites the first one's memory of "previous" with no way to recover it.</p>
+      <p class="code-label">SQL &middot; SCD Type 3, a previous-value column</p>
+      <pre class="code-block"><code>CREATE TABLE dim_customer_scd3 (
+    customer_key  INTEGER PRIMARY KEY,
+    customer_id   INTEGER NOT NULL,
+    name          VARCHAR(100) NOT NULL,
+    current_city  VARCHAR(50),
+    previous_city VARCHAR(50)
+);
+
+INSERT INTO dim_customer_scd3 VALUES (1, 7, 'Grace Kim', 'Vancouver', NULL);
+
+-- On change: shift the old value into previous_city, then overwrite current_city
+UPDATE dim_customer_scd3
+SET previous_city = current_city, current_city = 'Montreal'
+WHERE customer_id = 7;</code></pre>
+    </div>
+    <div class="concept-section">
       <h4>Watermarks Are Blind to Deletes</h4>
-      <p>A watermark-based load is the cheapest incremental strategy, but a deleted source row simply stops appearing &mdash; it never shows up as "changed." If hard deletes matter, you need log-based CDC instead.</p>
+      <p>A watermark-based load is the cheapest incremental strategy to build and the cheapest to run &mdash; just a timestamp comparison &mdash; but it has one structural blind spot: it only detects rows that were <em>inserted or updated</em> since the last watermark, because those are the only kinds of change that touch the "last updated" column it relies on. A row that gets hard-deleted from the source simply stops appearing in the next extract; there's no updated <code>updated_at</code> to trip the watermark, because the row isn't there to have one. If your pipeline needs to know about deletions &mdash; not just insertions and updates &mdash; a watermark alone can't tell you; that's exactly the gap log-based CDC closes, since it reads the transaction log directly and sees every operation, deletes included, as it happens. <code>MERGE</code> below is the ANSI-standard way most warehouses express the resulting upsert once a delta has been detected, by whichever method.</p>
       <p class="code-label">SQL &middot; the same upsert as ANSI MERGE (reference &mdash; not SQLite)</p>
       <pre class="code-block"><code>-- ANSI SQL:2003 MERGE (PostgreSQL 15+, SQL Server, Oracle, Snowflake, BigQuery -- not SQLite):
 MERGE INTO dim_customer_scd2 AS target

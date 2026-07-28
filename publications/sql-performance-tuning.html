@@ -149,7 +149,7 @@
 
     <div class="concept-section">
       <h4>Indexes: SCAN Becomes SEARCH</h4>
-      <p>An unindexed filter forces the engine to read every row (<code>SCAN</code>). An index on the filtered/joined column lets it jump straight to matching rows (<code>SEARCH</code>). Common anti-patterns that defeat an index anyway: <code>SELECT *</code>, a function wrapped around the indexed column in <code>WHERE</code>, and implicit type conversion.</p>
+      <p>An <strong>index</strong> is a separate, sorted data structure the engine keeps alongside a table, mapping a column's values to the rows that have them &mdash; conceptually the same as a book's index letting you jump straight to a page instead of reading the whole book to find a topic. Without one, an unindexed filter forces the engine to read every single row (a <code>SCAN</code>) just to check whether it matches; an index on the filtered/joined column lets the engine jump straight to matching rows instead (a <code>SEARCH</code>). <code>EXPLAIN QUERY PLAN</code> (SQLite's syntax; every platform has an equivalent) shows you which one is actually happening, rather than requiring you to guess. Three common anti-patterns quietly defeat an index even when one exists: <code>SELECT *</code> (the engine often still has to read the full row even after finding it via the index), a function wrapped around the indexed column in <code>WHERE</code> like <code>WHERE UPPER(city) = 'TORONTO'</code> (the index is built on the raw column, not the function's output), and implicit type conversion (comparing a text column to a numeric literal forces a conversion on every row, which usually blocks index use too).</p>
       <p class="code-label">SQL &middot; EXPLAIN QUERY PLAN, before &amp; after an index</p>
       <pre class="code-block"><code>-- Before: no index on the filtered/joined columns
 EXPLAIN QUERY PLAN
@@ -170,7 +170,7 @@ CREATE INDEX idx_order_items_order_id ON order_items(order_id);
     </div>
     <div class="concept-section">
       <h4>Partition Pruning, for Real</h4>
-      <p>The companion repo's Part 9 notebook writes a Hive-style partitioned Parquet dataset with DuckDB, then shows a real <code>EXPLAIN</code> plan scanning 1 of 3 partition files after filtering on the partition column &mdash; not a claim, an actual measured pruning result. See <a href="pattern-partitioning-clustering.html">Partitioning &amp; Clustering</a> for the platform-architecture version of the same idea (BigQuery partition+cluster, Snowflake micro-partitions, Delta Z-order).</p>
+      <p><strong>Partitioning</strong> physically splits a table's data into separate files or segments based on a column's value &mdash; almost always a date, since "which rows are from March" is the single most common filter in analytics. <strong>Partition pruning</strong> is what an engine does when a query filters on that same column: it skips reading the partitions that can't possibly match, instead of scanning the whole table and then discarding rows that don't qualify. <strong>Clustering</strong> is the complementary, finer-grained idea &mdash; sorting the rows <em>within</em> each partition by a second, frequently-filtered column, so even a scan within one partition can skip ahead efficiently. The companion repo's Part 9 notebook writes a real Hive-style partitioned Parquet dataset with DuckDB, then shows an actual <code>EXPLAIN</code> plan scanning 1 of 3 partition files after filtering on the partition column &mdash; not a claim, a measured result. See <a href="pattern-partitioning-clustering.html">Partitioning &amp; Clustering</a> for the platform-architecture version of the same idea (BigQuery partition+cluster, Snowflake micro-partitions, Delta Z-order).</p>
       <p class="code-label">SQL / Python &middot; DuckDB partition pruning (measured, not claimed)</p>
       <pre class="code-block"><code># Write a dataset partitioned by year, Hive-style -- mirrors a production lake table
 duckdb.sql("""
@@ -187,7 +187,7 @@ WHERE order_year = 2023;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Views vs. Materialized Views</h4>
-      <p>A plain view always re-runs its query &mdash; always fresh, never cached. A materialized view computes once and stores the result, trading freshness for speed; it needs an explicit or scheduled refresh. Decide your staleness tolerance up front, not after someone notices a stale number.</p>
+      <p>A plain view (Part 1) always re-runs its underlying query in full, every time it's selected from &mdash; always fresh, since it reflects the current data instantly, but never cached, so the cost of the query is paid again on every single read. A <strong>materialized view</strong> computes the query once and stores the result physically, like a real table, trading that freshness for speed: reading it is now just reading a stored result, no re-computation, but the data is only as current as the last refresh. It needs an explicit or scheduled refresh to catch up with changes in the underlying tables. Decide your staleness tolerance up front &mdash; how out-of-date is acceptable, and on what schedule it gets refreshed &mdash; not after someone in a meeting notices a number that doesn't match what they expected.</p>
       <p class="code-label">SQL &middot; simulating a materialized view</p>
       <pre class="code-block"><code>-- "Materializing" a view: compute once, store as a real table
 CREATE TABLE mv_customer_spend AS
@@ -202,8 +202,27 @@ GROUP BY c.id, c.name;
 -- automatic, incremental refresh -- see Part 12.</code></pre>
     </div>
     <div class="concept-section">
+      <h4>JOIN Order & CTE Materialization</h4>
+      <p>Modern query optimizers reorder JOINs for you based on table statistics &mdash; in most engines, listing the smallest table first in a JOIN chain doesn't matter the way it did on older, simpler optimizers; the engine works out a good order on its own. What you <em>do</em> still control, and what varies by engine, is whether a CTE (Part 4) is <strong>inlined</strong> (recomputed every place it's referenced, exactly like a view) or <strong>materialized</strong> (computed once, stored temporarily, then reused). Modern SQLite (3.35+) decides per-query based on cost, the same way PostgreSQL has since version 12 (older PostgreSQL materialized every CTE unconditionally, unless a subquery was clearly cheaper); Snowflake/BigQuery/Databricks make the same kind of cost-based call automatically. The practical rule holds regardless of engine: if a CTE is expensive and referenced more than once, don't assume it's computed once &mdash; check the actual plan, or materialize it into a temp table explicitly if you need that guarantee.</p>
+      <p class="code-label">SQL &middot; checking whether a CTE ran once or twice</p>
+      <pre class="code-block"><code>-- A CTE referenced twice -- check the plan to see if it's computed once or twice
+EXPLAIN QUERY PLAN
+WITH category_totals AS (
+    SELECT p.category, SUM(oi.quantity * oi.unit_price) AS revenue
+    FROM order_items oi JOIN products p ON p.id = oi.product_id
+    GROUP BY p.category
+)
+SELECT a.category, a.revenue
+FROM category_totals a
+JOIN category_totals b ON a.category = b.category
+WHERE a.revenue > 500;
+-- Measured result: "MATERIALIZE category_totals" appears ONCE, with its own SCAN/GROUP BY
+-- subtree computed once; the two outer references (SCAN a, SEARCH b) both reuse that single
+-- result -- SQLite chose to materialize here, not inline. Don't assume either way: check.</code></pre>
+    </div>
+    <div class="concept-section">
       <h4>A Cost Note</h4>
-      <p>Everything on this page reduces <em>bytes scanned</em> &mdash; and bytes scanned is very often exactly what cloud warehouses bill for (BigQuery: per byte; Snowflake/Databricks: per-second compute, but scanning less data means less time running). Partition pruning is a bill reduction, not just a latency win.</p>
+      <p>Every technique on this page &mdash; indexing, partition pruning, materialized views, avoiding a redundant CTE recomputation &mdash; ultimately reduces <em>bytes scanned</em>, and on a cloud warehouse, bytes scanned is very often the literal unit you're billed on. BigQuery charges per byte scanned by the query, full stop, so a partition-pruned query that reads 1 file instead of 3 costs roughly a third as much, not just runs roughly three times faster. Snowflake and Databricks bill per-second of compute instead, but scanning less data still means the query finishes sooner, so the same optimizations still shrink the bill, just indirectly through time rather than bytes. The habit this should build: before running an expensive-looking query against a cloud warehouse for the first time, check what it will cost, not just whether it will return the right answer.</p>
       <p class="code-label">CLI &middot; checking cost before you run (reference)</p>
       <pre class="code-block"><code>-- BigQuery: estimate bytes scanned WITHOUT running/billing for the query
 bq query --dry_run --use_legacy_sql=false 'SELECT * FROM orders WHERE order_year = 2023'

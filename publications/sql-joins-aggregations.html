@@ -148,8 +148,29 @@
     </div>
 
     <div class="concept-section">
+      <h4>The Core Aggregate Functions Every Analyst Uses Daily</h4>
+      <p>Before JOINs enter the picture at all, five functions cover most of the exploratory data analysis (EDA) a data analyst does on a single table: <strong><code>COUNT()</code></strong>, <strong><code>SUM()</code></strong>, <strong><code>AVG()</code></strong>, <strong><code>MIN()</code></strong>, and <strong><code>MAX()</code></strong>. <code>COUNT(*)</code> counts <em>rows</em>, including ones with <code>NULL</code>s in every column; <code>COUNT(column)</code> counts only the rows where that specific column is <em>not</em> <code>NULL</code>; <code>COUNT(DISTINCT column)</code> counts unique non-<code>NULL</code> values, so duplicates collapse to one. <code>SUM()</code> adds up a numeric column; <code>AVG()</code> computes its arithmetic mean &mdash; note there is no separate <code>MEAN()</code> function in SQL, "mean" and "average" are the same thing and <code>AVG()</code> is how you get it. <code>MIN()</code>/<code>MAX()</code> find the smallest/largest value and work on numbers, dates, and even text (alphabetically) alike. <strong>All five ignore <code>NULL</code> values in the column they're aggregating</strong> &mdash; the one exception is <code>COUNT(*)</code>, which counts every row regardless of what's in it. <code>DISTINCT</code> on its own (outside of <code>COUNT</code>) removes duplicate rows from a plain <code>SELECT</code>, the same de-duplication idea applied to the whole result instead of just a count.</p>
+      <p class="code-label">SQL &middot; the five core aggregates, no JOIN needed</p>
+      <pre class="code-block"><code>-- A single-table EDA pass: shape of the products table at a glance
+SELECT
+    COUNT(*)                   AS total_rows,
+    COUNT(DISTINCT category)   AS distinct_categories,
+    SUM(stock_quantity)        AS total_units_in_stock,
+    AVG(price)                 AS average_price,
+    MIN(price)                 AS cheapest_price,
+    MAX(price)                 AS most_expensive_price
+FROM products;
+
+-- DISTINCT on its own: unique category names, no counting involved
+SELECT DISTINCT category FROM products;
+
+-- COUNT(column) vs. COUNT(*): only phone is nullable, so these two differ
+SELECT COUNT(*) AS all_customers, COUNT(phone) AS customers_with_phone
+FROM customers;</code></pre>
+    </div>
+    <div class="concept-section">
       <h4>Choosing the Right JOIN</h4>
-      <p>The most common analytics shape is a chain: customers &rarr; orders &rarr; order_items &rarr; products. Be explicit about JOIN type &mdash; a silent <code>INNER JOIN</code> where you meant <code>LEFT JOIN</code> quietly drops exactly the rows you were often trying to measure (customers with zero orders, products never sold).</p>
+      <p>The most common analytics shape is a chain: customers &rarr; orders &rarr; order_items &rarr; products. Be explicit about JOIN type &mdash; a silent <code>INNER JOIN</code> where you meant <code>LEFT JOIN</code> quietly drops exactly the rows you were often trying to measure (customers with zero orders, products never sold). An <code>INNER JOIN</code> asks "give me rows that exist on both sides"; a <code>LEFT JOIN</code> asks "give me everything on the left, and whatever matches on the right, or blanks if nothing does." Reaching for the wrong one is the single most common correctness bug in day-to-day analytics SQL &mdash; not a syntax error, just a silently wrong number that looks plausible.</p>
       <p class="code-label">SQL &middot; INNER vs. LEFT vs. SELF</p>
       <pre class="code-block"><code>-- INNER JOIN: only customers who have placed at least one order
 SELECT c.name, o.id AS order_id, o.order_date, o.status
@@ -203,7 +224,7 @@ JOIN employees e2 ON e1.department = e2.department AND e1.id &lt; e2.id;</code><
 
     <div class="concept-section">
       <h4>WHERE vs. HAVING</h4>
-      <p><code>WHERE</code> runs before grouping and filters individual rows. <code>HAVING</code> runs after grouping and filters the aggregated groups. Both can appear in the same query: <code>WHERE</code> to exclude rows first, <code>HAVING</code> to filter the resulting summary.</p>
+      <p><code>WHERE</code> runs before grouping and filters individual rows. <code>HAVING</code> runs after grouping and filters the aggregated groups. Both can appear in the same query: <code>WHERE</code> to exclude rows first, <code>HAVING</code> to filter the resulting summary. The rule of thumb: if the condition touches a raw column (<code>status = 'delivered'</code>), it goes in <code>WHERE</code>; if it touches the <em>result</em> of an aggregate function (<code>SUM(...) &gt; 1000</code>), it has to go in <code>HAVING</code> &mdash; <code>WHERE</code> runs too early in the engine's logical order to see a group total that doesn't exist yet. Filtering with <code>WHERE</code> before grouping is also the faster choice whenever it's an option, since fewer rows reach the (usually more expensive) grouping step.</p>
       <p class="code-label">SQL &middot; GROUP BY, HAVING, COUNT(DISTINCT)</p>
       <pre class="code-block"><code>-- Revenue by category: JOIN + GROUP BY
 SELECT p.category,
@@ -225,7 +246,19 @@ ORDER BY revenue DESC;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Index What You Join and Filter On</h4>
-      <p>Joining on indexed columns is the single biggest lever for query speed at scale &mdash; Part 9 (Performance &amp; Tuning) shows exactly why, with a real before/after query plan.</p>
+      <p>An index is a separate, sorted lookup structure the engine maintains alongside a table, so it can jump straight to the rows matching a value instead of reading every row to check. Without one, every <code>JOIN ... ON</code> condition and every <code>WHERE</code> filter forces a full scan of the table &mdash; fine at a few thousand rows, painfully slow at millions. Joining on indexed columns is the single biggest lever for query speed at scale &mdash; Part 9 (Performance &amp; Tuning) shows exactly why, with a real before/after query plan.</p>
+      <p class="code-label">SQL &middot; index the columns a JOIN or WHERE actually uses</p>
+      <pre class="code-block"><code>-- Without these, every JOIN below forces a full scan of orders and order_items
+CREATE INDEX idx_orders_customer_id   ON orders(customer_id);
+CREATE INDEX idx_order_items_order_id ON order_items(order_id);
+
+-- Now this JOIN chain can jump straight to matching rows instead of scanning:
+SELECT c.name, SUM(oi.quantity * oi.unit_price) AS spend
+FROM customers c
+JOIN orders o       ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id   = o.id
+GROUP BY c.name;
+-- See Part 9 for the real EXPLAIN QUERY PLAN, before and after this index</code></pre>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="A JOIN chain feeds an aggregation &mdash; the two operations that answer almost every question.">

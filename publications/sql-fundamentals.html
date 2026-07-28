@@ -149,11 +149,11 @@
 
     <div class="concept-section">
       <h4>Why SQL Is Still the First Skill</h4>
-      <p>Every platform in this series &mdash; Snowflake, Databricks, BigQuery, Fabric, Redshift &mdash; speaks SQL as its primary interface. The dashboards, the dbt models, the ad-hoc analysis: all SQL underneath. Learn the language once, and the platform becomes a detail.</p>
+      <p>Every platform in this series &mdash; Snowflake, Databricks, BigQuery, Fabric, Redshift &mdash; speaks SQL as its primary interface. The dashboards, the dbt models, the ad-hoc analysis: all SQL underneath. Learn the language once, and the platform becomes a detail. That's the practical reason this series exists as a reference and not just an introduction: an analyst who is fluent in the concepts below can sit down in front of any of these five platforms and be productive within the hour, translating unfamiliar keywords rather than re-learning how relational data works.</p>
     </div>
     <div class="concept-section">
       <h4>DDL: Defining Structure</h4>
-      <p><code>CREATE TABLE</code> with <code>NOT NULL</code>, <code>UNIQUE</code>, <code>DEFAULT</code>, <code>CHECK</code>, and <code>FOREIGN KEY</code> constraints does most of the data-quality work before a single row is ever inserted &mdash; the engine simply refuses a row that violates them.</p>
+      <p><code>CREATE TABLE</code> with <code>NOT NULL</code>, <code>UNIQUE</code>, <code>DEFAULT</code>, <code>CHECK</code>, and <code>FOREIGN KEY</code> constraints does most of the data-quality work before a single row is ever inserted &mdash; the engine simply refuses a row that violates them. Each constraint answers a different question: <code>NOT NULL</code> says this column can never be empty; <code>UNIQUE</code> says no two rows may share this value; <code>DEFAULT</code> supplies a value when none is given; <code>CHECK</code> enforces an arbitrary condition (like <code>price &gt;= 0</code>); and <code>FOREIGN KEY</code> ties a column to another table's primary key so an order can never point at a customer that doesn't exist. Getting these right at table-creation time is far cheaper than catching the same bad data downstream in a report.</p>
       <p class="code-label">SQL &middot; DDL</p>
       <pre class="code-block"><code>CREATE TABLE customers (
     id               INTEGER  PRIMARY KEY,
@@ -174,8 +174,18 @@ CREATE TABLE orders (
 );</code></pre>
     </div>
     <div class="concept-section">
+      <h4>DQL: Retrieving Data with SELECT</h4>
+      <p><code>SELECT</code> is the query every analyst writes dozens of times a day, and its five clauses always run in the same logical order regardless of how they're typed: <code>FROM</code> (which table), <code>WHERE</code> (which rows), <code>GROUP BY</code> (collapse into groups, covered in Part 3), <code>SELECT</code> (which columns/expressions), then <code>ORDER BY</code> (final sort) and <code>LIMIT</code> (cap the row count, Part 12). Knowing this order explains a common beginner confusion: you can't reference a column alias from <code>SELECT</code> inside the same query's <code>WHERE</code>, because <code>WHERE</code> logically runs before <code>SELECT</code> has computed anything.</p>
+      <p class="code-label">SQL &middot; a plain SELECT, clause by clause</p>
+      <pre class="code-block"><code>SELECT name, city, membership_level        -- 4. which columns
+FROM customers                              -- 1. which table
+WHERE membership_level = 'vip'              -- 2. which rows
+ORDER BY name ASC                           -- 5. final sort
+LIMIT 10;                                   -- 6. cap the results</code></pre>
+    </div>
+    <div class="concept-section">
       <h4>DML: Writing Data, Safely</h4>
-      <p>The one hard rule that carries through every module in this series: preview every <code>UPDATE</code>/<code>DELETE</code> with a <code>SELECT</code> using the identical <code>WHERE</code> clause first. Omitting <code>WHERE</code> touches every row in the table.</p>
+      <p>The one hard rule that carries through every module in this series: preview every <code>UPDATE</code>/<code>DELETE</code> with a <code>SELECT</code> using the identical <code>WHERE</code> clause first. Omitting <code>WHERE</code> touches every row in the table &mdash; there's no "undo" once it commits. <code>INSERT</code> adds new rows; <code>UPDATE</code> modifies specific columns on existing rows that match a <code>WHERE</code>; <code>DELETE</code> removes whole rows that match a <code>WHERE</code>. All three are permanent the moment they're committed, which is exactly why the preview-first habit matters more here than almost anywhere else in SQL.</p>
       <p class="code-label">SQL &middot; safe DML</p>
       <pre class="code-block"><code>-- 1. Preview exactly which rows will be affected
 SELECT id, customer_id, order_date, status
@@ -192,7 +202,7 @@ UPDATE customers SET membership_level = 'vip' WHERE id IN (9, 14, 21);</code></p
     </div>
     <div class="concept-section">
       <h4>Views: A Saved Query</h4>
-      <p><code>CREATE VIEW</code> is DDL that defines a <code>SELECT</code>, not a table &mdash; it re-runs every time it's queried. Part 9 picks this up again to contrast plain views against <em>materialized</em> views, which trade freshness for speed.</p>
+      <p><code>CREATE VIEW</code> is DDL that defines a <code>SELECT</code>, not a table &mdash; the underlying rows are never duplicated or stored separately; the query behind the view simply re-runs, in full, every single time someone selects from it. That makes a view useful for exactly two things: hiding a complex, multi-table JOIN behind a simple name that reads like a table, and giving a metric a single, consistent definition so five different analysts don't each write a slightly different "active customer" query and get five different numbers. A view is always as fresh as the underlying tables, at the cost of re-computing the whole query every time &mdash; Part 9 picks this up again to contrast plain views against <em>materialized</em> views, which trade that freshness for speed by storing the result physically.</p>
       <p class="code-label">SQL &middot; view</p>
       <pre class="code-block"><code>CREATE VIEW customer_order_totals AS
 SELECT

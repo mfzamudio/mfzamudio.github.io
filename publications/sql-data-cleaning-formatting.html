@@ -148,7 +148,7 @@
 
     <div class="concept-section">
       <h4>Parsing Dates Down to Year, Month, Quarter</h4>
-      <p>SQLite stores dates as text and exposes <code>strftime()</code> to slice them; PostgreSQL/MySQL/most warehouses have a real <code>DATE</code>/<code>TIMESTAMP</code> type and richer functions (<code>DATE_TRUNC</code>, <code>EXTRACT</code>, <code>TO_CHAR</code>) &mdash; see Part 12 for the cross-platform mapping.</p>
+      <p>Raw timestamps are almost never the grain you want to report at &mdash; "revenue per exact second" is meaningless, "revenue per month" is a report. Parsing a date means pulling a coarser unit (year, month, quarter, day-of-week) out of a precise timestamp so rows can be grouped by that unit instead. SQLite stores dates as plain text and exposes <code>strftime()</code> to slice pieces out of that text; PostgreSQL/MySQL/most cloud warehouses instead have a real <code>DATE</code>/<code>TIMESTAMP</code> type with richer, purpose-built functions (<code>DATE_TRUNC</code> rounds down to a unit boundary, <code>EXTRACT</code> pulls out one field, <code>TO_CHAR</code> formats for display) &mdash; see Part 12 for the full cross-platform mapping. Date arithmetic (subtracting one date from another to get "days since") is the other half of this: SQLite does it via Julian day numbers (<code>julianday()</code>); most other engines let you subtract dates directly.</p>
       <p class="code-label">SQL &middot; date parsing &amp; arithmetic</p>
       <pre class="code-block"><code>SELECT order_date,
        strftime('%Y', order_date)      AS year,
@@ -165,7 +165,7 @@ ORDER BY order_date DESC;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Round for Display, Not for Math</h4>
-      <p>Rounding early and re-aggregating compounds error across rows. Keep full precision through every intermediate calculation; round only at the final, display step.</p>
+      <p><code>ROUND(value, decimals)</code> rounds a number to a fixed number of decimal places &mdash; simple on its own, but easy to misuse in a multi-step calculation. Rounding early and then re-aggregating compounds a small rounding error across every row it touches; a value rounded to two decimals and then summed a thousand times can drift measurably from the true total. Keep full precision through every intermediate calculation (every <code>JOIN</code>, every <code>SUM</code>/<code>AVG</code>) and round only once, at the very last step, right before the number is displayed to a human. The related trap is integer division: <code>7 / 2</code> in most SQL engines silently truncates to <code>3</code> if both operands are integers, instead of returning <code>3.5</code> &mdash; casting one side to a decimal/real type (<code>CAST(7 AS REAL) / 2</code>) forces the exact result.</p>
       <p class="code-label">SQL &middot; round at display time only</p>
       <pre class="code-block"><code>SELECT p.category,
        AVG(oi.unit_price)            AS avg_price_unrounded,
@@ -180,7 +180,7 @@ SELECT 7 / 2                   AS integer_division,       -- 3, silently truncat
     </div>
     <div class="concept-section">
       <h4>Canonicalize Labels with an Explicit Mapping</h4>
-      <p>A <code>CASE WHEN</code> that maps every known raw variant to one canonical label is auditable &mdash; a chain of ad-hoc <code>REPLACE</code> calls silently misses variants nobody thought to test.</p>
+      <p>Real-world text data is rarely consistent: mixed case ("toronto" vs. "Toronto"), stray leading/trailing whitespace, or several spellings of the same underlying value. <code>TRIM()</code> strips whitespace from both ends of a string; <code>UPPER()</code>/<code>LOWER()</code> normalize case so "Toronto" and "TORONTO" compare equal. For anything beyond simple whitespace/case cleanup &mdash; folding several raw variants into one canonical label &mdash; a <code>CASE WHEN</code> that explicitly maps every known variant to its canonical value is auditable: a reviewer can see the whole mapping in one place and confirm nothing's missing. A chain of ad-hoc <code>REPLACE()</code> calls does the same job but silently misses any variant nobody thought to write a <code>REPLACE</code> for, and there's no single place to review the full list of what's being fixed.</p>
       <p class="code-label">SQL &middot; TRIM/UPPER + CASE WHEN</p>
       <pre class="code-block"><code>SELECT DISTINCT city,
        TRIM(city)        AS trimmed,
@@ -201,7 +201,7 @@ GROUP BY city;</code></pre>
     </div>
     <div class="concept-section">
       <h4>NULL Is Not Zero, and Not an Empty String</h4>
-      <p>A NULL means "unknown/absent." Comparing directly to NULL with <code>=</code> always returns NULL (neither true nor false) &mdash; use <code>IS NULL</code>/<code>IS NOT NULL</code> instead, and <code>COALESCE</code> to supply a default.</p>
+      <p><code>NULL</code> represents "unknown or absent," a distinct third state from an empty string <code>''</code> or the number <code>0</code> &mdash; a customer with a <code>NULL</code> phone number never gave one; a customer with <code>''</code> actively has a blank one on file, which is a different data-quality problem. This distinctness has a sharp practical consequence: comparing anything to <code>NULL</code> with <code>=</code> or <code>!=</code> always evaluates to <code>NULL</code> (neither true nor false), never to true &mdash; so <code>WHERE phone = NULL</code> silently matches zero rows, always, even for rows where <code>phone</code> genuinely is <code>NULL</code>. Use <code>IS NULL</code>/<code>IS NOT NULL</code> to actually test for it, and <code>COALESCE(column, default)</code> to substitute a fallback value for display or calculation whenever the real value is missing.</p>
       <p class="code-label">SQL &middot; COALESCE + IS NULL</p>
       <pre class="code-block"><code>SELECT name, phone, COALESCE(phone, 'not provided') AS phone_display
 FROM customers
@@ -209,7 +209,7 @@ WHERE phone IS NULL;   -- never "= NULL" -- that always evaluates to NULL, not T
     </div>
     <div class="concept-section">
       <h4>Push Cleaning Upstream</h4>
-      <p>Put standardization logic in a view or a dbt staging model (Part 10) so every downstream query reads already-clean data, instead of repeating the same <code>CASE WHEN</code> in ten places.</p>
+      <p>Every cleaning technique above &mdash; date parsing, rounding discipline, label mapping, NULL handling &mdash; is easy to write once and easy to forget to repeat consistently everywhere it's needed. The fix is architectural, not a new SQL keyword: put the standardization logic in exactly one place (a view, Part 1, or a dbt staging model, Part 10) so every downstream query simply reads already-clean data instead of each analyst repeating a slightly different version of the same <code>CASE WHEN</code>. This is the same idea as a staging layer in a proper ELT pipeline &mdash; raw data lands untouched, a staging model cleans it exactly once, and every mart/report built on top of it inherits that cleanup for free.</p>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="Clean once, upstream &mdash; every later query inherits the result.">
