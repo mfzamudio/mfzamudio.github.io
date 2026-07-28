@@ -149,10 +149,38 @@
     <div class="concept-section">
       <h4>The Hard Rule from Part 1</h4>
       <p>Every UPDATE/DELETE in this entire series was preceded by a SELECT using the identical WHERE clause. This is not optional style &mdash; it's the difference between a scoped change and an accidental full-table wipe.</p>
+      <p class="code-label">SQL &middot; preview, then act, with the same WHERE both times</p>
+      <pre class="code-block"><code>-- 1. Preview exactly which rows will be touched
+SELECT id, name, membership_level
+FROM customers
+WHERE membership_level = 'vip';
+
+-- 2. Only then run the change, with the identical WHERE
+UPDATE customers SET membership_level = 'vip' WHERE membership_level = 'vip';
+
+-- Multi-statement changes: wrap in a transaction so a partial failure can't
+-- leave the data half-changed (this is exactly Part 8's SCD Type 2 upsert):
+BEGIN TRANSACTION;
+UPDATE dim_customer_scd2 SET end_date = '2024-06-15', is_current = 0
+    WHERE customer_id = 7 AND is_current = 1;
+INSERT INTO dim_customer_scd2 (customer_id, name, city, effective_date, is_current)
+    VALUES (7, 'Grace Kim', 'Montreal', '2024-06-15', 1);
+COMMIT;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Comment the Why, Not the What</h4>
       <p>"Grace MOVED cities" (Part 8) tells a reader something the SQL itself can't. "select all customers" next to <code>SELECT * FROM customers</code> tells them nothing.</p>
+      <p class="code-label">SQL &middot; naming + comments, good vs. not</p>
+      <pre class="code-block"><code>-- GOOD: snake_case, layer-prefixed, boolean named as a question, comment explains WHY
+-- Grace moved from Vancouver to Montreal on 2024-06-15 -- see Part 8 for the full SCD history
+SELECT customer_id, city, is_current
+FROM dim_customer_scd2
+WHERE is_current = 1;
+
+-- NOT: mixed casing, type-prefixed name, ambiguous boolean, comment restates the obvious
+-- select all customers
+SELECT customerId, city, currentFlag
+FROM tbl_customer_snapshot;</code></pre>
     </div>
     <div class="concept-section">
       <h4>A Short Code-Review Checklist</h4>

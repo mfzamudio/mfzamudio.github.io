@@ -147,12 +147,57 @@
     </div>
 
     <div class="concept-section">
+      <h4>The ANSI Baseline &mdash; Run for Real, Then Compared</h4>
+      <p>Every query on this page starts from an ANSI baseline that actually runs in DuckDB, so the comparisons below aren't hypothetical &mdash; they're annotated variants of a query that executes. <code>DATE_TRUNC</code>'s argument order is the single most common copy-paste bug moving a query between BigQuery and any other platform on this list.</p>
+      <p class="code-label">SQL &middot; ANSI baseline (executed) + the DATE_TRUNC gotcha</p>
+      <pre class="code-block"><code>-- Runs for real in DuckDB / PostgreSQL / Snowflake / Redshift as-is:
+SELECT DATE_TRUNC('month', order_date) AS month, SUM(amount)
+FROM orders
+GROUP BY month;
+
+-- BigQuery reverses the argument order -- the #1 copy-paste bug moving queries here:
+SELECT DATE_TRUNC(order_date, MONTH) AS month, SUM(amount)
+FROM orders
+GROUP BY month;
+
+-- String concatenation: -- works everywhere except Fabric/SQL Server
+SELECT first_name || ' ' || last_name AS full_name FROM customers;
+-- Fabric/SQL Server: `+` overloads for strings, but silently does numeric addition
+-- if either side isn't already a string -- BigQuery/Snowflake's CONCAT() can't do that by accident
+SELECT first_name + ' ' + last_name AS full_name FROM customers;</code></pre>
+    </div>
+    <div class="concept-section">
       <h4>Semi-Structured Data, Four Names (ties to Part 6)</h4>
       <p>BigQuery <code>STRUCT</code>/<code>ARRAY</code> with dot notation; Snowflake <code>VARIANT</code> with colon notation; Databricks <code>STRUCT</code>/<code>MAP</code>; Redshift <code>SUPER</code>. Unnesting an array also has four names: <code>UNNEST()</code>, <code>LATERAL FLATTEN</code>, <code>EXPLODE()</code> &mdash; same concept throughout.</p>
+      <p class="code-label">SQL &middot; same field, four extraction syntaxes (reference)</p>
+      <pre class="code-block"><code>-- This series (SQLite/DuckDB), Part 6:
+SELECT json_extract(payload, '$.device') FROM customer_events;
+
+-- BigQuery: dot notation on a native STRUCT column
+SELECT payload.device FROM customer_events;
+
+-- Snowflake: colon notation on a VARIANT column
+SELECT payload:device FROM customer_events;
+
+-- Fabric Warehouse: JSON functions over NVARCHAR (no first-class nested type yet)
+SELECT JSON_VALUE(payload, '$.device') FROM customer_events;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Partitioning & Clustering, Four Names Plus One Different Architecture (ties to Part 9)</h4>
       <p>BigQuery/Databricks/Fabric all separate storage from compute (see <a href="pattern-storage-vs-compute.html">Storage vs. Compute</a>), so partitioning/clustering is purely a storage-layout decision. Redshift's <code>DISTKEY</code> controls which <em>node</em> a row lives on &mdash; a genuinely different, node-distributed architecture, not just different syntax for the same idea.</p>
+      <p class="code-label">SQL &middot; partition + cluster DDL, four platforms (reference)</p>
+      <pre class="code-block"><code>-- BigQuery
+CREATE TABLE orders PARTITION BY DATE(order_date) CLUSTER BY customer_id AS SELECT ...;
+
+-- Snowflake: automatic micro-partitioning, no manual partition DDL -- CLUSTER BY is a hint
+ALTER TABLE orders CLUSTER BY (order_date);
+
+-- Databricks (Delta Lake)
+CREATE TABLE orders PARTITIONED BY (order_year) AS SELECT ...;
+OPTIMIZE orders ZORDER BY (customer_id);
+
+-- Redshift: DISTKEY picks the NODE a row lives on -- a different concept, not just syntax
+CREATE TABLE orders (...) DISTKEY(customer_id) SORTKEY(order_date);</code></pre>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="Same query, five sets of keywords &mdash; details in the table below.">

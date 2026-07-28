@@ -150,18 +150,105 @@
     <div class="concept-section">
       <h4>CTEs Over Nested Subqueries</h4>
       <p>A CTE names a subquery so it reads top to bottom instead of inside-out. Chained CTEs (a later one referencing an earlier one) turn a multi-step calculation &mdash; order revenue, then rank customers by it &mdash; into something a reader can follow in order.</p>
+      <p class="code-label">SQL &middot; chained CTEs</p>
+      <pre class="code-block"><code>WITH order_revenue AS (
+    SELECT o.id AS order_id, o.customer_id,
+           SUM(oi.quantity * oi.unit_price) AS revenue
+    FROM orders o
+    JOIN order_items oi ON oi.order_id = o.id
+    GROUP BY o.id, o.customer_id
+),
+customer_revenue AS (
+    SELECT customer_id, SUM(revenue) AS total_revenue
+    FROM order_revenue
+    GROUP BY customer_id
+)
+SELECT c.name, cr.total_revenue
+FROM customer_revenue cr
+JOIN customers c ON c.id = cr.customer_id
+ORDER BY cr.total_revenue DESC
+LIMIT 5;</code></pre>
     </div>
     <div class="concept-section">
       <h4>The Window Function Anatomy</h4>
       <p><code>FUNCTION() OVER (PARTITION BY col ORDER BY col ROWS BETWEEN ...)</code>. <code>PARTITION BY</code> defines groups (optional); <code>ORDER BY</code> defines row order within the window; the frame clause defines exactly which rows are "related."</p>
+      <p class="code-label">SQL &middot; RANK() vs. DENSE_RANK()</p>
+      <pre class="code-block"><code>SELECT name, department, salary,
+       RANK()       OVER (PARTITION BY department ORDER BY salary DESC) AS rnk,
+       DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_rnk
+FROM employees
+WHERE department = 'Sales'
+ORDER BY salary DESC;</code></pre>
     </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 280" role="img" aria-label="RANK vs DENSE_RANK for the same window, showing how each handles a tie.">
+        <defs><linearGradient id="gBg5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient></defs>
+        <rect x="0" y="0" width="1000" height="280" rx="14" fill="url(#gBg5)"/>
+        <text x="500" y="34" text-anchor="middle" fill="#bfdbfe" font-size="14" font-weight="700">PARTITION BY department ORDER BY salary DESC (Sales)</text>
+        <text x="120" y="70" fill="#94a3b8" font-size="11" font-weight="700">EMPLOYEE</text>
+        <text x="450" y="70" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">SALARY</text>
+        <text x="650" y="70" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">RANK()</text>
+        <text x="850" y="70" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">DENSE_RANK()</text>
+        <line x1="40" y1="82" x2="960" y2="82" stroke="#334155" stroke-width="1.5"/>
+        <text x="120" y="112" fill="#e2e8f0" font-size="13">Bob Martinez</text>
+        <text x="450" y="112" text-anchor="middle" fill="#e2e8f0" font-size="13">$72,000</text>
+        <circle cx="650" cy="107" r="14" fill="#3b82f6" fill-opacity="0.8"/><text x="650" y="112" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">1</text>
+        <circle cx="850" cy="107" r="14" fill="#8b5cf6" fill-opacity="0.8"/><text x="850" y="112" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">1</text>
+        <text x="120" y="150" fill="#e2e8f0" font-size="13">Carol Hughes</text>
+        <text x="450" y="150" text-anchor="middle" fill="#e2e8f0" font-size="13">$72,000</text>
+        <circle cx="650" cy="145" r="14" fill="#3b82f6" fill-opacity="0.8"/><text x="650" y="150" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">1</text>
+        <circle cx="850" cy="145" r="14" fill="#8b5cf6" fill-opacity="0.8"/><text x="850" y="150" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">1</text>
+        <text x="120" y="188" fill="#e2e8f0" font-size="13">Alice Foster</text>
+        <text x="450" y="188" text-anchor="middle" fill="#e2e8f0" font-size="13">$68,000</text>
+        <circle cx="650" cy="183" r="14" fill="#3b82f6" fill-opacity="0.5"/><text x="650" y="188" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">3</text>
+        <circle cx="850" cy="183" r="14" fill="#8b5cf6" fill-opacity="0.5"/><text x="850" y="188" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">2</text>
+        <text x="120" y="226" fill="#e2e8f0" font-size="13">David Okafor</text>
+        <text x="450" y="226" text-anchor="middle" fill="#e2e8f0" font-size="13">$58,000</text>
+        <circle cx="650" cy="221" r="14" fill="#3b82f6" fill-opacity="0.5"/><text x="650" y="226" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">4</text>
+        <circle cx="850" cy="221" r="14" fill="#8b5cf6" fill-opacity="0.5"/><text x="850" y="226" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">3</text>
+      </svg>
+    </div>
+    <p class="diagram-caption"><code>RANK()</code> leaves a gap after a tie (1, 1, 3, 4); <code>DENSE_RANK()</code> doesn't (1, 1, 2, 3).</p>
+
     <div class="concept-section">
       <h4>The LAST_VALUE Gotcha</h4>
       <p>The default frame (<code>UNBOUNDED PRECEDING AND CURRENT ROW</code>) makes <code>LAST_VALUE</code> return the <em>current</em> row, not the true last. Always specify <code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code> when you actually want the last row in the window.</p>
+      <p class="code-label">SQL &middot; running total + LAG</p>
+      <pre class="code-block"><code>-- Running total: SUM() OVER an ORDER BY, no PARTITION BY
+SELECT o.order_date,
+       SUM(oi.quantity * oi.unit_price) AS daily_revenue,
+       SUM(SUM(oi.quantity * oi.unit_price)) OVER (ORDER BY o.order_date) AS running_total
+FROM orders o
+JOIN order_items oi ON oi.order_id = o.id
+GROUP BY o.order_date
+ORDER BY o.order_date;
+
+-- LAG: this customer's previous order total, for month-over-month comparison
+SELECT c.name, o.order_date,
+       SUM(oi.quantity * oi.unit_price) AS order_total,
+       LAG(SUM(oi.quantity * oi.unit_price)) OVER (
+           PARTITION BY c.id ORDER BY o.order_date
+       ) AS previous_order_total
+FROM customers c
+JOIN orders o       ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id   = o.id
+WHERE c.id = 12
+GROUP BY c.name, o.id, o.order_date;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Window Functions Run Late</h4>
       <p>Window functions execute after WHERE/GROUP BY/HAVING but before ORDER BY/LIMIT in the logical query order &mdash; you can't filter directly on a window function's result in the same SELECT without wrapping it in a CTE or subquery first.</p>
+      <p class="code-label">SQL &middot; filtering a window function's result</p>
+      <pre class="code-block"><code>-- WRONG: can't reference a window alias in the same query's WHERE
+-- SELECT name, RANK() OVER (...) AS rnk FROM employees WHERE rnk = 1;  -- error
+
+-- RIGHT: wrap it in a CTE, then filter the CTE
+WITH ranked AS (
+    SELECT name, department, salary,
+           RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rnk
+    FROM employees
+)
+SELECT * FROM ranked WHERE rnk = 1;</code></pre>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="Each step keeps every row visible while adding more context to it.">

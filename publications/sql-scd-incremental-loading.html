@@ -150,18 +150,93 @@
     <div class="concept-section">
       <h4>Full Load vs. Incremental Load</h4>
       <p>Full load: truncate and reload every row, every run &mdash; simple, always correct, scales badly. Incremental load processes only what changed, detected via a watermark timestamp, a hash comparison, or log-based CDC (see the site's <a href="pattern-orchestration-cdc.html">Orchestration &amp; CDC</a> page for the platform-architecture framing, and <a href="pattern-etl-vs-elt.html">ETL vs. ELT</a> for where this transform logic runs).</p>
+      <p class="code-label">SQL &middot; watermark-based delta detection</p>
+      <pre class="code-block"><code>-- Only rows changed since the previous run's watermark come back
+SELECT *
+FROM source_customers
+WHERE updated_at &gt; '2024-03-01 00:00:00';   -- last_load_timestamp
+
+-- 1 row processed, not the whole table &mdash; that's the entire point of incremental loading</code></pre>
     </div>
     <div class="concept-section">
       <h4>Incremental Loading Is a Mechanism; SCD Is a Policy</h4>
       <p>Detecting that a row changed (incremental loading) and deciding what to do about it (SCD Type 1/2/3) are two separate decisions. A watermark can feed either a Type 1 overwrite or a Type 2 versioned insert &mdash; the mechanism doesn't dictate the policy.</p>
+      <p class="code-label">SQL &middot; SCD Type 1, overwrite in place</p>
+      <pre class="code-block"><code>-- Simplest policy: the old value is gone once this runs
+UPDATE dim_customer
+SET city = (
+    SELECT city FROM source_customers
+    WHERE source_customers.customer_id = dim_customer.customer_id
+)
+WHERE customer_id = 7;
+-- Fine for a typo fix; wrong if you'll ever ask "what city were they in on order #17?"</code></pre>
     </div>
     <div class="concept-section">
       <h4>SCD Type 2: the One Interviews Ask About</h4>
       <p>Keep every version of a row, each with its own surrogate key (Part 2) and validity window. This is the pattern that answers "what was true <em>at the time</em>" &mdash; which region a sale should be attributed to, what tier a customer was in when they churned. The upsert itself is a two-statement transaction: close out the current row (<code>end_date</code>, <code>is_current = 0</code>), then insert the new current version.</p>
+      <p class="code-label">SQL &middot; SCD Type 2 schema + the two-statement upsert</p>
+      <pre class="code-block"><code>CREATE TABLE dim_customer_scd2 (
+    customer_key     INTEGER PRIMARY KEY,
+    customer_id      INTEGER NOT NULL,
+    name             VARCHAR(100) NOT NULL,
+    city             VARCHAR(50),
+    membership_level VARCHAR(10),
+    effective_date   DATE NOT NULL,
+    end_date         DATE,               -- NULL means "still current"
+    is_current       INTEGER NOT NULL DEFAULT 1
+);
+
+-- Step 1: close out the row that's about to become historical
+UPDATE dim_customer_scd2
+SET end_date = '2024-06-15', is_current = 0
+WHERE customer_id = 7 AND is_current = 1;
+
+-- Step 2: insert the new current version
+INSERT INTO dim_customer_scd2
+    (customer_id, name, city, membership_level, effective_date, end_date, is_current)
+VALUES (7, 'Grace Kim', 'Montreal', 'vip', '2024-06-15', NULL, 1);
+
+-- The payoff: "what city was Grace in on 2024-03-01?" is now answerable, historically
+SELECT city, effective_date, end_date
+FROM dim_customer_scd2
+WHERE customer_id = 7
+  AND effective_date &lt;= '2024-03-01'
+  AND (end_date IS NULL OR end_date &gt; '2024-03-01');</code></pre>
     </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 220" role="img" aria-label="SCD Type 2 timeline for customer_id 7: two row versions, each valid for a date range.">
+        <defs><linearGradient id="gBg8" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient></defs>
+        <rect x="0" y="0" width="1000" height="220" rx="14" fill="url(#gBg8)"/>
+        <text x="500" y="30" text-anchor="middle" fill="#bfdbfe" font-size="14" font-weight="700">dim_customer_scd2 &mdash; two versions of the same customer_id (7)</text>
+        <rect x="60" y="80" width="440" height="60" rx="6" fill="#3b82f6" fill-opacity="0.6" stroke="#93c5fd" stroke-width="1.5"/>
+        <rect x="500" y="80" width="440" height="60" rx="6" fill="#8b5cf6" fill-opacity="0.6" stroke="#93c5fd" stroke-width="1.5"/>
+        <text x="280" y="105" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">city = Vancouver</text>
+        <text x="280" y="124" text-anchor="middle" fill="#dbeafe" font-size="10">key=1 &middot; is_current = 0</text>
+        <text x="720" y="105" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">city = Montreal</text>
+        <text x="720" y="124" text-anchor="middle" fill="#dbeafe" font-size="10">key=2 &middot; is_current = 1</text>
+        <line x1="60" y1="160" x2="940" y2="160" stroke="#475569" stroke-width="1.5"/>
+        <text x="60" y="178" text-anchor="middle" fill="#94a3b8" font-size="10">effective_date 2023-02-20</text>
+        <text x="500" y="178" text-anchor="middle" fill="#94a3b8" font-size="10">end_date / effective_date 2024-06-15</text>
+        <text x="940" y="178" text-anchor="middle" fill="#94a3b8" font-size="10">end_date = NULL (today)</text>
+      </svg>
+    </div>
+    <p class="diagram-caption">Two rows, same <code>customer_id</code>, different surrogate <code>customer_key</code> &mdash; each valid for its own date range.</p>
+
     <div class="concept-section">
       <h4>Watermarks Are Blind to Deletes</h4>
       <p>A watermark-based load is the cheapest incremental strategy, but a deleted source row simply stops appearing &mdash; it never shows up as "changed." If hard deletes matter, you need log-based CDC instead.</p>
+      <p class="code-label">SQL &middot; the same upsert as ANSI MERGE (reference &mdash; not SQLite)</p>
+      <pre class="code-block"><code>-- ANSI SQL:2003 MERGE (PostgreSQL 15+, SQL Server, Oracle, Snowflake, BigQuery -- not SQLite):
+MERGE INTO dim_customer_scd2 AS target
+USING source_customers AS src
+ON target.customer_id = src.customer_id AND target.is_current = 1
+WHEN MATCHED AND target.city != src.city THEN
+    UPDATE SET end_date = CURRENT_DATE, is_current = 0
+WHEN NOT MATCHED THEN
+    INSERT (customer_id, name, city, membership_level, effective_date, is_current)
+    VALUES (src.customer_id, src.name, src.city, src.membership_level, CURRENT_DATE, 1);
+-- a second INSERT ... SELECT is still needed for the new current row on most platforms --
+-- one MERGE statement takes only one action per matched row</code></pre>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="Incremental loading finds the delta; SCD Type 2 decides what to keep.">

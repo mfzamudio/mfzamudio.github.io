@@ -150,15 +150,134 @@
     <div class="concept-section">
       <h4>Fact and Dimension Tables</h4>
       <p>Put one fact table in the middle with dimensions around it, and it looks like a star: <code>fact_sales</code> joined to <code>dim_customer</code>, <code>dim_product</code>, <code>dim_date</code>. Facts are numerous and narrow (mostly keys and numbers); dimensions are fewer and wide (rich descriptive text).</p>
+      <p class="code-label">SQL &middot; star schema DDL</p>
+      <pre class="code-block"><code>-- DIMENSION: denormalized &mdash; city lives directly on the customer row
+CREATE TABLE dim_customer (
+    customer_key     INTEGER PRIMARY KEY,   -- surrogate key
+    customer_id      INTEGER NOT NULL,      -- source system's natural key
+    name             VARCHAR(100) NOT NULL,
+    city             VARCHAR(50),
+    membership_level VARCHAR(10)
+);
+
+-- DIMENSION: a pre-built date spine, standard in every star schema
+CREATE TABLE dim_date (
+    date_key   INTEGER PRIMARY KEY,   -- YYYYMMDD as an integer, e.g. 20230115
+    full_date  DATE NOT NULL,
+    year       INTEGER NOT NULL,
+    month_name VARCHAR(10) NOT NULL,
+    quarter    INTEGER NOT NULL
+);
+
+-- FACT: one row per order line item; mostly keys + measures
+CREATE TABLE fact_sales (
+    sales_key    INTEGER PRIMARY KEY,
+    customer_key INTEGER NOT NULL REFERENCES dim_customer(customer_key),
+    product_key  INTEGER NOT NULL REFERENCES dim_product(product_key),
+    date_key     INTEGER NOT NULL REFERENCES dim_date(date_key),
+    quantity     INTEGER NOT NULL,
+    unit_price   DECIMAL(10,2) NOT NULL,
+    revenue      DECIMAL(10,2) NOT NULL
+);</code></pre>
     </div>
     <div class="concept-section">
       <h4>Surrogate Keys Matter More Than They Look</h4>
       <p>Give every dimension its own surrogate key, separate from the source system's natural key. This single decision is the prerequisite for <strong>Slowly Changing Dimensions</strong> (Part 8) &mdash; you cannot version a row's history if its key <em>is</em> the natural key.</p>
+      <p class="code-label">SQL &middot; a star-schema query</p>
+      <pre class="code-block"><code>-- Join the fact to every dimension it needs; nothing more
+SELECT c.city, p.category, d.month_name, SUM(f.revenue) AS revenue
+FROM fact_sales f
+JOIN dim_customer c ON c.customer_key = f.customer_key
+JOIN dim_product  p ON p.product_key  = f.product_key
+JOIN dim_date     d ON d.date_key     = f.date_key
+GROUP BY c.city, p.category, d.month_name;</code></pre>
     </div>
     <div class="concept-section">
       <h4>When to Snowflake a Dimension</h4>
       <p>Split a dimension into a sub-table (e.g. <code>dim_city</code> &rarr; <code>dim_customer</code>) only when the sub-attribute is reused by many rows and changes independently. Most modern column-oriented warehouses compress repeated text well enough that the storage savings from snowflaking rarely justify the extra JOIN &mdash; star is still the default.</p>
+      <p class="code-label">SQL &middot; snowflaked dimension</p>
+      <pre class="code-block"><code>CREATE TABLE dim_city (
+    city_key INTEGER PRIMARY KEY,
+    city     VARCHAR(50) NOT NULL,
+    province VARCHAR(50) NOT NULL,
+    country  VARCHAR(50) NOT NULL DEFAULT 'Canada'
+);
+
+CREATE TABLE dim_customer_snowflaked (
+    customer_key      INTEGER PRIMARY KEY,
+    customer_id       INTEGER NOT NULL,
+    name              VARCHAR(100) NOT NULL,
+    city_key          INTEGER REFERENCES dim_city(city_key),
+    membership_level  VARCHAR(10)
+);
+
+-- Same question as the star version, one more JOIN required:
+SELECT cust.name, city.city, city.province
+FROM dim_customer_snowflaked cust
+JOIN dim_city city ON city.city_key = cust.city_key;</code></pre>
     </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 360" role="img" aria-label="Star keeps city on the customer row (one JOIN); snowflake splits city into its own table (two JOINs).">
+        <defs>
+          <linearGradient id="gBg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow2" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="cs1" d="M270,115 L430,115"/>
+          <path id="cs2" d="M200,255 L330,255"/>
+          <path id="cs3" d="M530,255 L660,255"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="360" rx="14" fill="url(#gBg2)"/>
+        <text x="500" y="34" text-anchor="middle" fill="#bfdbfe" font-size="14" font-weight="700">STAR &mdash; city inline on dim_customer (1 JOIN)</text>
+        <g stroke="#475569" stroke-width="2.5"><line x1="270" y1="115" x2="430" y2="115"/></g>
+        <g>
+          <rect x="40" y="70" width="230" height="90" rx="12" fill="url(#gBlue2)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="155" y="105" text-anchor="middle" font-size="20">👤</text>
+          <text x="155" y="130" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">dim_customer</text>
+          <text x="155" y="147" text-anchor="middle" fill="#dbeafe" font-size="9.5">+ city (inline)</text>
+        </g>
+        <g>
+          <rect x="430" y="70" width="200" height="90" rx="12" fill="url(#gPurple2)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="530" y="105" text-anchor="middle" font-size="20">📦</text>
+          <text x="530" y="130" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">fact_sales</text>
+          <text x="530" y="147" text-anchor="middle" fill="#dbeafe" font-size="9.5">Keys + measures</text>
+        </g>
+        <text x="500" y="197" text-anchor="middle" fill="#bfdbfe" font-size="14" font-weight="700">SNOWFLAKE &mdash; city split into dim_city (2 JOINs)</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="200" y1="255" x2="330" y2="255"/>
+          <line x1="530" y1="255" x2="660" y2="255"/>
+        </g>
+        <g>
+          <rect x="40" y="210" width="160" height="90" rx="12" fill="url(#gTeal2)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="120" y="245" text-anchor="middle" font-size="20">🏙️</text>
+          <text x="120" y="270" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">dim_city</text>
+          <text x="120" y="287" text-anchor="middle" fill="#dbeafe" font-size="9.5">province, country</text>
+        </g>
+        <g>
+          <rect x="330" y="210" width="200" height="90" rx="12" fill="url(#gBlue2)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="430" y="245" text-anchor="middle" font-size="20">👤</text>
+          <text x="430" y="270" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">dim_customer</text>
+          <text x="430" y="287" text-anchor="middle" fill="#dbeafe" font-size="9.5">city_key (FK)</text>
+        </g>
+        <g>
+          <rect x="660" y="210" width="200" height="90" rx="12" fill="url(#gPurple2)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="760" y="245" text-anchor="middle" font-size="20">📦</text>
+          <text x="760" y="270" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">fact_sales</text>
+          <text x="760" y="287" text-anchor="middle" fill="#dbeafe" font-size="9.5">Keys + measures</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow2)">
+          <circle r="4"><animateMotion dur="1.6s" begin="0.00s" repeatCount="indefinite"><mpath href="#cs1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#cs1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.00s" repeatCount="indefinite"><mpath href="#cs2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#cs2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.20s" repeatCount="indefinite"><mpath href="#cs3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.73s" repeatCount="indefinite"><mpath href="#cs3"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Star keeps city inline (one JOIN); snowflake splits it into <code>dim_city</code> (two JOINs) &mdash; only worth it when city's own attributes are reused and change independently.</p>
+
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="One fact table, dimensions around it &mdash; that's the whole shape.">
         <defs>

@@ -162,6 +162,22 @@
       <h4>The Decision Isn't Permanent</h4>
       <p>Many real architectures run more than one category at once &mdash; an OLTP engine feeding a warehouse via CDC (<a href="pattern-orchestration-cdc.html">Orchestration &amp; CDC</a>). Don't default to "whatever's newest": an OLTP question answered with a warehouse (or vice versa) usually surfaces as a cost or performance problem months later, not immediately.</p>
     </div>
+    <div class="platform-table">
+      <table>
+        <thead>
+          <tr><th>Question</th><th>Points toward</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Does this serve a live application's reads/writes?</td><td>An OLTP engine (Category 1)</td></tr>
+          <tr><td>Am I aggregating/analyzing large historical volumes?</td><td>A cloud warehouse (Category 2)</td></tr>
+          <tr><td>Am I developing/testing locally, or is the data genuinely small?</td><td>SQLite/DuckDB (Category 3)</td></tr>
+          <tr><td>Do I already have a dominant cloud provider?</td><td>Often decides the warehouse for you (BigQuery&rarr;GCP, Redshift&rarr;AWS, Fabric&rarr;Azure) &mdash; Snowflake and Databricks are the two credible multi-cloud choices</td></tr>
+          <tr><td>Does my organization already run Oracle/SQL Server for OLTP?</td><td>Worth knowing PL/SQL/T-SQL (Part 11) regardless of which warehouse sits alongside it</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Decision framing, not a ranking &mdash; the same query engine can be the right answer for one row and the wrong answer for another.</p>
+
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="Match the database category to the question, not to what's newest.">
         <defs>

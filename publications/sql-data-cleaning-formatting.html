@@ -147,16 +147,65 @@
     </div>
 
     <div class="concept-section">
+      <h4>Parsing Dates Down to Year, Month, Quarter</h4>
+      <p>SQLite stores dates as text and exposes <code>strftime()</code> to slice them; PostgreSQL/MySQL/most warehouses have a real <code>DATE</code>/<code>TIMESTAMP</code> type and richer functions (<code>DATE_TRUNC</code>, <code>EXTRACT</code>, <code>TO_CHAR</code>) &mdash; see Part 12 for the cross-platform mapping.</p>
+      <p class="code-label">SQL &middot; date parsing &amp; arithmetic</p>
+      <pre class="code-block"><code>SELECT order_date,
+       strftime('%Y', order_date)      AS year,
+       strftime('%m', order_date)      AS month_number,
+       strftime('%Y-%m', order_date)   AS year_month,
+       CAST(strftime('%m', order_date) AS INTEGER) AS month_as_int
+FROM orders;
+
+-- Date arithmetic: days since the order was placed
+SELECT order_date,
+       julianday('now') - julianday(order_date) AS days_since_order
+FROM orders
+ORDER BY order_date DESC;</code></pre>
+    </div>
+    <div class="concept-section">
       <h4>Round for Display, Not for Math</h4>
       <p>Rounding early and re-aggregating compounds error across rows. Keep full precision through every intermediate calculation; round only at the final, display step.</p>
+      <p class="code-label">SQL &middot; round at display time only</p>
+      <pre class="code-block"><code>SELECT p.category,
+       AVG(oi.unit_price)            AS avg_price_unrounded,
+       ROUND(AVG(oi.unit_price), 2)  AS avg_price_display
+FROM order_items oi
+JOIN products p ON p.id = oi.product_id
+GROUP BY p.category;
+
+-- CAST forces exact (non-integer) division:
+SELECT 7 / 2                   AS integer_division,       -- 3, silently truncated
+       CAST(7 AS REAL) / 2     AS explicit_cast_division;  -- 3.5</code></pre>
     </div>
     <div class="concept-section">
       <h4>Canonicalize Labels with an Explicit Mapping</h4>
       <p>A <code>CASE WHEN</code> that maps every known raw variant to one canonical label is auditable &mdash; a chain of ad-hoc <code>REPLACE</code> calls silently misses variants nobody thought to test.</p>
+      <p class="code-label">SQL &middot; TRIM/UPPER + CASE WHEN</p>
+      <pre class="code-block"><code>SELECT DISTINCT city,
+       TRIM(city)        AS trimmed,
+       UPPER(TRIM(city)) AS standardized
+FROM customers;
+
+-- CASE WHEN maps every known raw variant onto one canonical label
+SELECT city,
+       CASE
+           WHEN city IN ('Toronto', 'Ottawa') THEN 'Ontario'
+           WHEN city IN ('Montreal')          THEN 'Quebec'
+           WHEN city IN ('Vancouver')         THEN 'British Columbia'
+           WHEN city IN ('Calgary')           THEN 'Alberta'
+           ELSE 'Other'
+       END AS region
+FROM customers
+GROUP BY city;</code></pre>
     </div>
     <div class="concept-section">
       <h4>NULL Is Not Zero, and Not an Empty String</h4>
       <p>A NULL means "unknown/absent." Comparing directly to NULL with <code>=</code> always returns NULL (neither true nor false) &mdash; use <code>IS NULL</code>/<code>IS NOT NULL</code> instead, and <code>COALESCE</code> to supply a default.</p>
+      <p class="code-label">SQL &middot; COALESCE + IS NULL</p>
+      <pre class="code-block"><code>SELECT name, phone, COALESCE(phone, 'not provided') AS phone_display
+FROM customers
+WHERE phone IS NULL;   -- never "= NULL" -- that always evaluates to NULL, not TRUE</code></pre>
     </div>
     <div class="concept-section">
       <h4>Push Cleaning Upstream</h4>

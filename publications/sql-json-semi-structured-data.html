@@ -149,14 +149,81 @@
     <div class="concept-section">
       <h4>Validate Before You Extract</h4>
       <p><code>json_valid()</code> checks whether a string is well-formed JSON before you rely on it &mdash; especially important for data from an external API you don't control. A malformed payload should fail loudly, not silently return NULL for every field.</p>
+      <p class="code-label">SQL &middot; storing + validating + extracting JSON</p>
+      <pre class="code-block"><code>CREATE TABLE customer_events (
+    id          INTEGER PRIMARY KEY,
+    customer_id INTEGER NOT NULL,
+    event_type  VARCHAR(30) NOT NULL,
+    payload     TEXT NOT NULL   -- JSON blob: shape varies by event_type
+);
+
+INSERT INTO customer_events (id, customer_id, event_type, payload) VALUES
+    (3, 7, 'page_view', '{"page": "/checkout", "device": "desktop", "duration_sec": 118}');
+
+SELECT id, event_type, json_valid(payload) AS is_valid_json
+FROM customer_events;
+
+-- json_extract pulls a single field out; ->> is the shorthand for the same thing
+SELECT id, event_type,
+       json_extract(payload, '$.device')       AS device,
+       payload ->> '$.duration_sec'            AS duration_sec
+FROM customer_events
+WHERE event_type = 'page_view';</code></pre>
     </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 300" role="img" aria-label="json_extract turns a field inside a JSON payload into an ordinary column.">
+        <defs>
+          <linearGradient id="gBg6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow6" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <path id="cj1" d="M430,150 L610,150"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg6)"/>
+        <text x="500" y="32" text-anchor="middle" fill="#bfdbfe" font-size="14" font-weight="700">json_extract(payload, '$.device') &mdash; one field, out of the blob</text>
+        <rect x="30" y="55" width="400" height="200" rx="10" fill="#111a2c" stroke="#334155" stroke-width="1.5"/>
+        <text x="50" y="82" fill="#5eead4" font-size="12" font-family="monospace">payload (TEXT / JSON)</text>
+        <text x="50" y="112" fill="#e2e8f0" font-size="12" font-family="monospace">{</text>
+        <text x="66" y="134" fill="#e2e8f0" font-size="12" font-family="monospace">"page": "/checkout",</text>
+        <text x="66" y="156" fill="#fbbf24" font-size="12" font-family="monospace">"device": "desktop",</text>
+        <text x="66" y="178" fill="#fbbf24" font-size="12" font-family="monospace">"duration_sec": 118</text>
+        <text x="50" y="200" fill="#e2e8f0" font-size="12" font-family="monospace">}</text>
+        <g stroke="#475569" stroke-width="2.5"><line x1="430" y1="150" x2="610" y2="150"/></g>
+        <g fill="#bae6fd" filter="url(#glow6)">
+          <circle r="4"><animateMotion dur="1.6s" begin="0.00s" repeatCount="indefinite"><mpath href="#cj1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#cj1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="1.06s" repeatCount="indefinite"><mpath href="#cj1"/></animateMotion></circle>
+        </g>
+        <rect x="610" y="55" width="360" height="200" rx="10" fill="#111a2c" stroke="#334155" stroke-width="1.5"/>
+        <text x="630" y="82" fill="#5eead4" font-size="12" font-family="monospace">extracted columns</text>
+        <line x1="630" y1="95" x2="950" y2="95" stroke="#334155" stroke-width="1"/>
+        <text x="630" y="118" fill="#94a3b8" font-size="11" font-weight="700">DEVICE</text>
+        <text x="800" y="118" fill="#94a3b8" font-size="11" font-weight="700">DURATION_SEC</text>
+        <text x="630" y="150" fill="#fbbf24" font-size="13">desktop</text>
+        <text x="800" y="150" fill="#fbbf24" font-size="13">118</text>
+      </svg>
+    </div>
+    <p class="diagram-caption">Once extracted, a JSON field behaves like any other column &mdash; GROUP BY, AVG, CASE WHEN all work on it.</p>
+
     <div class="concept-section">
       <h4>Unnesting an Array</h4>
       <p>A table-valued function turns a nested array (e.g. a purchase event's list of line items) into one row per element, so it can be joined like any other table. Part 12 maps this same idea onto BigQuery's <code>UNNEST()</code>, Snowflake's <code>LATERAL FLATTEN</code>, and Databricks' <code>EXPLODE()</code> &mdash; one concept, four names.</p>
+      <p class="code-label">SQL &middot; json_each unnests an array</p>
+      <pre class="code-block"><code>-- payload: {"order_total": 174.98, "items": [{"product_id": 13, "qty": 1}, {"product_id": 15, "qty": 1}]}
+SELECT ce.id AS event_id, ce.customer_id,
+       je.value ->> '$.product_id' AS product_id,
+       je.value ->> '$.qty'        AS quantity
+FROM customer_events ce, json_each(ce.payload, '$.items') je
+WHERE ce.event_type = 'purchase';</code></pre>
     </div>
     <div class="concept-section">
       <h4>Extract What You Query Often</h4>
       <p>Pull the fields you query repeatedly into real, typed columns (a view, or a dbt staging model &mdash; Part 10) rather than re-parsing JSON on every query. Keep the raw payload around for fields you only need occasionally.</p>
+      <p class="code-label">SQL &middot; aggregating an extracted field</p>
+      <pre class="code-block"><code>SELECT json_extract(payload, '$.device') AS device,
+       COUNT(*)                          AS views,
+       ROUND(AVG(json_extract(payload, '$.duration_sec')), 1) AS avg_duration_sec
+FROM customer_events
+WHERE event_type = 'page_view'
+GROUP BY device;</code></pre>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="Once extracted, a JSON field behaves like any other column.">

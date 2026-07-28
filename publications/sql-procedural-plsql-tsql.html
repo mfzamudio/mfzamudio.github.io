@@ -150,14 +150,74 @@
     <div class="concept-section">
       <h4>Runnable, via Docker Postgres</h4>
       <p>Neither SQLite nor DuckDB implement real stored procedures/triggers &mdash; this module's one runnable demo uses the optional Docker Postgres container from Part 10. A stored PL/pgSQL function restocks a product automatically when stock drops below a threshold; a trigger logs every price change to an audit table without any application code having to remember to call it.</p>
+      <p class="code-label">PL/pgSQL &middot; a stored function with control flow</p>
+      <pre class="code-block"><code>CREATE OR REPLACE FUNCTION restock_if_low(p_id INTEGER, p_threshold INTEGER, p_restock_qty INTEGER)
+RETURNS TEXT AS $$
+DECLARE
+    current_stock INTEGER;
+BEGIN
+    SELECT stock_quantity INTO current_stock FROM products WHERE id = p_id;
+
+    IF current_stock IS NULL THEN
+        RETURN 'Product not found';
+    ELSIF current_stock &lt; p_threshold THEN
+        UPDATE products SET stock_quantity = stock_quantity + p_restock_qty WHERE id = p_id;
+        RETURN 'Restocked: ' || current_stock || ' -&gt; ' || (current_stock + p_restock_qty);
+    ELSE
+        RETURN 'Stock sufficient, no action taken';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT restock_if_low(2, 10, 50);   -- stock=3, below threshold=10 -&gt; restocks</code></pre>
+      <p class="code-label">PL/pgSQL &middot; a trigger that fires automatically</p>
+      <pre class="code-block"><code>CREATE OR REPLACE FUNCTION log_price_change() RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.price != OLD.price THEN
+        INSERT INTO price_audit VALUES (OLD.id, OLD.price, NEW.price, now());
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_price_change
+BEFORE UPDATE ON products
+FOR EACH ROW EXECUTE FUNCTION log_price_change();
+
+UPDATE products SET price = 139.99 WHERE id = 1;   -- fires the trigger automatically</code></pre>
     </div>
     <div class="concept-section">
       <h4>Oracle PL/SQL (reference)</h4>
       <p>PL/SQL wraps SQL in <code>BEGIN</code>/<code>END</code> blocks with the same DECLARE/control-flow shape as PL/pgSQL. Distinctive features: <code>%ROWTYPE</code> (a variable mirroring a table row's structure) and <strong>packages</strong> (a named, versioned bundle of related procedures). <em>Capability description only &mdash; verify exact syntax against current Oracle docs.</em></p>
+      <p class="code-label">PL/SQL &middot; reference, not executed here</p>
+      <pre class="code-block"><code>CREATE OR REPLACE PROCEDURE restock_if_low(p_id IN products.id%TYPE, p_threshold IN NUMBER) IS
+    v_product products%ROWTYPE;
+BEGIN
+    SELECT * INTO v_product FROM products WHERE id = p_id;
+    IF v_product.stock_quantity &lt; p_threshold THEN
+        UPDATE products SET stock_quantity = stock_quantity + 50 WHERE id = p_id;
+    END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Product not found');
+END;
+/</code></pre>
     </div>
     <div class="concept-section">
       <h4>SQL Server / Fabric T-SQL (reference)</h4>
       <p>T-SQL structures error handling as <code>TRY</code>/<code>CATCH</code> and offers table variables (<code>DECLARE @t TABLE (...)</code>). Microsoft Fabric's Warehouse item supports a T-SQL subset; verify current feature coverage against Fabric docs, since it doesn't yet match on-prem SQL Server 1:1. <em>Capability description only.</em></p>
+      <p class="code-label">T-SQL &middot; reference, not executed here</p>
+      <pre class="code-block"><code>CREATE OR ALTER PROCEDURE RestockIfLow @ProductId INT, @Threshold INT AS
+BEGIN
+    BEGIN TRY
+        DECLARE @CurrentStock INT = (SELECT stock_quantity FROM products WHERE id = @ProductId);
+        IF @CurrentStock &lt; @Threshold
+            UPDATE products SET stock_quantity = stock_quantity + 50 WHERE id = @ProductId;
+    END TRY
+    BEGIN CATCH
+        PRINT ERROR_MESSAGE();
+    END CATCH
+END;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Do Cloud Warehouses Still Need This?</h4>

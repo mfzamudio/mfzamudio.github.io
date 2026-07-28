@@ -150,18 +150,67 @@
     <div class="concept-section">
       <h4>The Honest Ordering</h4>
       <p>Reach for SQLite/DuckDB first &mdash; they cover the overwhelming majority of what this whole series teaches with zero setup. Reach for Docker only for the one thing they can't simulate: real server-side procedural execution (Part 11).</p>
+      <p class="code-label">Python / shell &middot; the three options, side by side</p>
+      <pre class="code-block"><code># SQLite in-memory: zero-install, plain relational SQL
+import sqlite3
+conn = sqlite3.connect(':memory:')
+
+# DuckDB: zero-install, columnar/analytical (Parquet, partitioning)
+import duckdb
+ddb = duckdb.connect()
+
+# Docker Postgres: the one thing the two above genuinely can't simulate
+# (real procedural SQL -- Part 11)
+docker compose up -d</code></pre>
     </div>
     <div class="concept-section">
       <h4>A Real dbt Project, Not a Toy</h4>
       <p>The companion repo's <code>dbt/</code> folder seeds the same Store dataset, builds staging views and mart tables, runs an <strong>incremental</strong> model, and passes both generic (unique/not_null/relationships/accepted_values) and singular tests &mdash; all executed via <code>dbt build</code> against a local DuckDB file, no warehouse account needed.</p>
+      <p class="code-label">shell / SQL &middot; staging model + build command</p>
+      <pre class="code-block"><code># dbt/models/staging/stg_orders.sql
+with source as (
+    select * from {{ ref('orders') }}
+)
+select
+    id as order_id,
+    customer_id,
+    cast(order_date as date) as order_date,
+    status,
+    {{ is_terminal_status('status') }} as is_terminal_status
+from source
+
+# Seeds + staging + marts + tests, all in one command, against a local .duckdb file:
+dbt build --profiles-dir .</code></pre>
     </div>
     <div class="concept-section">
       <h4>The Incremental Model: Part 8, Productionized</h4>
       <p>The repo's <code>incremental_orders</code> model is configured <code>materialized='incremental'</code>: first run builds the full table; every run after, dbt's <code>is_incremental()</code> block filters the source to rows newer than what's already in the target &mdash; the exact watermark pattern from Part 8, expressed as configuration instead of hand-written procedural logic.</p>
+      <p class="code-label">SQL &middot; dbt/models/marts/incremental_orders.sql</p>
+      <pre class="code-block"><code>{{ config(materialized='incremental', unique_key='order_id') }}
+
+select * from {{ ref('stg_orders') }}
+
+{% if is_incremental() %}
+where order_date &gt; (select coalesce(max(order_date), '1900-01-01') from {{ this }})
+{% endif %}</code></pre>
     </div>
     <div class="concept-section">
       <h4>Tests and Docs as Governance-Lite</h4>
       <p>A platform's governance layer usually provides access control, a catalog, and lineage. dbt gives you two of the three for free: documented models + column tests <em>are</em> a searchable catalog once you run <code>dbt docs generate</code>; the dependency graph built from every <code>ref()</code> call <em>is</em> a lineage graph. See <a href="pattern-governance-lineage.html">Governance, Catalog &amp; Lineage</a> for the platform-scale version (Unity Catalog, Purview), and <a href="data-engineer.html">Data Engineer: The Builder</a> for where dbt sits in a data engineer's day-to-day toolkit.</p>
+      <p class="code-label">YAML &middot; dbt/models/marts/_marts.yml (generic tests)</p>
+      <pre class="code-block"><code>models:
+  - name: incremental_orders
+    description: >
+      One row per order. Incremental (unique_key=order_id) -- after the first
+      full build, only pulls orders newer than max(order_date) already loaded.
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+
+# Turns every model + test above into a browsable catalog and DAG:
+dbt docs generate && dbt docs serve</code></pre>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="Reach for the leftmost option that answers the question; Docker only for Part 11.">

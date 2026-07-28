@@ -150,18 +150,66 @@
     <div class="concept-section">
       <h4>Indexes: SCAN Becomes SEARCH</h4>
       <p>An unindexed filter forces the engine to read every row (<code>SCAN</code>). An index on the filtered/joined column lets it jump straight to matching rows (<code>SEARCH</code>). Common anti-patterns that defeat an index anyway: <code>SELECT *</code>, a function wrapped around the indexed column in <code>WHERE</code>, and implicit type conversion.</p>
+      <p class="code-label">SQL &middot; EXPLAIN QUERY PLAN, before &amp; after an index</p>
+      <pre class="code-block"><code>-- Before: no index on the filtered/joined columns
+EXPLAIN QUERY PLAN
+SELECT c.name, SUM(oi.quantity * oi.unit_price) AS spend
+FROM customers c
+JOIN orders o       ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id   = o.id
+WHERE c.city = 'Toronto'
+GROUP BY c.name;
+-- ... SCAN oi / SCAN c -- reads every row of each table
+
+CREATE INDEX idx_customers_city      ON customers(city);
+CREATE INDEX idx_orders_customer_id  ON orders(customer_id);
+CREATE INDEX idx_order_items_order_id ON order_items(order_id);
+
+-- After: the same EXPLAIN QUERY PLAN now shows SEARCH ... USING INDEX
+-- instead of SCAN -- the engine jumps straight to matching rows</code></pre>
     </div>
     <div class="concept-section">
       <h4>Partition Pruning, for Real</h4>
       <p>The companion repo's Part 9 notebook writes a Hive-style partitioned Parquet dataset with DuckDB, then shows a real <code>EXPLAIN</code> plan scanning 1 of 3 partition files after filtering on the partition column &mdash; not a claim, an actual measured pruning result. See <a href="pattern-partitioning-clustering.html">Partitioning &amp; Clustering</a> for the platform-architecture version of the same idea (BigQuery partition+cluster, Snowflake micro-partitions, Delta Z-order).</p>
+      <p class="code-label">SQL / Python &middot; DuckDB partition pruning (measured, not claimed)</p>
+      <pre class="code-block"><code># Write a dataset partitioned by year, Hive-style -- mirrors a production lake table
+duckdb.sql("""
+    COPY (SELECT *, EXTRACT(year FROM order_date) AS order_year FROM orders_big)
+    TO '/tmp/orders_partitioned' (FORMAT PARQUET, PARTITION_BY (order_year))
+""")
+
+-- No filter on the partition column: EXPLAIN shows ~91,617 rows read (all 3 years)
+EXPLAIN SELECT COUNT(*) FROM read_parquet('/tmp/orders_partitioned/*/*.parquet', hive_partitioning=true);
+
+-- Filtered on the partition column: EXPLAIN shows "Scanning Files: 1/3"
+EXPLAIN SELECT COUNT(*) FROM read_parquet('/tmp/orders_partitioned/*/*.parquet', hive_partitioning=true)
+WHERE order_year = 2023;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Views vs. Materialized Views</h4>
       <p>A plain view always re-runs its query &mdash; always fresh, never cached. A materialized view computes once and stores the result, trading freshness for speed; it needs an explicit or scheduled refresh. Decide your staleness tolerance up front, not after someone notices a stale number.</p>
+      <p class="code-label">SQL &middot; simulating a materialized view</p>
+      <pre class="code-block"><code>-- "Materializing" a view: compute once, store as a real table
+CREATE TABLE mv_customer_spend AS
+SELECT c.id, c.name, SUM(oi.quantity * oi.unit_price) AS lifetime_spend
+FROM customers c
+JOIN orders o ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id = o.id
+GROUP BY c.id, c.name;
+
+-- To "refresh": DROP TABLE mv_customer_spend, then re-run the CREATE TABLE AS above.
+-- Snowflake/BigQuery/Databricks/Fabric all offer real materialized views with
+-- automatic, incremental refresh -- see Part 12.</code></pre>
     </div>
     <div class="concept-section">
       <h4>A Cost Note</h4>
       <p>Everything on this page reduces <em>bytes scanned</em> &mdash; and bytes scanned is very often exactly what cloud warehouses bill for (BigQuery: per byte; Snowflake/Databricks: per-second compute, but scanning less data means less time running). Partition pruning is a bill reduction, not just a latency win.</p>
+      <p class="code-label">CLI &middot; checking cost before you run (reference)</p>
+      <pre class="code-block"><code>-- BigQuery: estimate bytes scanned WITHOUT running/billing for the query
+bq query --dry_run --use_legacy_sql=false 'SELECT * FROM orders WHERE order_year = 2023'
+
+-- Snowflake: shows the partitions/micro-partitions a query would scan, before running it
+EXPLAIN USING TEXT SELECT * FROM orders WHERE order_year = 2023;</code></pre>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="Indexing and partition pruning both do the same thing: read less.">

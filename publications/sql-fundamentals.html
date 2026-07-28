@@ -154,14 +154,62 @@
     <div class="concept-section">
       <h4>DDL: Defining Structure</h4>
       <p><code>CREATE TABLE</code> with <code>NOT NULL</code>, <code>UNIQUE</code>, <code>DEFAULT</code>, <code>CHECK</code>, and <code>FOREIGN KEY</code> constraints does most of the data-quality work before a single row is ever inserted &mdash; the engine simply refuses a row that violates them.</p>
+      <p class="code-label">SQL &middot; DDL</p>
+      <pre class="code-block"><code>CREATE TABLE customers (
+    id               INTEGER  PRIMARY KEY,
+    name             VARCHAR(100) NOT NULL,
+    email            VARCHAR(100) UNIQUE NOT NULL,
+    membership_level VARCHAR(10)  NOT NULL DEFAULT 'basic'
+                         CHECK (membership_level IN ('basic', 'premium', 'vip')),
+    created_date     DATE NOT NULL DEFAULT (date('now'))
+);
+
+CREATE TABLE orders (
+    id          INTEGER PRIMARY KEY,
+    customer_id INTEGER NOT NULL,
+    order_date  DATE    NOT NULL DEFAULT (date('now')),
+    status      VARCHAR(20) NOT NULL DEFAULT 'pending'
+                    CHECK (status IN ('pending','shipped','delivered','cancelled')),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);</code></pre>
     </div>
     <div class="concept-section">
       <h4>DML: Writing Data, Safely</h4>
       <p>The one hard rule that carries through every module in this series: preview every <code>UPDATE</code>/<code>DELETE</code> with a <code>SELECT</code> using the identical <code>WHERE</code> clause first. Omitting <code>WHERE</code> touches every row in the table.</p>
+      <p class="code-label">SQL &middot; safe DML</p>
+      <pre class="code-block"><code>-- 1. Preview exactly which rows will be affected
+SELECT id, customer_id, order_date, status
+FROM orders
+WHERE status = 'cancelled';
+
+-- 2. Only then run the DELETE, with the identical WHERE.
+--    Children before parents, or a FOREIGN KEY will reject the delete:
+DELETE FROM order_items WHERE order_id = 40;
+DELETE FROM orders WHERE status = 'cancelled' AND id = 40;
+
+-- An UPDATE with no WHERE touches every row in the table:
+UPDATE customers SET membership_level = 'vip' WHERE id IN (9, 14, 21);</code></pre>
     </div>
     <div class="concept-section">
       <h4>Views: A Saved Query</h4>
       <p><code>CREATE VIEW</code> is DDL that defines a <code>SELECT</code>, not a table &mdash; it re-runs every time it's queried. Part 9 picks this up again to contrast plain views against <em>materialized</em> views, which trade freshness for speed.</p>
+      <p class="code-label">SQL &middot; view</p>
+      <pre class="code-block"><code>CREATE VIEW customer_order_totals AS
+SELECT
+    c.id            AS customer_id,
+    c.name          AS customer_name,
+    c.membership_level,
+    COUNT(o.id)     AS order_count,
+    COALESCE(SUM(oi.quantity * oi.unit_price), 0) AS lifetime_spend
+FROM customers c
+LEFT JOIN orders o       ON o.customer_id = c.id
+LEFT JOIN order_items oi ON oi.order_id   = o.id
+GROUP BY c.id, c.name, c.membership_level;
+
+-- Query it exactly like a table:
+SELECT * FROM customer_order_totals
+ORDER BY lifetime_spend DESC
+LIMIT 5;</code></pre>
     </div>
     <div class="diagram-wrap">
       <svg viewBox="0 0 1000 320" role="img" aria-label="DDL defines the shape; DML fills it; DQL reads it back out.">

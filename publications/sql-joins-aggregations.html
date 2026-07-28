@@ -150,10 +150,78 @@
     <div class="concept-section">
       <h4>Choosing the Right JOIN</h4>
       <p>The most common analytics shape is a chain: customers &rarr; orders &rarr; order_items &rarr; products. Be explicit about JOIN type &mdash; a silent <code>INNER JOIN</code> where you meant <code>LEFT JOIN</code> quietly drops exactly the rows you were often trying to measure (customers with zero orders, products never sold).</p>
+      <p class="code-label">SQL &middot; INNER vs. LEFT vs. SELF</p>
+      <pre class="code-block"><code>-- INNER JOIN: only customers who have placed at least one order
+SELECT c.name, o.id AS order_id, o.order_date, o.status
+FROM customers c
+JOIN orders o ON o.customer_id = c.id;
+
+-- LEFT JOIN: every customer, INCLUDING the ones with zero orders
+SELECT c.id, c.name, o.id AS order_id
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+WHERE o.id IS NULL;               -- isolates customers with no orders at all
+
+-- SELF JOIN: pair employees in the same department (excluding self-pairs)
+SELECT e1.name AS employee_a, e2.name AS employee_b, e1.department
+FROM employees e1
+JOIN employees e2 ON e1.department = e2.department AND e1.id &lt; e2.id;</code></pre>
     </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 300" role="img" aria-label="Venn diagrams of INNER, LEFT, RIGHT, and FULL JOIN, showing which rows each keeps.">
+        <defs>
+          <linearGradient id="gBg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <clipPath id="cL1"><circle cx="90" cy="140" r="50"/></clipPath>
+          <clipPath id="cR1"><circle cx="160" cy="140" r="50"/></clipPath>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg4)"/>
+        <text x="500" y="30" text-anchor="middle" fill="#bfdbfe" font-size="14" font-weight="700">Which rows survive each JOIN type</text>
+
+        <circle cx="90" cy="140" r="50" fill="none" stroke="#93c5fd" stroke-width="2"/>
+        <circle cx="160" cy="140" r="50" fill="none" stroke="#93c5fd" stroke-width="2"/>
+        <g clip-path="url(#cL1)"><g clip-path="url(#cR1)"><rect x="0" y="0" width="1000" height="300" fill="#3b82f6" fill-opacity="0.75"/></g></g>
+        <text x="125" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">INNER JOIN</text>
+        <text x="125" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">Matching rows only</text>
+
+        <circle cx="330" cy="140" r="50" fill="#3b82f6" fill-opacity="0.65" stroke="#93c5fd" stroke-width="2"/>
+        <circle cx="400" cy="140" r="50" fill="none" stroke="#93c5fd" stroke-width="2"/>
+        <text x="365" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">LEFT JOIN</text>
+        <text x="365" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">All of left + matches</text>
+
+        <circle cx="570" cy="140" r="50" fill="none" stroke="#93c5fd" stroke-width="2"/>
+        <circle cx="640" cy="140" r="50" fill="#3b82f6" fill-opacity="0.65" stroke="#93c5fd" stroke-width="2"/>
+        <text x="605" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">RIGHT JOIN</text>
+        <text x="605" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">All of right + matches</text>
+
+        <circle cx="810" cy="140" r="50" fill="#3b82f6" fill-opacity="0.55" stroke="#93c5fd" stroke-width="2"/>
+        <circle cx="880" cy="140" r="50" fill="#3b82f6" fill-opacity="0.55" stroke="#93c5fd" stroke-width="2"/>
+        <text x="845" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">FULL JOIN</text>
+        <text x="845" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">Everything, matched or not</text>
+      </svg>
+    </div>
+    <p class="diagram-caption">SQLite has no native <code>RIGHT</code>/<code>FULL JOIN</code> &mdash; swap table order with <code>LEFT JOIN</code>, or use a platform from Part 12 that supports them directly.</p>
+
     <div class="concept-section">
       <h4>WHERE vs. HAVING</h4>
       <p><code>WHERE</code> runs before grouping and filters individual rows. <code>HAVING</code> runs after grouping and filters the aggregated groups. Both can appear in the same query: <code>WHERE</code> to exclude rows first, <code>HAVING</code> to filter the resulting summary.</p>
+      <p class="code-label">SQL &middot; GROUP BY, HAVING, COUNT(DISTINCT)</p>
+      <pre class="code-block"><code>-- Revenue by category: JOIN + GROUP BY
+SELECT p.category,
+       COUNT(DISTINCT o.id)                       AS orders,
+       ROUND(SUM(oi.quantity * oi.unit_price), 2) AS revenue
+FROM order_items oi
+JOIN orders o   ON o.id = oi.order_id
+JOIN products p ON p.id = oi.product_id
+GROUP BY p.category
+ORDER BY revenue DESC;
+
+-- HAVING filters the GROUPED result -- WHERE can't reference an aggregate
+SELECT p.category, ROUND(SUM(oi.quantity * oi.unit_price), 2) AS revenue
+FROM order_items oi
+JOIN products p ON p.id = oi.product_id
+GROUP BY p.category
+HAVING revenue &gt; 1000
+ORDER BY revenue DESC;</code></pre>
     </div>
     <div class="concept-section">
       <h4>Index What You Join and Filter On</h4>
