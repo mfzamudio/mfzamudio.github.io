@@ -147,16 +147,56 @@
     </div>
 
     <div class="concept-section">
-      <h4>Category 1 — OLTP Engines</h4>
+      <h4>Category 1 — OLTP Engines (PostgreSQL, MySQL, SQL Server, Oracle)</h4>
       <p>Row-oriented storage, normalized schemas, strong transactional guarantees (ACID), fast single-row reads/writes &mdash; the database <em>behind</em> an application. PostgreSQL is the closest thing to a modern default; Oracle's PL/SQL (Part 11) is still common in banking, telecom, and government systems.</p>
+      <p><strong>Pros:</strong></p>
+      <ul>
+        <li><strong>ACID transactions</strong> guarantee correctness under concurrent writes &mdash; two people can't double-book the same seat, and a payment charge + inventory decrement either both happen or neither does.</li>
+        <li><strong>Fast single-row lookups/writes</strong> via primary-key indexes &mdash; fetching or updating one specific row stays fast even as the table grows.</li>
+        <li><strong>Referential integrity</strong> (foreign keys, constraints &mdash; Part 1) is enforced by the engine itself, not left to application code to get right every time.</li>
+        <li>Decades of mature tooling, drivers, and operational knowledge &mdash; nothing here is exotic to hire for or operate.</li>
+      </ul>
+      <p><strong>Cons:</strong></p>
+      <ul>
+        <li>Row-oriented storage makes "scan and aggregate 500M rows" slow and I/O-heavy &mdash; the wrong physical shape for wide analytical queries (Part 9).</li>
+        <li>Vertical scaling has a real ceiling &mdash; a single write-heavy instance eventually needs read replicas or sharding, genuine engineering effort, not a config flag.</li>
+        <li>Not built for ad hoc queries touching many columns across huge historical tables &mdash; that's a warehouse's job (Category 2).</li>
+      </ul>
+      <p><strong>Real scenario &mdash; why it wins:</strong> an e-commerce checkout. Each order needs its payment charge and inventory decrement to succeed or fail <em>together</em> (a transaction), thousands of shoppers may write concurrently, and each individual query touches a handful of rows (this one order, this one customer). PostgreSQL wins here because ACID guarantees plus fast single-row access is exactly the job description &mdash; a columnar warehouse, optimized for scanning many rows at once, would be both slower and needlessly expensive for this write-heavy, single-row access pattern.</p>
     </div>
     <div class="concept-section">
-      <h4>Category 2 — Cloud Analytical Warehouses</h4>
+      <h4>Category 2 — Cloud Analytical Warehouses (Snowflake, BigQuery, Databricks, Fabric, Redshift)</h4>
       <p>Columnar storage, elastic/serverless compute, mostly-separated storage and compute (Redshift is the architectural exception &mdash; Part 12). This is what a BI tool or a scheduled dbt pipeline (Part 10) actually queries.</p>
+      <p><strong>Pros:</strong></p>
+      <ul>
+        <li><strong>Columnar storage + elastic compute</strong> scan and aggregate billions of rows fast, without anyone provisioning or managing hardware.</li>
+        <li><strong>Storage/compute mostly separated</strong> (Redshift excepted) means query power scales independently of how much data is stored &mdash; and on BigQuery/Snowflake, you largely pay only when actually querying.</li>
+        <li>Native integration with the analytics ecosystem &mdash; BI tools, dbt (Part 10), orchestration &mdash; built for that workflow, not bolted onto it.</li>
+      </ul>
+      <p><strong>Cons:</strong></p>
+      <ul>
+        <li>Poor fit for high-frequency, low-latency single-row writes &mdash; an OLTP-style checkout flow here would be slow and often needlessly costly.</li>
+        <li>Real cost risk: a badly written query can scan far more data (and money) than expected, with no query-plan visibility unless you check <em>before</em> running it (Part 9's cost note).</li>
+        <li>Some proprietary SQL extensions don't port cleanly between platforms (Snowflake Scripting, BigQuery-specific functions &mdash; Part 12) &mdash; a real, if partial, lock-in tendency.</li>
+      </ul>
+      <p><strong>Real scenario &mdash; why it wins:</strong> a BI dashboard aggregating a year of sales across every region. It needs to scan hundreds of millions of rows, group by a dozen dimensions, and return in seconds when an analyst refreshes a Tableau/Power BI report. A cloud warehouse wins because its entire architecture &mdash; columnar storage, serverless/MPP compute &mdash; is purpose-built for "read a lot, write rarely." An OLTP engine would either time out or need to be over-provisioned well beyond what its transactional design is meant for.</p>
     </div>
     <div class="concept-section">
-      <h4>Category 3 — Embedded / Local</h4>
+      <h4>Category 3 — Embedded / Local (SQLite, DuckDB)</h4>
       <p>SQLite (row-oriented, the engine behind Parts 1-8 of this series) and DuckDB (columnar, "SQLite for analytics," behind Part 9's pruning demo and Part 10's dbt project). Neither replaces a warehouse at production scale &mdash; but for local development or a dataset that fits on one machine, reaching for a cloud warehouse is often overkill.</p>
+      <p><strong>Pros:</strong></p>
+      <ul>
+        <li><strong>Zero install, zero server</strong> &mdash; a single file (SQLite) or an in-process engine (DuckDB), running wherever the app or notebook itself runs.</li>
+        <li><strong>Genuinely fast at machine scale</strong> &mdash; DuckDB in particular rivals warehouse-grade analytical performance for data that fits on one machine.</li>
+        <li>Ideal for CI test suites and local development &mdash; real SQL semantics, none of the setup cost or cloud account this entire series was built to avoid.</li>
+      </ul>
+      <p><strong>Cons:</strong></p>
+      <ul>
+        <li>No concurrent multi-writer support at production scale &mdash; SQLite in particular locks the whole database file for a write.</li>
+        <li>No built-in high availability, replication, or access control &mdash; not meant to survive a server dying or serve many simultaneous users.</li>
+        <li>A genuine data-volume ceiling &mdash; doesn't scale past what fits on one machine's disk/memory.</li>
+      </ul>
+      <p><strong>Real scenario &mdash; why it wins:</strong> writing and testing this entire series' 14 notebooks. Every concept from JOINs to window functions to a real dbt project needed to run reproducibly on any machine, with zero setup and no cloud account or credit card required. SQLite/DuckDB win here because the job isn't "serve production traffic" &mdash; it's "verify the SQL is correct, fast, for free, anywhere" &mdash; and spinning up a warehouse account for that would add friction for zero benefit.</p>
     </div>
     <div class="concept-section">
       <h4>The Decision Isn't Permanent</h4>
