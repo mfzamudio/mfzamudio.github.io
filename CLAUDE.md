@@ -226,18 +226,24 @@ Platform-agnostic data engineering fundamentals. The through-line is **transfera
 | `ml-ai-engineer.html` | Part 4 — ML/AI Engineer: The Deployer (RAG pipeline diagram, MLOps lifecycle) |
 
 ### SQL for Every Data Platform (14-Part Series) — July 2026
-The first skill any new platform assumes. A flat 14-part series, fundamentals through procedural
+The first skill any new platform assumes. A 14-part series, fundamentals through procedural
 SQL through cross-platform syntax, using the **same anatomy as Learn the Pattern** (In 60 seconds
-box, concept sections, particle-flow SVG diagram) — **but with no separate landing page**: Part 1
-carries the series framing inline, and both Part 1's "prev" and Part 14's "next" nav link back to
-`publications.html` directly. A `platform-table` ("Same query, every platform") appears only on
-Part 12. **Code companion:** public GitHub repo [`sql-for-data-platforms`](https://github.com/mfzamudio/sql-for-data-platforms) —
+box, concept sections, particle-flow SVG diagram). **Has its own landing page**
+(`sql-for-every-data-platform.html` — series overview, 4-stage particle-SVG diagram, 14-part grid,
+same shape as `learn-the-pattern.html`), added August 2026 after the flat-series-with-no-landing
+design (Part 1 carrying the framing inline) proved confusing in practice: the sidebar's series
+header linked straight to Part 1 with no overview, unlike every other series. Every part's top
+back-link now points to the landing page (`← Back to Series Overview`), Part 1's "prev" and
+Part 14's "next" both link to it, and the sidebar header / `publications.html` post-card were
+updated to match. A `platform-table` ("Same query, every platform") appears only on Part 12.
+**Code companion:** public GitHub repo [`sql-for-data-platforms`](https://github.com/mfzamudio/sql-for-data-platforms) —
 14 independently runnable Jupyter notebooks (SQLite/DuckDB, zero server except an optional Docker
 Postgres for Part 11's procedural-SQL demo) plus a working dbt-duckdb project (seeds, staging/mart
 models, an incremental model, generic + singular tests).
 
 | File | Title |
 |---|---|
+| `sql-for-every-data-platform.html` | Landing page — series overview, 4-stage particle-SVG diagram, 14-part grid |
 | `sql-fundamentals.html` | Part 1 — SQL Fundamentals: DDL, DML, DQL |
 | `sql-schema-design-star-snowflake.html` | Part 2 — Designing the Schema: Star vs. Snowflake |
 | `sql-joins-aggregations.html` | Part 3 — Joins & Aggregations |

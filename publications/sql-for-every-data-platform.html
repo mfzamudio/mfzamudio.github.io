@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SQL for Every Data Platform | Mario Zamudio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    .pub-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      padding: 44px 32px;
+      border-radius: 12px;
+      margin: 24px 0 36px;
+      text-align: center;
+    }
+    .pub-hero .series-label {
+      display: inline-block;
+      background: rgba(37,99,235,0.35);
+      color: #bfdbfe;
+      border: 1px solid rgba(191,219,254,0.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .pub-hero h2 {
+      color: white !important;
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .pub-hero h2::after { display: none !important; }
+    .pub-hero .subtitle {
+      color: #bfdbfe;
+      font-size: 1.05rem;
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+    .diagram-wrap {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin: 28px 0 8px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-caption {
+      text-align: center;
+      font-size: 0.83rem;
+      color: #475569;
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin: 28px 0;
+    }
+    .pillar-card {
+      background: white;
+      border-radius: 10px;
+      padding: 22px;
+      box-shadow: 0 1px 4px rgba(15,23,42,.06);
+      border-top: 4px solid #2563eb;
+    }
+    .pillar-card.purple { border-top-color: #6d28d9; }
+    .pillar-card.teal { border-top-color: #0369a1; }
+    .pillar-card h3 { font-size: 1.05rem; margin: 0 0 8px; color: #0f172a; }
+    .pillar-card p { font-size: 0.9rem; color: #475569; margin: 0; line-height: 1.65; }
+    .series-parts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 28px 0 40px;
+    }
+    .part-link {
+      display: block;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px;
+      text-decoration: none;
+      color: #0f172a;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .part-link:hover {
+      border-color: #2563eb;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.1);
+      transform: translateY(-3px);
+      color: #0f172a;
+    }
+    .part-number { font-size: 0.72rem; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+    .part-link h4 { font-size: 0.92rem; margin: 0 0 6px; color: #0f172a; line-height: 1.35; }
+    .part-link p { font-size: 0.8rem; color: #475569; margin: 0; line-height: 1.5; }
+    .highlight-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 24px 0;
+    }
+    .highlight-box p { margin: 0; font-size: 0.95rem; color: #0f172a; line-height: 1.7; }
+  </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<main class="project-detail">
+  <section>
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+
+    <div class="pub-hero">
+      <div class="series-label">Technical Reference &mdash; 14-Part Series</div>
+      <h2>SQL for Every Data Platform</h2>
+      <p class="subtitle">Before Fabric, Snowflake, Databricks, or BigQuery, there's one skill every one of them assumes: SQL. This series starts at the fundamentals and builds to procedural SQL and cross-platform syntax &mdash; every concept explained, runnable, and mapped across platforms.</p>
+    </div>
+
+    <h3>Why SQL Is Still the First Skill</h3>
+    <p>
+      Every platform in this series &mdash; Snowflake, Databricks, BigQuery, Fabric, Redshift &mdash; speaks SQL as its primary interface. The dashboards, the dbt models, the ad-hoc analysis: all SQL underneath. Learn the language once, and the platform becomes a detail &mdash; an analyst who is fluent in the concepts below can sit down in front of any of these five platforms and be productive within the hour, translating unfamiliar keywords instead of re-learning how relational data works.
+    </p>
+    <p>
+      This series is built as a working reference, not a quick skim: every concept &mdash; from <code>COUNT</code>/<code>SUM</code>/<code>AVG</code> to Slowly Changing Dimensions to stored procedures &mdash; is explained in full, with a runnable example, before moving to the next. All 14 companion notebooks execute end to end with zero errors, and every "same query, every platform" claim is flagged for its confidence level, not presented as fact to memorize.
+    </p>
+
+    <div class="highlight-box">
+      <p>
+        <strong>The rule of thumb:</strong> learn a concept once here, in SQLite/DuckDB, with real executed output &mdash; then Part 12 and the per-topic notes throughout the series show you where the same idea lives on BigQuery, Snowflake, Databricks, Fabric, and Redshift, so the knowledge transfers instead of expiring with one vendor's syntax.
+      </p>
+    </div>
+
+    <h3>From Fundamentals to Platform Fluency</h3>
+    <p>The 14 parts build in four stages, each one assuming the last:</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 300" role="img" aria-label="Four stages: Fundamentals, Everyday Querying, Production Patterns, Platform Fluency">
+        <defs>
+          <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+          <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+          <linearGradient id="gTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
+          <path id="c1" d="M170,150 L222,150"/>
+          <path id="c2" d="M372,150 L425,150"/>
+          <path id="c3" d="M575,150 L628,150"/>
+        </defs>
+        <rect x="0" y="0" width="1000" height="300" rx="14" fill="url(#gBg)"/>
+        <text x="500" y="46" text-anchor="middle" fill="#bfdbfe" font-size="15" font-weight="700">Fourteen parts, four stages, one transferable skill</text>
+        <g stroke="#475569" stroke-width="2.5">
+          <line x1="170" y1="150" x2="222" y2="150"/>
+          <line x1="372" y1="150" x2="425" y2="150"/>
+          <line x1="575" y1="150" x2="628" y2="150"/>
+        </g>
+        <g>
+          <rect x="20" y="105" width="150" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="95" y="140" text-anchor="middle" font-size="22">📐</text>
+          <text x="95" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Fundamentals</text>
+          <text x="95" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Parts 1&ndash;2</text>
+        </g>
+        <g>
+          <rect x="222" y="105" width="203" height="90" rx="12" fill="url(#gPurple)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="323" y="140" text-anchor="middle" font-size="22">🔍</text>
+          <text x="323" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Everyday Querying</text>
+          <text x="323" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Parts 3&ndash;7</text>
+        </g>
+        <g>
+          <rect x="425" y="105" width="203" height="90" rx="12" fill="url(#gTeal)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="526" y="140" text-anchor="middle" font-size="22">⚙️</text>
+          <text x="526" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Production Patterns</text>
+          <text x="526" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Parts 8&ndash;11</text>
+        </g>
+        <g>
+          <rect x="628" y="105" width="180" height="90" rx="12" fill="url(#gBlue)" stroke="#93c5fd" stroke-opacity="0.5"/>
+          <text x="718" y="140" text-anchor="middle" font-size="22">🌐</text>
+          <text x="718" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Platform Fluency</text>
+          <text x="718" y="182" text-anchor="middle" fill="#dbeafe" font-size="9.5">Parts 12&ndash;14</text>
+        </g>
+        <g fill="#bae6fd" filter="url(#glow)">
+          <circle r="4"><animateMotion dur="1.6s" begin="0.00s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.53s" repeatCount="indefinite"><mpath href="#c1"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.20s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.73s" repeatCount="indefinite"><mpath href="#c2"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.40s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+          <circle r="4"><animateMotion dur="1.6s" begin="0.93s" repeatCount="indefinite"><mpath href="#c3"/></animateMotion></circle>
+        </g>
+      </svg>
+    </div>
+    <p class="diagram-caption">Structure and syntax first, then day-to-day querying, then production-grade patterns, then cross-platform fluency.</p>
+
+    <h3>What This Series Is &mdash; and Isn't</h3>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <h3>Reference-depth, not a skim</h3>
+        <p>Every concept is explained in full &mdash; what it is, why it matters, the common pitfall &mdash; with a runnable example, not a one-line definition.</p>
+      </div>
+      <div class="pillar-card purple">
+        <h3>Runnable, verified code</h3>
+        <p>All 14 companion notebooks execute end to end with zero errors, including a real dbt project and measured (not claimed) performance results.</p>
+      </div>
+      <div class="pillar-card teal">
+        <h3>Platform-agnostic</h3>
+        <p>Learn each concept once in SQLite/DuckDB, then see exactly where it lives on BigQuery, Snowflake, Databricks, Fabric, and Redshift.</p>
+      </div>
+    </div>
+
+    <h3>The 14 Parts</h3>
+    <p>Each part is self-contained and independently useful, but together they form a complete reference &mdash; from your first <code>CREATE TABLE</code> to comparing five cloud warehouses side by side:</p>
+
+    <div class="series-parts">
+      <a href="sql-fundamentals.html" class="part-link">
+        <div class="part-number">Part 1 &rarr;</div>
+        <h4>Fundamentals: DDL, DML, DQL</h4>
+        <p>The three pillars: define structure, write data, read it back.</p>
+      </a>
+      <a href="sql-schema-design-star-snowflake.html" class="part-link">
+        <div class="part-number">Part 2 &rarr;</div>
+        <h4>Designing the Schema: Star vs. Snowflake</h4>
+        <p>Fact and dimension tables, the analytical shape of your data.</p>
+      </a>
+      <a href="sql-joins-aggregations.html" class="part-link">
+        <div class="part-number">Part 3 &rarr;</div>
+        <h4>Joins &amp; Aggregations</h4>
+        <p>COUNT, SUM, AVG, MIN, MAX, and the JOIN types that combine tables.</p>
+      </a>
+      <a href="sql-subqueries-ctes-window-functions.html" class="part-link">
+        <div class="part-number">Part 4 &rarr;</div>
+        <h4>Subqueries, CTEs &amp; Window Functions</h4>
+        <p>Ask harder questions without losing row-level detail.</p>
+      </a>
+      <a href="sql-data-cleaning-formatting.html" class="part-link">
+        <div class="part-number">Part 5 &rarr;</div>
+        <h4>Data Cleaning &amp; Formatting with SQL</h4>
+        <p>Dates, rounding, labels, and NULLs &mdash; the unglamorous work.</p>
+      </a>
+      <a href="sql-json-semi-structured-data.html" class="part-link">
+        <div class="part-number">Part 6 &rarr;</div>
+        <h4>Semi-Structured Data &amp; JSON in SQL</h4>
+        <p>Query nested, schema-less data directly with SQL.</p>
+      </a>
+      <a href="sql-query-cookbook.html" class="part-link">
+        <div class="part-number">Part 7 &rarr;</div>
+        <h4>The Query Cookbook</h4>
+        <p>Eleven day-to-day patterns, copy-paste ready.</p>
+      </a>
+      <a href="sql-scd-incremental-loading.html" class="part-link">
+        <div class="part-number">Part 8 &rarr;</div>
+        <h4>Slowly Changing Dimensions &amp; Incremental Loading</h4>
+        <p>The interview question about tracking history over time.</p>
+      </a>
+      <a href="sql-performance-tuning.html" class="part-link">
+        <div class="part-number">Part 9 &rarr;</div>
+        <h4>Query Performance &amp; Tuning</h4>
+        <p>Indexes, partitioning, views, and a real measured pruning demo.</p>
+      </a>
+      <a href="sql-local-simulation.html" class="part-link">
+        <div class="part-number">Part 10 &rarr;</div>
+        <h4>Simulating a Platform Locally</h4>
+        <p>Run dbt, tests, and governance on your laptop, no warehouse account.</p>
+      </a>
+      <a href="sql-procedural-plsql-tsql.html" class="part-link">
+        <div class="part-number">Part 11 &rarr;</div>
+        <h4>Procedural SQL</h4>
+        <p>Stored procedures, triggers, and PL/pgSQL, PL/SQL, T-SQL compared.</p>
+      </a>
+      <a href="sql-syntax-across-platforms.html" class="part-link">
+        <div class="part-number">Part 12 &rarr;</div>
+        <h4>Same Query, Every Platform</h4>
+        <p>BigQuery, Snowflake, Databricks, Fabric, and Redshift syntax side by side.</p>
+      </a>
+      <a href="sql-choosing-your-database.html" class="part-link">
+        <div class="part-number">Part 13 &rarr;</div>
+        <h4>Choosing Your Database</h4>
+        <p>OLTP vs. warehouse vs. embedded, with pros, cons, and real scenarios.</p>
+      </a>
+      <a href="sql-style-best-practices.html" class="part-link">
+        <div class="part-number">Part 14 &rarr;</div>
+        <h4>SQL Style &amp; Best Practices</h4>
+        <p>Naming, safe DML, and a code-review checklist that closes the series.</p>
+      </a>
+    </div>
+
+    <p style="font-size:0.85rem;color:var(--text-muted, #64748b);margin:8px 2px 24px;">
+      Runnable code for the whole series: <a href="https://github.com/mfzamudio/sql-for-data-platforms" target="_blank">sql-for-data-platforms</a> on GitHub &mdash; 14 independently runnable Jupyter notebooks, a working dbt-duckdb project, and an optional Docker Postgres setup for Part 11.
+    </p>
+
+    <a href="../../publications/publications.html" class="home-link">← Back to Publications</a>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="../../scripts/include-layout.js"></script>
+</body>
+</html>

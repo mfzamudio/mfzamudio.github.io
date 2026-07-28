@@ -120,6 +120,7 @@ The first skill any new platform assumes. Fundamentals (DDL/DML/DQL) through sch
 
 | Part | Title |
 |------|-------|
+| Landing | [Series Overview](publications/sql-for-every-data-platform.html) |
 | Part 1 | [SQL Fundamentals: DDL, DML, DQL](publications/sql-fundamentals.html) |
 | Part 2 | [Designing the Schema: Star vs. Snowflake](publications/sql-schema-design-star-snowflake.html) |
 | Part 3 | [Joins & Aggregations](publications/sql-joins-aggregations.html) |
