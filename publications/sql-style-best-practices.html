@@ -204,6 +204,51 @@ SELECT customerId, city, currentFlag
 FROM tbl_customer_snapshot;</code></pre>
     </div>
     <div class="concept-section">
+      <h4>Common Errors &amp; Fixes</h4>
+      <p>Two genuinely new traps, plus a map to where every other recurring error in this series already gets its full explanation &mdash; scattered by design, next to the concept it belongs to, but consolidated here for a quick lookup.</p>
+      <p class="code-label">SQL &middot; JOIN fan-out (the most common silent wrong number)</p>
+      <pre class="code-block"><code>-- WRONG: COUNT(o.id) after joining order_items counts each order ONCE PER LINE ITEM
+SELECT c.name, COUNT(o.id) AS orders_wrong, SUM(oi.quantity * oi.unit_price) AS revenue
+FROM customers c
+JOIN orders o       ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id   = o.id
+GROUP BY c.name;
+-- Measured on 1 customer, 3 orders, 6 line items total: orders_wrong = 6, not 3.
+-- The join to order_items multiplied every order row by its own line-item count --
+-- SUM(revenue) is still correct (it's summing the right column), but COUNT(o.id) isn't.
+
+-- RIGHT: COUNT(DISTINCT o.id) counts each order once, no matter how many line items it has
+SELECT c.name, COUNT(DISTINCT o.id) AS orders_right, SUM(oi.quantity * oi.unit_price) AS revenue
+FROM customers c
+JOIN orders o       ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id   = o.id
+GROUP BY c.name;
+-- Measured, same data: orders_right = 3 -- the actual order count.</code></pre>
+      <p class="code-label">SQL &middot; ambiguous column reference</p>
+      <pre class="code-block"><code>-- WRONG: both tables have an "id" column -- the engine can't tell which one you mean
+SELECT id FROM customers c JOIN orders o ON o.customer_id = c.id;
+-- Error: ambiguous column name: id  (verified against this exact query)
+
+-- RIGHT: qualify every column that exists on more than one side of a JOIN
+SELECT c.id FROM customers c JOIN orders o ON o.customer_id = c.id;</code></pre>
+      <div class="platform-table">
+        <table>
+          <thead>
+            <tr><th>Error / symptom</th><th>Where it's fully covered</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>A query returns zero rows, but you expected some (comparing to NULL with <code>=</code>)</td><td>Part 5 &mdash; NULL Is Not Zero</td></tr>
+            <tr><td><code>NOT IN</code> silently returns zero rows for everyone</td><td>Part 7 &mdash; The NOT IN Trap</td></tr>
+            <tr><td><code>FOREIGN KEY constraint failed</code> on a DELETE</td><td>Part 1 &mdash; DML: Writing Data, Safely (delete children before parents)</td></tr>
+            <tr><td>"column must appear in GROUP BY clause or be used in an aggregate function" (strict platforms; SQLite is lenient here)</td><td>Part 3 &mdash; WHERE vs. HAVING / The Core Aggregate Functions</td></tr>
+            <tr><td>A window function alias can't be used in the same query's <code>WHERE</code></td><td>Part 4 &mdash; Window Functions Run Late</td></tr>
+            <tr><td>A query that used to be fast is suddenly slow after the data grew</td><td>Part 9 &mdash; Indexes: SCAN Becomes SEARCH</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">General strategy when a query errors or looks wrong: read where the engine's error message actually points (not just the first line); remove JOINs/clauses one at a time until the result matches expectations again, to isolate which one introduced the problem; and check the schema (<code>PRAGMA table_info</code>, or the platform's equivalent) before assuming a column means what its name suggests.</p>
+    </div>
+    <div class="concept-section">
       <h4>A Short Code-Review Checklist</h4>
       <p>Every habit above, condensed into what to actually check before merging any SQL change:</p>
       <ul>
