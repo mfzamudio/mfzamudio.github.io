@@ -230,7 +230,7 @@ The first skill any new platform assumes. A 14-part series, fundamentals through
 SQL through cross-platform syntax, using the **same anatomy as Learn the Pattern** (In 60 seconds
 box, concept sections, particle-flow SVG diagram). **Has its own landing page**
 (`sql-for-every-data-platform.html` — series overview, 4-stage particle-SVG diagram, 14-part grid,
-same shape as `learn-the-pattern.html`), added August 2026 after the flat-series-with-no-landing
+same shape as `learn-the-pattern.html`), added later the same day (July 28, 2026) after the flat-series-with-no-landing
 design (Part 1 carrying the framing inline) proved confusing in practice: the sidebar's series
 header linked straight to Part 1 with no overview, unlike every other series. Every part's top
 back-link now points to the landing page (`← Back to Series Overview`), Part 1's "prev" and
@@ -239,7 +239,12 @@ updated to match. A `platform-table` ("Same query, every platform") appears only
 **Code companion:** public GitHub repo [`sql-for-data-platforms`](https://github.com/mfzamudio/sql-for-data-platforms) —
 14 independently runnable Jupyter notebooks (SQLite/DuckDB, zero server except an optional Docker
 Postgres for Part 11's procedural-SQL demo) plus a working dbt-duckdb project (seeds, staging/mart
-models, an incremental model, generic + singular tests).
+models, an incremental model, generic + singular tests). **Content is reference-depth, not a
+skim** (a later same-day pass): every concept-section explains what/why/pitfall with a runnable example,
+not a one-line definition; Part 13 covers in-memory databases (Redis/Memcached vs. SQLite/DuckDB/
+HANA/TimesTen) as a cross-cutting property, not a 4th category; Part 14 closes with a consolidated
+Common Errors & Fixes section. Every SQL example on every page has a matching, already-executed
+cell in the companion repo — verified by an explicit audit, not assumed.
 
 | File | Title |
 |---|---|
@@ -308,6 +313,63 @@ models, an incremental model, generic + singular tests).
 ---
 
 ## Session History / Changelog
+
+### July 28, 2026 (later the same day) — Program E content-depth pass, landing page, and repo-consistency audit
+After Program E shipped (see the entry directly below), Mario reviewed the live pages across
+several follow-ups and asked for real content-quality fixes, all committed and pushed.
+
+- **Code snippets added to all 14 pages.** The initial ship had zero actual `<pre class="code-block">`
+  elements — just prose + one diagram per page. Added copy-pasteable SQL/YAML/shell examples per
+  concept-section, sourced from the already-executed notebooks (not invented), plus new inline SVG
+  diagrams for visual concepts (JOIN Venn diagrams, star vs. snowflake, RANK/DENSE_RANK,
+  UNION/INTERSECT/EXCEPT, SCD Type 2 timeline).
+- **Full content-depth pass, all 14 pages.** Mario said the series read like a "60 seconds" skim
+  throughout, not the technical reference it's meant to be. Expanded every concept-section from
+  ~25-60 words to 90-300 words, and filled real structural gaps a page's own title/summary promised
+  but never delivered: Part 3 got the missing basic-aggregate-functions section (COUNT/SUM/AVG/
+  MIN/MAX/DISTINCT — explicit ask, EDA fundamentals), Part 1 got DQL/SELECT, Part 4 got a dedicated
+  Subqueries section, Part 8 got SCD Type 3, Part 9 got JOIN order/CTE materialization, Part 14 got
+  Naming Conventions and the CTE-vs-Subquery decision table.
+- **Landing page added** (`sql-for-every-data-platform.html`) after Mario noticed the sidebar's
+  series header linked straight to Part 1 with no overview — every other series has a landing page,
+  Program E didn't, an earlier "flat series, no landing" design choice that turned out to be
+  confusing in practice. Built matching `learn-the-pattern.html`'s shape (overview + 4-stage
+  particle-flow diagram + 14-part grid); repointed the sidebar header, the `publications.html`
+  post-card, Part 1/14's series-nav, and every part's top back-link to it. One rendering bug along
+  the way: widening two diagram boxes for longer labels left the connector lines using the old,
+  narrower edges, so boxes ended up touching with zero gap — fixed by recomputing all four box
+  positions with equal spacing.
+- **JOIN Venn diagram corrected for accuracy, not just rendering.** Mario correctly flagged that
+  the LEFT/RIGHT/FULL JOIN diagram — while following the internet-standard "SQL Joins Venn diagram"
+  convention — visually looked like "just the left table" / "just the right table" / a plain UNION,
+  because shading only "which rows survive" never showed that a JOIN result row still carries
+  columns from *both* tables (NULL-padded on the unmatched side), unlike a UNION which stacks
+  same-shaped rows. Fixed with explicit NULL-padding captions and a new real-data mini-table (one
+  matched row, one unmatched row with visible NULLs) proving the point concretely.
+- **Performance-tuning EXPLAIN PLAN made concrete:** split the indexing example into three labeled
+  steps (before plan → the fix → after plan) with real captured `EXPLAIN QUERY PLAN` output and a
+  cost comparison grounded in verified counts against the notebook's exact seed data (80
+  order_items scanned before indexing → 26 touched after, via 7 Toronto customers → 13 orders).
+- **In-memory databases added to Part 13**, framed as an orthogonal property, not a 4th category:
+  SQLite/DuckDB in-memory mode (SQL) vs. Redis/Memcached (the most-used in-memory stores, but *not*
+  SQL — an accuracy point worth stating plainly) vs. SAP HANA/Oracle TimesTen (enterprise in-memory
+  SQL).
+- **Common Errors & Fixes added to Part 14** after Mario asked whether the series needed a
+  troubleshooting chapter. Recommended (and Mario confirmed) expanding Part 14 rather than adding a
+  new Part 15, since most recurring errors already live next to their concept throughout the series,
+  and a new part would force renumbering the "14-part series" branding everywhere (README, this
+  file, the GitHub repo, the 14 already-drafted LinkedIn posts, every page's "Module N of 14"
+  footer). Added two genuinely new, measured examples (JOIN fan-out inflating `COUNT()`; ambiguous
+  column reference) plus a lookup table to where everything else is already covered.
+- **Repo-consistency audit:** a background agent compared every HTML code block on all 14 pages
+  against every notebook cell in `sql-for-data-platforms` and found 8 gaps — new site content with
+  no matching executed cell. All added, all 5 touched notebooks re-executed with 0 error cells,
+  every specific number claimed on the site verified against real query output before writing it
+  down (not derived from memory). Caught a real bug in the process: a transaction cell was calling
+  the auto-committing `execute()` helper for `BEGIN TRANSACTION`/`COMMIT` themselves, causing a
+  double-commit error — fixed to use `conn.execute()` directly for those two statements.
+- All of the above pushed to `mfzamudio.github.io` main (several commits) and one combined commit
+  to `sql-for-data-platforms` main for the notebook additions/fixes.
 
 ### July 28, 2026 — "SQL for Every Data Platform" series (Program E) + new public code repo
 Built a new 14-part flat series after Mario asked to check whether the portfolio referenced his
