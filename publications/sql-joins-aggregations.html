@@ -207,20 +207,49 @@ JOIN employees e2 ON e1.department = e2.department AND e1.id &lt; e2.id;</code><
         <circle cx="330" cy="140" r="50" fill="#3b82f6" fill-opacity="0.65" stroke="#93c5fd" stroke-width="2"/>
         <circle cx="400" cy="140" r="50" fill="none" stroke="#93c5fd" stroke-width="2"/>
         <text x="365" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">LEFT JOIN</text>
-        <text x="365" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">All of left + matches</text>
+        <text x="365" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">All of left; right cols NULL if unmatched</text>
 
         <circle cx="570" cy="140" r="50" fill="none" stroke="#93c5fd" stroke-width="2"/>
         <circle cx="640" cy="140" r="50" fill="#3b82f6" fill-opacity="0.65" stroke="#93c5fd" stroke-width="2"/>
         <text x="605" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">RIGHT JOIN</text>
-        <text x="605" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">All of right + matches</text>
+        <text x="605" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">All of right; left cols NULL if unmatched</text>
 
         <circle cx="810" cy="140" r="50" fill="#3b82f6" fill-opacity="0.55" stroke="#93c5fd" stroke-width="2"/>
         <circle cx="880" cy="140" r="50" fill="#3b82f6" fill-opacity="0.55" stroke="#93c5fd" stroke-width="2"/>
         <text x="845" y="215" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">FULL JOIN</text>
-        <text x="845" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">Everything, matched or not</text>
+        <text x="845" y="232" text-anchor="middle" fill="#94a3b8" font-size="9.5">Both sides; NULL on whichever didn't match</text>
       </svg>
     </div>
-    <p class="diagram-caption">SQLite has no native <code>RIGHT</code>/<code>FULL JOIN</code> &mdash; swap table order with <code>LEFT JOIN</code>, or use a platform from Part 12 that supports them directly.</p>
+    <p class="diagram-caption">A JOIN result row always has columns from <em>both</em> tables &mdash; LEFT/RIGHT/FULL don't drop the unmatched side's columns, they fill them with <code>NULL</code>. That's different from a <a href="sql-query-cookbook.html">UNION</a> (Part 7), which stacks same-shaped rows instead of combining columns side by side &mdash; a FULL JOIN of two tables is not the same thing as a UNION of them, even though this diagram's shading looks similar for both. SQLite also has no native <code>RIGHT</code>/<code>FULL JOIN</code> &mdash; swap table order with <code>LEFT JOIN</code>, or use a platform from Part 12 that supports them directly.</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1000 210" role="img" aria-label="A real LEFT JOIN result: one matched row, one unmatched row with NULL on the right side.">
+        <defs><linearGradient id="gBg4b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e1b4b"/></linearGradient></defs>
+        <rect x="0" y="0" width="1000" height="210" rx="14" fill="url(#gBg4b)"/>
+        <text x="500" y="28" text-anchor="middle" fill="#bfdbfe" font-size="14" font-weight="700">customers LEFT JOIN orders &mdash; the row still has order columns, just NULL</text>
+        <text x="70" y="60" fill="#94a3b8" font-size="11" font-weight="700">NAME</text>
+        <text x="330" y="60" fill="#94a3b8" font-size="11" font-weight="700">ORDER_ID</text>
+        <text x="530" y="60" fill="#94a3b8" font-size="11" font-weight="700">ORDER_DATE</text>
+        <text x="750" y="60" fill="#94a3b8" font-size="11" font-weight="700">STATUS</text>
+        <line x1="40" y1="72" x2="960" y2="72" stroke="#334155" stroke-width="1.5"/>
+        <text x="70" y="100" fill="#e2e8f0" font-size="13">Alice Martin</text>
+        <text x="330" y="100" fill="#e2e8f0" font-size="13">1</text>
+        <text x="530" y="100" fill="#e2e8f0" font-size="13">2023-01-20</text>
+        <text x="750" y="100" fill="#e2e8f0" font-size="13">delivered</text>
+        <text x="960" y="100" text-anchor="end" fill="#5eead4" font-size="10.5">matched</text>
+        <line x1="40" y1="118" x2="960" y2="118" stroke="#334155" stroke-width="1" stroke-dasharray="2 4"/>
+        <text x="70" y="148" fill="#e2e8f0" font-size="13">Walter Bell</text>
+        <rect x="310" y="130" width="60" height="24" rx="4" fill="none" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <text x="340" y="148" text-anchor="middle" fill="#fca5a5" font-size="12" font-style="italic">NULL</text>
+        <rect x="500" y="130" width="90" height="24" rx="4" fill="none" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <text x="545" y="148" text-anchor="middle" fill="#fca5a5" font-size="12" font-style="italic">NULL</text>
+        <rect x="720" y="130" width="80" height="24" rx="4" fill="none" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <text x="760" y="148" text-anchor="middle" fill="#fca5a5" font-size="12" font-style="italic">NULL</text>
+        <text x="960" y="148" text-anchor="end" fill="#fca5a5" font-size="10.5">unmatched, kept anyway</text>
+        <text x="70" y="188" fill="#64748b" font-size="10.5" font-style="italic">Same 4 columns on every row -- if this were "just the left table," order_id/order_date/status wouldn't be columns at all.</text>
+      </svg>
+    </div>
+    <p class="diagram-caption">Walter Bell has no orders, but the row survives with three <code>NULL</code>s &mdash; not because the right table vanished, but because nothing matched it.</p>
 
     <div class="concept-section">
       <h4>WHERE vs. HAVING</h4>
